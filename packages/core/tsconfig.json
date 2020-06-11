@@ -1,23 +1,16 @@
 {
+  "extends": "../tsconfig.settings.json",
   "include": ["src", "types"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "lib",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
-    "esModuleInterop": true
   }
 }
