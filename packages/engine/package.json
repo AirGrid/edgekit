@@ -1,20 +1,21 @@
 {
-    "name": "@edgekit/engine",
-    "version": "0.0.1",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "compile": "tsc",
-      "test": "jest --verbose"
-    },
-    "author": "ydennisy",
-    "license": "MIT",
-    "devDependencies": {
-      "@types/jest": "^26.0.0",
-      "jest": "^26.0.1",
-      "jest-fetch-mock": "^3.0.3",
-      "ts-jest": "^26.1.0",
-      "tslib": "^2.0.0",
-      "typescript": "^3.9.5"
-    }
+  "name": "@edgekit/engine",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "test": "jest --verbose"
+  },
+  "author": "ydennisy",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "jest-fetch-mock": "^3.0.3",
+    "ts-jest": "^26.1.0",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.5"
   }
+}
