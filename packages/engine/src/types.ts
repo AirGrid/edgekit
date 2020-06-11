@@ -1,6 +1,9 @@
+// TODO: this is being duplicated - types should be shared.
 export interface IPageView {
+  ts: number;
   features: {
-    keywords: string[];
+    // keywords: string[];
+    [name: string]: string[];
   };
 }
 
@@ -10,19 +13,20 @@ interface IConditionQuery {
 }
 
 interface IConditionRule {
-  reducer?: {
+  reducer: {
     name: string;
-    args?: any;
+    // args?: string;
   };
-  matcher?: {
-    name: string;
-    args: any;
+  matcher: {
+    name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
+    args: number;
   };
 }
 
 export interface ICondition {
   filter: {
-    any: boolean;
+    // TODO: return support for any?
+    // any: boolean;
     queries: IConditionQuery[];
   };
   rules: IConditionRule[];

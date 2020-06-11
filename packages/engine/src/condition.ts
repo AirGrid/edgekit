@@ -14,7 +14,9 @@ const createCondition = (condition: ICondition) => (pageViews: IPageView[]) => {
     .flat();
 
   const ruleResults = rules.map(rule => {
-    const reducer = reducers[rule.reducer.name](rule.reducer.args);
+    // TODO: allow other reducers...
+    // const reducer = reducers[rule.reducer.name](rule.reducer.args);
+    const reducer = reducers[rule.reducer.name]();
     const value = reducer(filteredPageViews);
     const matcher = matchers[rule.matcher.name](rule.matcher.args);
     const result = matcher(value);

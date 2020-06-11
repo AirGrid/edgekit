@@ -64,11 +64,11 @@ export const setAndReturnAllPageViews = (pageFeatures: IPageFeature[]): IPageVie
   return pageViews;
 };
 
-export const updateMatchedAudiences = (audienceIds) => {
+/* export const updateMatchedAudiences = (audienceIds) => {
   try {
     const serializedAudiences = JSON.stringify(audienceIds);
     localStorage.setItem('edkt_matched_audiences', serializedAudiences);
   } catch (e) {
     // ignore...
   } 
-}
+} */

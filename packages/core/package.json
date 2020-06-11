@@ -10,6 +10,9 @@
   },
   "author": "ydennisy",
   "license": "MIT",
+  "dependencies": {
+    "@edgekit/engine": "^0.0.1"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "jest": "^26.0.1",
