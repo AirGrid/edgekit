@@ -9,8 +9,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    // "target": "es5",
-    // "module": "commonjs",
+    "esModuleInterop": true
+    // "target": "es5"
+    // "module": "commonjs"
   }
 }
