@@ -2,20 +2,13 @@ import fetchMock from 'jest-fetch-mock'
 import { edkt } from '../src';
 
 const sportKeywordsString = 'sport,news,football,stadium'
-const travelKeywordsString = 'beach,holiday,cruise,mojito'
+// const travelKeywordsString = 'beach,holiday,cruise,mojito'
 
 const sportsKeywordsHtml = 
   `<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="keywords" content="${sportKeywordsString}">
-  <title>Article about sports, news and football!</title>`
-
-const travelKeywordsHtml = 
-  `<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="keywords" content="${travelKeywordsString}">
   <title>Article about sports, news and football!</title>`
 
 const getHtmlKeywords = {
@@ -52,7 +45,7 @@ describe('EdgeKit edkt() API tests', () => {
   });
 
   it('expects edkt_page_views length to be 2', async () => {
-    fetchMock.mockOnce(JSON.stringify(travelKeywordsString));
+    fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
     await edkt({
       pageFeatureGetters: [getHttpKeywords]
@@ -64,7 +57,7 @@ describe('EdgeKit edkt() API tests', () => {
   });
 
   it('sports audience should be stored in matched audiences', async () => {
-    fetchMock.mockOnce(JSON.stringify(travelKeywordsString));
+    fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
     await edkt({
       pageFeatureGetters: [getHttpKeywords]

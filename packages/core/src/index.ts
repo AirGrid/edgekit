@@ -13,11 +13,15 @@ interface IPageFeatureGetter {
   func: () => Promise<string[]>;
 }
 
+
+// TODO: we need to give a way to consumers to ensure this does not
+// run multiple times on a single page load.
 export const edkt = async (config: IConfig) => {
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   const pageViews = setAndReturnAllPageViews(pageFeatures);
-  console.log(pageViews);
+
+
   // TODO: avoid checking audiences the user is already in.
   const checkedAudiences = audiences.map(audience => {
     return {
@@ -25,5 +29,6 @@ export const edkt = async (config: IConfig) => {
       matched: engine.check(audience.conditions, pageViews)
     }
   });
+
   updateCheckedAudiences(checkedAudiences);
-}
+};
