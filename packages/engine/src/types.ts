@@ -14,7 +14,7 @@ interface IConditionQuery {
 
 interface IConditionRule {
   reducer: {
-    name: string;
+    name: 'count';
     // args?: string;
   };
   matcher: {

@@ -1,5 +1,6 @@
 interface IPageView {
   ts: number;
+  features: {};
   // TODO: how do we enforce / check that `keywords` is available?
   // It feels that this should happen early in the flow
   // when a user passes the getters.
@@ -10,6 +11,11 @@ interface IPageFeature {
   name: string;
   error: boolean;
   value: string[];
+}
+
+interface ICheckedAudience {
+  id: string;
+  matched: boolean;
 }
 
 const createPageView = (pageFeatures: IPageFeature[]): IPageView | undefined => {
@@ -27,7 +33,8 @@ const createPageView = (pageFeatures: IPageFeature[]): IPageView | undefined => 
 
   return {
     ts,
-    ...features
+    features
+    // ...features
   }
 };
 
@@ -60,15 +67,44 @@ export const setAndReturnAllPageViews = (pageFeatures: IPageFeature[]): IPageVie
   } catch (e) {
     // ignore...
   }
-
+  console.log('views: ', pageViews)
   return pageViews;
 };
 
-/* export const updateMatchedAudiences = (audienceIds) => {
+export const updateCheckedAudiences = (checkedAudiences: ICheckedAudience[]) => {
+  const updatedAudiences: Record<string, object> = {};
+  const matchedAudiences = checkedAudiences.filter(audience => audience.matched);
+  console.log('checked!!!', checkedAudiences);
+  console.log('matched!!!', matchedAudiences);
+  const previouslyMatchedAudiences = get('edkt_matched_audiences') || {};
+  
+  matchedAudiences.forEach((audience) => {
+    if (audience.id in previouslyMatchedAudiences) {
+      // update the ttl
+    } else {
+      updatedAudiences[audience.id] = audience;
+    }
+  });
+
+  set('edkt_matched_audiences', updatedAudiences);
+}
+
+const get = (key: string) => {
+  const value = localStorage.getItem(key);
+  if (!value) return undefined;
+  
   try {
-    const serializedAudiences = JSON.stringify(audienceIds);
-    localStorage.setItem('edkt_matched_audiences', serializedAudiences);
+    return JSON.parse(value);
+  } catch (e) {
+    return undefined;
+  }
+};
+
+const set = (key: string, value: object) => {
+  try {
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
   } catch (e) {
     // ignore...
-  } 
-} */
+  }
+};

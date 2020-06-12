@@ -3,12 +3,14 @@ import { IPageView, ICondition } from './types';
 
 export const check = (
   conditions: ICondition[],
-  pageViews: IPageView[]
-  // any: boolean = false
-) => {
+  pageViews: IPageView[],
+  any: boolean = false
+): boolean => {
   const checkedConditions = conditions.map(condition => {
     return createCondition(condition)(pageViews);
   });
-  console.log(checkedConditions);
-  return checkedConditions;
+
+  return any
+    ? checkedConditions.includes(true)
+    : !checkedConditions.includes(false);
 };

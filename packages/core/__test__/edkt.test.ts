@@ -34,7 +34,7 @@ describe('EdgeKit edkt() API tests', () => {
     const getHttpKeywords = {
       name: 'keywords',
       func: async (): Promise<string[]> => {
-        const response = await fetch('https://jsonplaceholder.typicode.com/albums/1');
+        const response = await fetch('https://thisisnevercalled.com');
         const json = await response.json();
         const keywords = json.split(',');
         return keywords;
@@ -48,5 +48,26 @@ describe('EdgeKit edkt() API tests', () => {
     const edktPageViews = JSON.parse(localStorage.getItem('edkt_page_views') || '[]');
 
     expect(edktPageViews.length).toEqual(2);
+  });
+
+  it('sports audience should be stored in matched audiences', async () => {
+    fetchMock.mockOnce(JSON.stringify('keywords,mocked,with,fetch,sport'));
+  
+    const getHttpKeywords = {
+      name: 'keywords',
+      func: async (): Promise<string[]> => {
+        const response = await fetch('https://thisisnevercalled.com');
+        const json = await response.json();
+        const keywords = json.split(',');
+        return keywords;
+      }
+    }
+
+    await edkt({
+      pageFeatureGetters: [getHttpKeywords]
+    });
+    const edktMatchedAudiences = JSON.parse(localStorage.getItem('edkt_matched_audiences') || '{}');
+    console.log(edktMatchedAudiences);
+    expect(edktMatchedAudiences).toHaveProperty('sport');
   });
 });

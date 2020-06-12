@@ -1,26 +1,54 @@
-const condition1 = {
+const travelCond = {
   filter: {
     queries: [
       {
         property: 'keywords',
-        value: ['sport'],
+        value: ['beach', 'holiday'],
       },
     ],
   },
   rules: [
     {
       reducer: {
-        name: 'count',
+        name: 'count' as 'count',
       },
       matcher: {
-        name: 'gt',
+        name: 'gt' as 'gt',
+        args: 2,
+      },
+    }
+  ],
+};
+
+const sportCond = {
+  filter: {
+    queries: [
+      {
+        property: 'keywords',
+        value: ['sport', 'football'],
+      },
+    ],
+  },
+  rules: [
+    {
+      reducer: {
+        name: 'count' as 'count',
+      },
+      matcher: {
+        name: 'gt' as 'gt',
         args: 1,
       },
     }
   ],
 };
 
-export const travelAudience = {
-  id: 'travel1',
-  conditions: [condition1]
-}
+export const audiences = [
+  {
+    id: 'travel',
+    conditions: [travelCond]
+  },
+  {    
+    id: 'sport',
+    conditions: [sportCond]
+  }
+];
