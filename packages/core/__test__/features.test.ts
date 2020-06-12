@@ -1,7 +1,7 @@
 import { getPageFeatures } from '../src/features';
 
 describe('EdgeKit | Features Module', () => {
-  it('testing...', async () => {
+  it('able to extract html keywords', async () => {
     document.head.innerHTML = 
       `<meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">

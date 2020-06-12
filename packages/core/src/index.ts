@@ -17,6 +17,7 @@ export const edkt = async (config: IConfig) => {
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   const pageViews = setAndReturnAllPageViews(pageFeatures);
+  console.log(pageViews);
   // TODO: avoid checking audiences the user is already in.
   const checkedAudiences = audiences.map(audience => {
     return {
