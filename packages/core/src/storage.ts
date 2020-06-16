@@ -11,6 +11,11 @@ interface ICheckedAudience {
   matched: boolean;
 }
 
+enum StorageKeys {
+  PAGE_VIEWS = 'edkt_page_views',
+  MATCHED_AUDIENCES = 'edkt_matched_audiences',
+}
+
 const get = (key: string) => {
   const value = localStorage.getItem(key);
   if (!value) return undefined;
@@ -31,6 +36,9 @@ const set = (key: string, value: object) => {
   }
 };
 
+/*
+ * Creates an IPageView to be stored locally.
+ */
 const createPageView = (pageFeatures: IPageFeature[]): IPageView | undefined => {
   const ts = Math.round(Date.now() / 1000);
 
@@ -53,7 +61,7 @@ const createPageView = (pageFeatures: IPageFeature[]): IPageView | undefined => 
 /*
  * Returns an array of pageViews or an empty array.
  */
-const getAllPageViews = (): IPageView[] => get('edkt_page_views') || [];
+const getAllPageViews = (): IPageView[] => get(StorageKeys.PAGE_VIEWS) || [];
 
 /*
  * Creates a new pageView and stores it.
@@ -65,15 +73,23 @@ export const setAndReturnAllPageViews = (pageFeatures: IPageFeature[]): IPageVie
   if (!pageView) return pageViews;
   pageViews.push(pageView);
   
-  set('edkt_page_views', pageViews)
+  set(StorageKeys.PAGE_VIEWS, pageViews)
 
   return pageViews;
 };
 
+/*
+ * Purge audiences which have expired.
+ * Return current audiences.
+ */
+export const getCurrentAudiences = () => {
+
+}
+
 export const updateCheckedAudiences = (checkedAudiences: ICheckedAudience[]) => {
   const updatedAudiences: Record<string, object> = {};
   const matchedAudiences = checkedAudiences.filter(audience => audience.matched);
-  const previouslyMatchedAudiences = get('edkt_matched_audiences') || {};
+  const previouslyMatchedAudiences = get(StorageKeys.MATCHED_AUDIENCES) || {};
   
   matchedAudiences.forEach((audience) => {
     if (audience.id in previouslyMatchedAudiences) {
@@ -83,5 +99,5 @@ export const updateCheckedAudiences = (checkedAudiences: ICheckedAudience[]) => 
     }
   });
 
-  set('edkt_matched_audiences', updatedAudiences);
+  set(StorageKeys.MATCHED_AUDIENCES, updatedAudiences);
 };

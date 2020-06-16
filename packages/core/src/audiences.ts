@@ -45,10 +45,12 @@ const sportCond = {
 export const audiences = [
   {
     id: 'travel',
+    ttl: 3600,
     conditions: [travelCond]
   },
   {    
     id: 'sport',
+    ttl: 3600,
     conditions: [sportCond]
   }
 ];

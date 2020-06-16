@@ -21,6 +21,8 @@ export const edkt = async (config: IConfig) => {
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   const pageViews = setAndReturnAllPageViews(pageFeatures);
 
+  // get current audiences - this will also purge based on ttl
+  // filter audiences for current
 
   // TODO: avoid checking audiences the user is already in.
   const checkedAudiences = audiences.map(audience => {
