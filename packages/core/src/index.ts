@@ -1,6 +1,12 @@
 import * as engine from '@edgekit/engine';
 import { getPageFeatures } from './features';
-import { setAndReturnAllPageViews, updateCheckedAudiences } from './storage';
+import { 
+  setAndReturnAllPageViews, 
+  updateCheckedAudiences, 
+  // getAndPurgeMatchedAudiences 
+} from './storage';
+
+import { audienceStore } from './store/store';
 
 import { audiences } from './audiences';
 
@@ -22,15 +28,24 @@ export const edkt = async (config: IConfig) => {
   const pageViews = setAndReturnAllPageViews(pageFeatures);
 
   // get current audiences - this will also purge based on ttl
+  // const previouslyMatchedAudiences = getAndPurgeMatchedAudiences();
   // filter audiences for current
 
-  // TODO: avoid checking audiences the user is already in.
-  const checkedAudiences = audiences.map(audience => {
-    return {
-      ...audience,
-      matched: engine.check(audience.conditions, pageViews)
-    }
-  });
+  const previouslyMatchedAudienceIds = audienceStore.getMatchedAudienceIds();
+
+  const matchedAudiences = audiences
+    .filter((audience) => {
+      return !previouslyMatchedAudienceIds.includes(audience.id);
+    })
+    .map((audience) => {
+      return {
+        ...audience,
+        matched: engine.check(audience.conditions, pageViews)
+      }
+    })
+    .filter((audience) => audience.matched);
+
+  audienceStore.setMatchedAudiences(matchedAudiences);
 
   updateCheckedAudiences(checkedAudiences);
 };

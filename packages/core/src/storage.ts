@@ -36,11 +36,13 @@ const set = (key: string, value: object) => {
   }
 };
 
+const timeStampInSecs = (): number => Math.round(Date.now() / 1000);
+
 /*
  * Creates an IPageView to be stored locally.
  */
 const createPageView = (pageFeatures: IPageFeature[]): IPageView | undefined => {
-  const ts = Math.round(Date.now() / 1000);
+  const ts = timeStampInSecs();
 
   const features = pageFeatures.reduce((acc, item) => {
     if (!item.error) {
@@ -79,14 +81,28 @@ export const setAndReturnAllPageViews = (pageFeatures: IPageFeature[]): IPageVie
 };
 
 /*
- * Purge audiences which have expired.
+ * Fetch matched audiences from storage.
+ * Check for any which have expired.
  * Return current audiences.
  */
-export const getCurrentAudiences = () => {
+export const getAndPurgeMatchedAudiences = () => {
+  const matchedAudiences = get(StorageKeys.MATCHED_AUDIENCES) || {};
+  
+  // TODO: improve & centralise this type
+  const updatedAudiences: Record<string, object> = {};
+  Object.keys(matchedAudiences).forEach((audienceId) => {
+    if (matchedAudiences[audienceId].expiresAt >= timeStampInSecs()) {
+      updatedAudiences[audienceId] = matchedAudiences[audienceId];
+    }
+  });
 
+  set(StorageKeys.MATCHED_AUDIENCES, updatedAudiences);
+  return updatedAudiences;
 }
 
 export const updateCheckedAudiences = (checkedAudiences: ICheckedAudience[]) => {
+
+  // TODO: improve & centralise this type
   const updatedAudiences: Record<string, object> = {};
   const matchedAudiences = checkedAudiences.filter(audience => audience.matched);
   const previouslyMatchedAudiences = get(StorageKeys.MATCHED_AUDIENCES) || {};
