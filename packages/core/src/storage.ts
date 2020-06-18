@@ -6,11 +6,6 @@ interface IPageFeature {
   value: string[];
 }
 
-interface ICheckedAudience {
-  id: string;
-  matched: boolean;
-}
-
 enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
   MATCHED_AUDIENCES = 'edkt_matched_audiences',
