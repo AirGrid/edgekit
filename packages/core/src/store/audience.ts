@@ -12,26 +12,24 @@ interface IMatchedAudience {
   expiresAt: number;
 }
 
-// TODO: define the types.
+// TODO: share the types.
 class AudienceStore {
   matchedAudiences: IMatchedAudience[];
   matchedAudienceIds: string[];
 
   constructor() {
-    this.matchedAudiences = this._loadMatchedAudiences();
-    this.matchedAudienceIds = this.getMatchedAudienceIds();
+    this.matchedAudiences = [];
+    this.matchedAudienceIds = [];
+    this._load();
   }
 
-  _loadMatchedAudiences() {
+  _load() {
     const audiences: IMatchedAudience[] = get(StorageKeys.MATCHED_AUDIENCES) || [];
     const unExpiredAudiences = audiences.filter(audience => audience.expiresAt > timeStampInSecs());
-    set(StorageKeys.MATCHED_AUDIENCES, unExpiredAudiences);
-    return unExpiredAudiences;
-  }
-
-  _loadMatchedAudienceIds() {
-    // TODO: do we need to check if audiences are loaded?
-    this.matchedAudienceIds = this.matchedAudiences.map(audience => audience.id);
+    const unExpiredAudienceIds = unExpiredAudiences.map(audience => audience.id);
+    this.matchedAudiences = unExpiredAudiences;
+    this.matchedAudienceIds = unExpiredAudienceIds;
+    set(StorageKeys.MATCHED_AUDIENCES, this.matchedAudiences);
     set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
