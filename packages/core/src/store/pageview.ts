@@ -13,20 +13,20 @@ interface IPageFeature {
   value: string[];
 }
 
-class PageviewStore {
-  entries: IPageView[];
+class ViewStore {
+  pageViews: IPageView[];
 
   constructor() {
-    this.entries = [];
+    this.pageViews = [];
     this._load();
   }
 
   _load() {
-    this.entries = storage.get(StorageKeys.PAGE_VIEWS) || [];
+    this.pageViews = storage.get(StorageKeys.PAGE_VIEWS) || [];
   }
 
   _save() {
-    storage.set(StorageKeys.PAGE_VIEWS, this.entries);
+    storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
   _formatIntoPageView(pageFeatures: IPageFeature[]) {
@@ -49,11 +49,11 @@ class PageviewStore {
   }
 
   insert(pageFeatures: IPageFeature[]) {
-    const pageview = this._formatIntoPageView(pageFeatures);
-    if (!pageview) return;
-    this.entries.push(pageview);
+    const pageView = this._formatIntoPageView(pageFeatures);
+    if (!pageView) return;
+    this.pageViews.push(pageView);
     this._save();
   }
 }
 
-export const pageviewStore = new PageviewStore();
+export const viewStore = new ViewStore();

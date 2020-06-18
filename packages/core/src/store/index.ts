@@ -1,2 +1,2 @@
 export { audienceStore } from './audience';
-export { pageviewStore } from './pageview';
+export { viewStore } from './pageview';

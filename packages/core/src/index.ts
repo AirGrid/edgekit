@@ -1,7 +1,7 @@
 import * as engine from '@edgekit/engine';
 import audiences from '@edgekit/audiences';
 import { getPageFeatures } from './features';
-import { pageviewStore, audienceStore } from './store';
+import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
 
 interface IConfig {
@@ -19,7 +19,7 @@ interface IPageFeatureGetter {
 const run = async (config: IConfig) => {
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
-  pageviewStore.insert(pageFeatures);
+  viewStore.insert(pageFeatures);
 
   const matchedAudiences = audiences
     .filter((audience) => {
@@ -30,7 +30,7 @@ const run = async (config: IConfig) => {
         id: audience.id,
         matchedAt: timeStampInSecs(),
         expiresAt: timeStampInSecs() + audience.ttl,
-        matched: engine.check(audience.conditions, pageviewStore.entries)
+        matched: engine.check(audience.conditions, viewStore.pageViews)
       }
     })
     .filter((audience) => audience.matched);
