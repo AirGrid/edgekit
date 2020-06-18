@@ -2,11 +2,13 @@ import * as engine from '@edgekit/engine';
 import { getPageFeatures } from './features';
 import { 
   setAndReturnAllPageViews, 
-  updateCheckedAudiences, 
+  // updateCheckedAudiences, 
   // getAndPurgeMatchedAudiences 
 } from './storage';
 
-import { audienceStore } from './store/store';
+import { timeStampInSecs } from './utils';
+
+import { audienceStore } from './store';
 
 import { audiences } from './audiences';
 
@@ -27,10 +29,6 @@ export const edkt = async (config: IConfig) => {
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   const pageViews = setAndReturnAllPageViews(pageFeatures);
 
-  // get current audiences - this will also purge based on ttl
-  // const previouslyMatchedAudiences = getAndPurgeMatchedAudiences();
-  // filter audiences for current
-
   const previouslyMatchedAudienceIds = audienceStore.getMatchedAudienceIds();
 
   const matchedAudiences = audiences
@@ -39,7 +37,9 @@ export const edkt = async (config: IConfig) => {
     })
     .map((audience) => {
       return {
-        ...audience,
+        id: audience.id,
+        matchedAt: timeStampInSecs(),
+        expiresAt: timeStampInSecs() + audience.ttl,
         matched: engine.check(audience.conditions, pageViews)
       }
     })
@@ -47,5 +47,4 @@ export const edkt = async (config: IConfig) => {
 
   audienceStore.setMatchedAudiences(matchedAudiences);
 
-  updateCheckedAudiences(checkedAudiences);
 };

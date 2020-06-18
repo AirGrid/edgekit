@@ -63,8 +63,8 @@ describe('EdgeKit edkt() API tests', () => {
       pageFeatureGetters: [getHttpKeywords]
     });
 
-    const edktMatchedAudiences = JSON.parse(localStorage.getItem('edkt_matched_audiences') || '{}');
+    const edktMatchedAudiences = JSON.parse(localStorage.getItem('edkt_matched_audiences') || '[]');
 
-    expect(edktMatchedAudiences).toHaveProperty('sport');
+    expect(edktMatchedAudiences[0]).toHaveProperty('id', 'sport');
   });
 });
