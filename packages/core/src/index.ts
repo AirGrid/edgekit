@@ -22,6 +22,7 @@ interface IPageFeatureGetter {
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
 const run = async (config: IConfig) => {
+  console.log(audiences.length)
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   const pageViews = setAndReturnAllPageViews(pageFeatures);
@@ -39,6 +40,8 @@ const run = async (config: IConfig) => {
       }
     })
     .filter((audience) => audience.matched);
+  
+  console.log(matchedAudiences)
 
   audienceStore.setMatchedAudiences(matchedAudiences);
 };

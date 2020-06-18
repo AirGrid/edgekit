@@ -35,7 +35,7 @@ describe('EdgeKit edkt() API tests', () => {
   it('expects edkt_page_views length to be 1', async () => {
     document.head.innerHTML = sportsKeywordsHtml;
 
-    await edkt({
+    await edkt.run({
       pageFeatureGetters: [getHtmlKeywords]
     });
 
@@ -47,7 +47,7 @@ describe('EdgeKit edkt() API tests', () => {
   it('expects edkt_page_views length to be 2', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
-    await edkt({
+    await edkt.run({
       pageFeatureGetters: [getHttpKeywords]
     });
 
@@ -59,7 +59,7 @@ describe('EdgeKit edkt() API tests', () => {
   it('sports audience should be stored in matched audiences', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
-    await edkt({
+    await edkt.run({
       pageFeatureGetters: [getHttpKeywords]
     });
 

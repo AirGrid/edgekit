@@ -1,5 +1,7 @@
-import interestTravel from './interest/travel';
+import interestTravel from './definitions/interest/travel';
+import interestSport from './definitions/interest/sport';
 
 export default [
-  interestTravel
+  interestTravel,
+  interestSport
 ];
