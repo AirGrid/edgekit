@@ -33,10 +33,6 @@ class AudienceStore {
     set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
-  getMatchedAudiences() {
-    return this.matchedAudiences;
-  }
-
   setMatchedAudiences(newlyMatchedAudiences: IMatchedAudience[]) {
     // TODO: decide if we need to check duplicate audiences here...
 
@@ -52,10 +48,6 @@ class AudienceStore {
       StorageKeys.MATCHED_AUDIENCE_IDS, 
       this.matchedAudienceIds
     );
-  }
-
-  getMatchedAudienceIds() {
-    return this.matchedAudiences.map(audience => audience.id);
   }
 };
 
