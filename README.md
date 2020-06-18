@@ -1,6 +1,6 @@
 # EdgeKit | `edkt();`
 
-> EdgeKit allows web publishers to create privacy focused, 1st party data audience segments to monetise through online advertising.
+**EdgeKit allows web publishers to create privacy focused, 1st party data audience segments to monetise through online advertising.**
 
 ## Features:
 > (this needs some sections....)
