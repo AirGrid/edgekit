@@ -1,4 +1,5 @@
-import { get, set, timeStampInSecs } from './utils';
+import { get, set } from './utils';
+import { timeStampInSecs } from '../utils'; // this is confusing...
 
 enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
@@ -29,6 +30,10 @@ class AudienceStore {
     const unExpiredAudienceIds = unExpiredAudiences.map(audience => audience.id);
     this.matchedAudiences = unExpiredAudiences;
     this.matchedAudienceIds = unExpiredAudienceIds;
+    this._save();
+  }
+
+  _save() {
     set(StorageKeys.MATCHED_AUDIENCES, this.matchedAudiences);
     set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
@@ -36,18 +41,11 @@ class AudienceStore {
   setMatchedAudiences(newlyMatchedAudiences: IMatchedAudience[]) {
     // TODO: decide if we need to check duplicate audiences here...
 
-    // if(nomatchedwereturn)
+    if (newlyMatchedAudiences.length === 0) return;
     const allMatchedAudiences = [...this.matchedAudiences, ...newlyMatchedAudiences];
     this.matchedAudiences = allMatchedAudiences;
-    this.matchedAudienceIds = this.getMatchedAudienceIds();
-    set(
-      StorageKeys.MATCHED_AUDIENCES, 
-      this.matchedAudiences
-    );
-    set(
-      StorageKeys.MATCHED_AUDIENCE_IDS, 
-      this.matchedAudienceIds
-    );
+    this.matchedAudienceIds = allMatchedAudiences.map(audience => audience.id);
+    this._save();
   }
 };
 

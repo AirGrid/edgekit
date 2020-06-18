@@ -17,5 +17,3 @@ export const set = (key: string, value: object) => {
     // ignore...
   }
 };
-
-export const timeStampInSecs = (): number => Math.round(Date.now() / 1000);
