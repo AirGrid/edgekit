@@ -1,4 +1,4 @@
-import { storage, timeStampInSecs } from '../utils'; // this is confusing...
+import { storage, timeStampInSecs } from '../utils';
 
 enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
