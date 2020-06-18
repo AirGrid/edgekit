@@ -1,6 +1,5 @@
 import { IPageView } from '@edgekit/types';
-import { get, set } from './utils';
-import { timeStampInSecs } from '../utils'; // this is confusing...
+import { storage, timeStampInSecs } from '../utils';
 
 enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
@@ -23,11 +22,11 @@ class PageviewStore {
   }
 
   _load() {
-    this.entries = get(StorageKeys.PAGE_VIEWS) || [];
+    this.entries = storage.get(StorageKeys.PAGE_VIEWS) || [];
   }
 
   _save() {
-    set(StorageKeys.PAGE_VIEWS, this.entries);
+    storage.set(StorageKeys.PAGE_VIEWS, this.entries);
   }
 
   _formatIntoPageView(pageFeatures: IPageFeature[]) {

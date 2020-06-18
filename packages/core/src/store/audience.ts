@@ -1,5 +1,4 @@
-import { get, set } from './utils';
-import { timeStampInSecs } from '../utils'; // this is confusing...
+import { storage, timeStampInSecs } from '../utils'; // this is confusing...
 
 enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
@@ -25,7 +24,7 @@ class AudienceStore {
   }
 
   _load() {
-    const audiences: IMatchedAudience[] = get(StorageKeys.MATCHED_AUDIENCES) || [];
+    const audiences: IMatchedAudience[] = storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
     const unExpiredAudiences = audiences.filter(audience => audience.expiresAt > timeStampInSecs());
     const unExpiredAudienceIds = unExpiredAudiences.map(audience => audience.id);
     this.matchedAudiences = unExpiredAudiences;
@@ -34,8 +33,8 @@ class AudienceStore {
   }
 
   _save() {
-    set(StorageKeys.MATCHED_AUDIENCES, this.matchedAudiences);
-    set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
+    storage.set(StorageKeys.MATCHED_AUDIENCES, this.matchedAudiences);
+    storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
   setMatchedAudiences(newlyMatchedAudiences: IMatchedAudience[]) {
