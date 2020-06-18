@@ -3,6 +3,7 @@
   "references": [
     { "path": "core" },
     { "path": "engine" },
-    { "path": "types" }
+    { "path": "types" },
+    { "path": "audiences" }
   ]
 }

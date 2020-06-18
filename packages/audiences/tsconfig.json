@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*"]
+    "*": ["src/*", "node_modules/*"]
     },
   }
 }

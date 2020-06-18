@@ -12,7 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "@edgekit/engine": "^0.0.1",
-    "@edgekit/types": "^0.0.1"
+    "@edgekit/types": "^0.0.1",
+    "@edgekit/audiences": "^0.0.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",

@@ -1,14 +1,13 @@
 import * as engine from '@edgekit/engine';
+import audiences from '@edgekit/audiences';
 import { getPageFeatures } from './features';
+import { audienceStore } from './store';
+import { timeStampInSecs } from './utils';
+
+// refactor
 import { 
   setAndReturnAllPageViews, 
 } from './storage';
-
-import { timeStampInSecs } from './utils';
-
-import { audienceStore } from './store';
-
-import { audiences } from './audiences';
 
 interface IConfig {
   pageFeatureGetters: IPageFeatureGetter[];
