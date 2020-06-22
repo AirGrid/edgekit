@@ -10,6 +10,7 @@ interface IMatchedAudience {
   id: string;
   matchedAt: number;
   expiresAt: number;
+  matchedOnCurrentPageView: boolean;
 }
 
 // TODO: share the types.
@@ -26,9 +27,14 @@ class AudienceStore {
   _load() {
     const audiences: IMatchedAudience[] =
       storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
-    const unExpiredAudiences = audiences.filter(
-      (audience) => audience.expiresAt > timeStampInSecs()
-    );
+    const unExpiredAudiences = audiences
+      .filter((audience) => audience.expiresAt > timeStampInSecs())
+      .map((audience) => {
+        return {
+          ...audience,
+          matchedOnCurrentPageView: false,
+        };
+      });
     const unExpiredAudienceIds = unExpiredAudiences.map(
       (audience) => audience.id
     );

@@ -15,7 +15,7 @@ interface IPageFeatureGetter {
 
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
-const run = async (config: IConfig) => {
+const run = async (config: IConfig): Promise<void> => {
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   viewStore.insert(pageFeatures);
@@ -29,6 +29,7 @@ const run = async (config: IConfig) => {
         id: audience.id,
         matchedAt: timeStampInSecs(),
         expiresAt: timeStampInSecs() + audience.ttl,
+        matchedOnCurrentPageView: true,
         matched: engine.check(audience.conditions, viewStore.pageViews),
       };
     })
@@ -37,11 +38,11 @@ const run = async (config: IConfig) => {
   audienceStore.setMatchedAudiences(matchedAudiences);
 };
 
-const stats = () => {
-  return {};
+const getMatchedAudiences = () => {
+  return audienceStore.matchedAudiences;
 };
 
 export const edkt = {
   run,
-  stats,
+  getMatchedAudiences,
 };

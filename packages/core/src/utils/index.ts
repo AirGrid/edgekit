@@ -11,7 +11,7 @@ const get = (key: string) => {
   }
 };
 
-const set = (key: string, value: object) => {
+const set = (key: string, value: any) => {
   try {
     const serialized = JSON.stringify(value);
     localStorage.setItem(key, serialized);
