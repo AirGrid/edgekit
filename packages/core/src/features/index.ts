@@ -1,8 +1,4 @@
-// TODO: this is duplicated - move into types.
-interface IPageFeatureGetter {
-  name: string;
-  func: () => Promise<string[]>;
-}
+import { IPageFeatureGetter } from '../types';
 
 const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
   return pageFeatureGetters.map((getter) => {

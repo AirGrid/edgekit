@@ -1,11 +1,6 @@
 import { IPageView } from '@edgekit/types';
 import { storage, timeStampInSecs } from '../utils';
-
-enum StorageKeys {
-  PAGE_VIEWS = 'edkt_page_views',
-  MATCHED_AUDIENCES = 'edkt_matched_audiences',
-  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
-}
+import { StorageKeys } from '../types';
 
 interface IPageFeature {
   name: string;

@@ -4,3 +4,28 @@ export interface IPageView {
     [name: string]: string[];
   };
 }
+
+export interface IConditionQuery {
+  property: string;
+  value: string[] | number[];
+}
+
+export interface IConditionRule {
+  reducer: {
+    name: 'count';
+    // args?: string;
+  };
+  matcher: {
+    name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
+    args: number;
+  };
+}
+
+export interface ICondition {
+  filter: {
+    // TODO: return support for any?
+    // any: boolean;
+    queries: IConditionQuery[];
+  };
+  rules: IConditionRule[];
+}

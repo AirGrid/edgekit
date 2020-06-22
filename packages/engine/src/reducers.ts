@@ -1,4 +1,4 @@
-import { IPageView } from './types';
+import { IPageView } from '@edgekit/types';
 
 export const count = () => (pageViews: IPageView[]): number => pageViews.length;
 

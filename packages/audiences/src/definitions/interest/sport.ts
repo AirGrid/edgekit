@@ -1,4 +1,6 @@
-const condition = {
+import { ICondition } from '@edgekit/types';
+
+const condition: ICondition = {
   filter: {
     queries: [
       {
@@ -10,10 +12,10 @@ const condition = {
   rules: [
     {
       reducer: {
-        name: 'count' as const,
+        name: 'count',
       },
       matcher: {
-        name: 'gt' as const,
+        name: 'gt',
         args: 1,
       },
     },

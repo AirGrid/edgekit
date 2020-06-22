@@ -1,5 +1,5 @@
+import { IPageView, ICondition } from '@edgekit/types';
 import createCondition from './condition';
-import { IPageView, ICondition } from './types';
 
 export const check = (
   conditions: ICondition[],

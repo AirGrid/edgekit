@@ -9,6 +9,9 @@
   },
   "author": "ydennisy",
   "license": "MIT",
+  "dependencies": {
+    "@edgekit/types": "^0.0.1"
+  },
   "devDependencies": {
     "typescript": "^3.9.5"
   }

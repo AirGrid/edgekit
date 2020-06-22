@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "tsc -b packages",
+    "watch": "tsc -w packages",
     "lint": "eslint packages/**/src packages/**/__test__ --ext js,ts",
     "lint:fix": "eslint packages/**/src packages/**/__test__ --ext js,ts --fix"
   },

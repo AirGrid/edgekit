@@ -5,6 +5,7 @@
 EdgeKit.org -> https://projects.invisionapp.com/share/2NXLNZYG64X#/screens/421377757
 
 ## Features:
+
 > (this needs some sections....)
 
 - Packaged with a taxonomy of [IAB Data Transparency Framework](https://iabtechlab.com/standards/data-transparency/) audiences.
@@ -23,18 +24,21 @@ EdgeKit.org -> https://projects.invisionapp.com/share/2NXLNZYG64X#/screens/42137
 ### Install
 
 First we install EdgeKit into our project.
+
 ```shell
 $ npm i -S @AirGrid/EdgeKit
 ```
 
 We can now import the API into our script.
+
 ```javascript
 import edkt from '@AirGrid/EdgeKit';
 ```
 
 Alternatively to get started quickly, we can use unpkg to load the `edkt` object into the `window`.
+
 ```html
-<Todo>
+<Todo></Todo>
 ```
 
 ### Page Features
@@ -47,10 +51,10 @@ A simple example would be to collect the keywords often present in the meta tags
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="keywords" content="sport,news,football,stadium">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="keywords" content="sport,news,football,stadium" />
     <title>Article about sports, news and football!</title>
   </head>
   <body>
@@ -69,27 +73,31 @@ const getPageKeywords = {
     const keywordString = tag.getAttribute('content');
     const keywords = keywordString.toLowerCase().split(',');
     return Promise.resolve(keywords);
-  }
-}
+  },
+};
 ```
 
 ### Init
 
 Now we can initialise and run the library passing in `pageFeatureGetters`, which will:
+
 1. Collect and store all the features which correspond to this page view event (current page).
 2. Evaluate all the audience model definitions, to see if the user can be added into any new `elegibleAudiences`.
 3. Pass this information to Prebid, for any subsequent ad calls on the same page.
 
 ```javascript
 edkt.init({
-  pageFeatureGetters: pageFeatureGetters
+  pageFeatureGetters: pageFeatureGetters,
 });
 ```
 
 ### Prebid
+
 > this makes sense to be last in the readme, but it must occur first in the actual page code.
 
 Now we can use EdgeKit to grab and pass audience IDs, from the device into Prebid for downstream targeting. This must happen early in the execution of the page before Prebid makes bid requests to adapters.
+
+> todo: we need to add links to the prebid docs here to explain the below object.
 
 ```javascript
 const edktAudienceIds = edkt.getElegibleAudienceIds();
@@ -104,10 +112,10 @@ pbjs.que.push(() => {
         user: {
           data: {
             user: edktAudienceIds,
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   });
 });
 ```

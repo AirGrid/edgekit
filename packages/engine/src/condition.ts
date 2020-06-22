@@ -1,7 +1,6 @@
-import { IPageView } from '@edgekit/types';
+import { IPageView, ICondition } from '@edgekit/types';
 import * as reducers from './reducers';
 import * as matchers from './matchers';
-import { ICondition } from './types';
 
 const createCondition = (condition: ICondition) => (pageViews: IPageView[]) => {
   const { filter, rules } = condition;

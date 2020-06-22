@@ -3,14 +3,10 @@ import audiences from '@edgekit/audiences';
 import { getPageFeatures } from './features';
 import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
+import { IPageFeatureGetter } from './types';
 
 interface IConfig {
   pageFeatureGetters: IPageFeatureGetter[];
-}
-
-interface IPageFeatureGetter {
-  name: string;
-  func: () => Promise<string[]>;
 }
 
 // TODO: we need to give a way to consumers to ensure this does not

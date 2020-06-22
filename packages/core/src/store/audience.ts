@@ -1,10 +1,5 @@
 import { storage, timeStampInSecs } from '../utils';
-
-enum StorageKeys {
-  PAGE_VIEWS = 'edkt_page_views',
-  MATCHED_AUDIENCES = 'edkt_matched_audiences',
-  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
-}
+import { StorageKeys } from '../types';
 
 interface IMatchedAudience {
   id: string;
@@ -13,7 +8,6 @@ interface IMatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-// TODO: share the types.
 class AudienceStore {
   matchedAudiences: IMatchedAudience[];
   matchedAudienceIds: string[];
