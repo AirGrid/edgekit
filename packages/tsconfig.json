@@ -4,6 +4,7 @@
     { "path": "core" },
     { "path": "engine" },
     { "path": "types" },
-    { "path": "audiences" }
+    { "path": "audiences" },
+    // { "path": "tools" }
   ]
 }
