@@ -24,9 +24,14 @@ class AudienceStore {
   }
 
   _load() {
-    const audiences: IMatchedAudience[] = storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
-    const unExpiredAudiences = audiences.filter(audience => audience.expiresAt > timeStampInSecs());
-    const unExpiredAudienceIds = unExpiredAudiences.map(audience => audience.id);
+    const audiences: IMatchedAudience[] =
+      storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
+    const unExpiredAudiences = audiences.filter(
+      (audience) => audience.expiresAt > timeStampInSecs()
+    );
+    const unExpiredAudienceIds = unExpiredAudiences.map(
+      (audience) => audience.id
+    );
     this.matchedAudiences = unExpiredAudiences;
     this.matchedAudienceIds = unExpiredAudienceIds;
     this._save();
@@ -41,11 +46,16 @@ class AudienceStore {
     // TODO: decide if we need to check duplicate audiences here...
 
     if (newlyMatchedAudiences.length === 0) return;
-    const allMatchedAudiences = [...this.matchedAudiences, ...newlyMatchedAudiences];
+    const allMatchedAudiences = [
+      ...this.matchedAudiences,
+      ...newlyMatchedAudiences,
+    ];
     this.matchedAudiences = allMatchedAudiences;
-    this.matchedAudienceIds = allMatchedAudiences.map(audience => audience.id);
+    this.matchedAudienceIds = allMatchedAudiences.map(
+      (audience) => audience.id
+    );
     this._save();
   }
-};
+}
 
 export const audienceStore = new AudienceStore();

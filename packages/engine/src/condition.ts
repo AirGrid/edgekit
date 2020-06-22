@@ -6,15 +6,15 @@ import { ICondition } from './types';
 const createCondition = (condition: ICondition) => (pageViews: IPageView[]) => {
   const { filter, rules } = condition;
   const filteredPageViews = filter.queries
-    .map(query => {
-      return pageViews.filter(pageView => {
+    .map((query) => {
+      return pageViews.filter((pageView) => {
         const queryFeatures = pageView.features[query.property];
-        return queryFeatures.some(v => query.value.indexOf(v) !== -1);
+        return queryFeatures.some((v) => query.value.indexOf(v) !== -1);
       });
     })
     .flat();
 
-  const ruleResults = rules.map(rule => {
+  const ruleResults = rules.map((rule) => {
     // TODO: allow other reducers...
     // const reducer = reducers[rule.reducer.name](rule.reducer.args);
     const reducer = reducers[rule.reducer.name]();

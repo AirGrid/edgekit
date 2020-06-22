@@ -10,18 +10,18 @@ const condition = {
   rules: [
     {
       reducer: {
-        name: 'count' as 'count',
+        name: 'count' as const,
       },
       matcher: {
-        name: 'gt' as 'gt',
+        name: 'gt' as const,
         args: 2,
       },
-    }
+    },
   ],
 };
 
 export default {
   id: 'travel',
   ttl: 3600,
-  conditions: [condition]
+  conditions: [condition],
 };

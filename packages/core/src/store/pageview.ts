@@ -39,13 +39,13 @@ class ViewStore {
       }
       return acc;
     }, {} as Record<string, string[]>);
-  
+
     if (Object.keys(features).length < 1) return undefined;
-  
+
     return {
       ts,
-      features
-    }
+      features,
+    };
   }
 
   insert(pageFeatures: IPageFeature[]) {

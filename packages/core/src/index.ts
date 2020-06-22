@@ -13,7 +13,6 @@ interface IPageFeatureGetter {
   func: () => Promise<string[]>;
 }
 
-
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
 const run = async (config: IConfig) => {
@@ -30,8 +29,8 @@ const run = async (config: IConfig) => {
         id: audience.id,
         matchedAt: timeStampInSecs(),
         expiresAt: timeStampInSecs() + audience.ttl,
-        matched: engine.check(audience.conditions, viewStore.pageViews)
-      }
+        matched: engine.check(audience.conditions, viewStore.pageViews),
+      };
     })
     .filter((audience) => audience.matched);
 
@@ -40,9 +39,9 @@ const run = async (config: IConfig) => {
 
 const stats = () => {
   return {};
-}
+};
 
 export const edkt = {
   run,
-  stats
-}
+  stats,
+};

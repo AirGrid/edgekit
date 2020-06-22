@@ -5,7 +5,7 @@ interface IPageFeatureGetter {
 }
 
 const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
-  return pageFeatureGetters.map(getter => {
+  return pageFeatureGetters.map((getter) => {
     return (async () => {
       let error: boolean;
       let value: string[];
@@ -17,18 +17,20 @@ const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
         value = [];
         error = true;
       }
-  
-      return { 
+
+      return {
         name,
         error,
         value,
       };
     })();
-  })
-}
+  });
+};
 
-export const getPageFeatures = async (pageFeatureGetters: IPageFeatureGetter[])=> {
+export const getPageFeatures = async (
+  pageFeatureGetters: IPageFeatureGetter[]
+) => {
   const wrappedGetters = wrapPageFeatureGetters(pageFeatureGetters);
   const features = await Promise.all(wrappedGetters);
   return features;
-}
+};

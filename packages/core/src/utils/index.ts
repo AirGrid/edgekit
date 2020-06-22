@@ -3,7 +3,7 @@ export const timeStampInSecs = (): number => Math.round(Date.now() / 1000);
 const get = (key: string) => {
   const value = localStorage.getItem(key);
   if (!value) return undefined;
-  
+
   try {
     return JSON.parse(value);
   } catch (e) {
@@ -22,5 +22,5 @@ const set = (key: string, value: object) => {
 
 export const storage = {
   set,
-  get
+  get,
 };

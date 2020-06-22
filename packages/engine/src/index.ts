@@ -4,9 +4,9 @@ import { IPageView, ICondition } from './types';
 export const check = (
   conditions: ICondition[],
   pageViews: IPageView[],
-  any: boolean = false
+  any = false
 ): boolean => {
-  const checkedConditions = conditions.map(condition => {
+  const checkedConditions = conditions.map((condition) => {
     return createCondition(condition)(pageViews);
   });
 
