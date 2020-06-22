@@ -6,20 +6,17 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "compile": "tsc",
-    "test": "jest --verbose",
-    "lint": "eslint '*/**/*.{js,ts}'"
+    "test": "jest --verbose"
   },
   "author": "ydennisy",
   "license": "MIT",
   "dependencies": {
     "@edgekit/engine": "^0.0.1",
     "@edgekit/types": "^0.0.1",
-    "@edgekit/audiences": "^0.0.1",
-    "@edgekit/tools": "^0.0.1"
+    "@edgekit/audiences": "^0.0.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
-    "@typescript-eslint/parser": "^3.3.0",
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.3",
     "ts-jest": "^26.1.0",
