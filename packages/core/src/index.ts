@@ -34,7 +34,7 @@ const run = async (config: IConfig) => {
       }
     })
     .filter((audience) => audience.matched);
-  
+
   audienceStore.setMatchedAudiences(matchedAudiences);
 };
 
