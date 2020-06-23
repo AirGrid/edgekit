@@ -1,7 +1,19 @@
 {
   "name": "root",
-  "private": true,
+  "scripts": {
+    "build": "tsc -b packages",
+    "watch": "tsc -w packages",
+    "lint": "eslint packages/**/src packages/**/__test__ --ext js,ts",
+    "lint:fix": "eslint packages/**/src packages/**/__test__ --ext js,ts --fix"
+  },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "eslint": "^7.3.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "lerna": "^3.22.1",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.5"
   }
 }
