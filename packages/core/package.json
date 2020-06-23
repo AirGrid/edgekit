@@ -1,0 +1,41 @@
+{
+  "name": "@edgekit/core",
+  "version": "0.0.1-alpha.4",
+  "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "source": "src/index.ts",
+  "typings": "lib/index.d.ts",
+  "main": "lib/index.js",
+  "umd:main": "lib/index.umd.js",
+  "module": "lib/index.m.js",
+  "esmodule": "lib/index.modern.js",
+  "unpkg": "lib/index.umd.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "/lib"
+  ],
+  "scripts": {
+    "compile": "tsc",
+    "build": "microbundle",
+    "test": "jest --verbose"
+  },
+  "author": "AirGrid",
+  "license": "MIT",
+  "dependencies": {
+    "@edgekit/audiences": "^0.0.1",
+    "@edgekit/engine": "^0.0.1",
+    "@edgekit/types": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "jest-fetch-mock": "^3.0.3",
+    "microbundle": "^0.12.2",
+    "ts-jest": "^26.1.0",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.5"
+  },
+  "gitHead": "d7e3c229de3d6564757ce95af38ac27963af688e"
+}
