@@ -1,6 +1,5 @@
 {
   "name": "root",
-  "private": true,
   "scripts": {
     "build": "tsc -b packages",
     "watch": "tsc -w packages",
