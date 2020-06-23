@@ -83,7 +83,9 @@ $ tsc -b packages
 
 ## EdgeKit ❤️ AirGrid
 
-Image!
+_AirGrid provides a managed layer for your EdgeKit deployments._
+
+![EdgeKit AirGrid](./docs/images/edgekit-airgrid.svg?raw=true)
 
 ## Contributing 🎗️
 
