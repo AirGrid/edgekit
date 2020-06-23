@@ -2,6 +2,9 @@
   "name": "@edgekit/audiences",
   "version": "0.0.1-alpha.2",
   "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -18,5 +21,5 @@
   "devDependencies": {
     "typescript": "^3.9.5"
   },
-  "gitHead": "6f7a66e32922436e66e50c367bc31404a06fce03"
+  "gitHead": "d7e3c229de3d6564757ce95af38ac27963af688e"
 }
