@@ -11,6 +11,7 @@
   "umd:main": "lib/index.umd.js",
   "module": "lib/index.m.js",
   "esmodule": "lib/index.modern.js",
+  "unpkg": "lib/index.umd.js",
   "types": "lib/index.d.ts",
   "files": [
     "/lib"
