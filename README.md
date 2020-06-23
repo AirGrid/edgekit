@@ -1,128 +1,77 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
+
 # EdgeKit | `edkt();`
 
-**EdgeKit allows web publishers to create privacy focused, 1st party data audience segments to monetise through online advertising.**
+An open source, privacy focused client side library for the creation and monetisation of online audiences.
 
-EdgeKit.org -> https://projects.invisionapp.com/share/2NXLNZYG64X#/screens/421377757
+![EdgeKit Prebid Flow](./docs/images/edgekit-prebid-flow.svg?raw=true)
 
-## Features:
+## What is EdgeKit? 🤔
 
-> (this needs some sections....)
+EdgeKit is an open source library which allows publishers to quickly and easily start to use their own 1st party data to create audience segments for monetisation via programmatic advertising.
 
-- Packaged with a taxonomy of [IAB Data Transparency Framework](https://iabtechlab.com/standards/data-transparency/) audiences.
-- Does not use or set cookies, so compatible with all browsers.
-- Privacy focused, all personal data remains on device.
-- Does not require a server, runs directly on the client.
-- Integrates with header bidders such as [Prebid.js](http://prebid.org/).
-- Free & open source.
-- Only x kb gzipped & minified.
-- Built with TypeScript.
+As a publisher, you can use EdgeKit to segment your audience, in a privacy focused manner, by keeping all your web visitors personal information on their device. No need for third party tracking or sending personal data to the server.
 
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+Audience definitions are collaborative, and allow marketers & publishers to agree upon a taxonomy & definition in which all can trust.
 
-## Usage:
+## Why use EdgeKit? 🎖️
 
-### Install
+EdgeKit allows publishers to:
 
-First we install EdgeKit into our project.
+- Control their 1st party data, reducing the reliance on 3rd parties for tracking & segmentation of their users.
+- Respect the privacy of their audience, by keeping their personal information local to their device and easily purgeable.
+- Earn increased revenue from online advertising, by decorating bid requests with audience signals.
+
+## Key Features 🔑
+
+- Community driven, free & open source forever.
+- Pre-packaged with a taxonomy of IAB Data Transparency Framework audiences.
+- Integrates with header bidders, SSPs or ad-servers.
+- Cookie-less and 3rd party tracking free.
+- Compatible with all modern web browsers.
+- No server infrastructure needed.
+- Developed with TypeScript.
+- No external dependencies.
+- Only 10kb gzip & minified.
+
+## Installation 🚪
+
+Using [npm](https://www.npmjs.com/):
 
 ```shell
-$ npm i -S @AirGrid/EdgeKit
+npm i -S @edgekit/core
 ```
 
-We can now import the API into our script.
-
-```javascript
-import edkt from '@AirGrid/EdgeKit';
-```
-
-Alternatively to get started quickly, we can use unpkg to load the `edkt` object into the `window`.
+Using [unpkg](https://unpkg.com/):
 
 ```html
 <Todo></Todo>
 ```
 
-### Page Features
+## Usage 🤓
 
-The EdgeKit library allows for the fetching and storage of arbitrary page features, which will become available in the audience evaluation step.
+### Full Flow
 
-A simple example would be to collect the keywords often present in the meta tags of webpages, which aim to describe their content. Therefore given the following `HTML` markup:
+EdgeKit will execute the following high level flow:
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="keywords" content="sport,news,football,stadium" />
-    <title>Article about sports, news and football!</title>
-  </head>
-  <body>
-    Lots of juicy content!
-  </body>
-</html>
-```
+1. **Register, run and store user defined `pageFeatureGetters`.**
+   In this step the library will fetch `keywords` to describe the current page load, which will be stored locally to create a history of the pages viewed by the user visiting your site.
+2. **Run audience definitions against the local page views.**
+   The library now checks the users local history to see if they match any of the audience definitions, storing any matched audiences.
+3. **Make matched audiences available to bidding.**
+   The final step is to pass the newly defined audience signals to third party bidders, for example via Prebid.
 
-We can define a `pageFeatureGetter` to collect these tags, and allow EdgeKit to process and store them for model evaluation. We define this as an object with a `name` and `func` key, which must resolve a `Promise` of values which are our page features!
+#### Page Features
 
-```javascript
-const getPageKeywords = {
-  name: 'pageKeywords',
-  func: () => {
-    const tag = document.head.querySelector('meta[name="keywords"]');
-    const keywordString = tag.getAttribute('content');
-    const keywords = keywordString.toLowerCase().split(',');
-    return Promise.resolve(keywords);
-  },
-};
-```
+#### Audience Evaluation
 
-### Init
+#### Bidding Integration
 
-Now we can initialise and run the library passing in `pageFeatureGetters`, which will:
+## Developer Setup 💻
 
-1. Collect and store all the features which correspond to this page view event (current page).
-2. Evaluate all the audience model definitions, to see if the user can be added into any new `elegibleAudiences`.
-3. Pass this information to Prebid, for any subsequent ad calls on the same page.
-
-```javascript
-edkt.init({
-  pageFeatureGetters: pageFeatureGetters,
-});
-```
-
-### Prebid
-
-> this makes sense to be last in the readme, but it must occur first in the actual page code.
-
-Now we can use EdgeKit to grab and pass audience IDs, from the device into Prebid for downstream targeting. This must happen early in the execution of the page before Prebid makes bid requests to adapters.
-
-> todo: we need to add links to the prebid docs here to explain the below object.
-
-```javascript
-const edktAudienceIds = edkt.getElegibleAudienceIds();
-
-let pbjs = pbjs || {};
-pbjs.que = pbjs.que || [];
-pbjs.que.push(() => {
-  pbjs.setBidderConfig({
-    bidders: ['appnexus'],
-    config: {
-      fpd: {
-        user: {
-          data: {
-            user: edktAudienceIds,
-          },
-        },
-      },
-    },
-  });
-});
-```
-
-## Development Setup
-
-> Todo
+> Full developer documentation coming soon!
 
 ```
 $ git clone https://github.com/{UPDATEME}
@@ -131,3 +80,17 @@ $ npm i
 $ lerna bootstrap
 $ tsc -b packages
 ```
+
+## EdgeKit ❤️ AirGrid
+
+Image!
+
+## Contributing 🎗️
+
+Contributions are always welcome, no matter how large or small. Before contributing, please read the code of conduct.
+
+See Contributing.
+
+## Licence 💮
+
+MIT License | Copyright (c) 2020 AirGrid LTD | [Link](./LICENSE)
