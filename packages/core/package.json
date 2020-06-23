@@ -1,6 +1,6 @@
 {
   "name": "@edgekit/core",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "source": "src/index.ts",
   "typings": "lib/index.d.ts",
