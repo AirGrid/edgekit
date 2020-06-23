@@ -7,7 +7,7 @@ export interface IPageView {
 
 export interface IConditionQuery {
   property: string;
-  value: string[] | number[];
+  value: string[];
 }
 
 export interface IConditionRule {

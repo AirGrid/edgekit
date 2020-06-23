@@ -1,7 +1,7 @@
 import { storage, timeStampInSecs } from '../utils';
 import { StorageKeys } from '../types';
 
-interface IMatchedAudience {
+export interface IMatchedAudience {
   id: string;
   matchedAt: number;
   expiresAt: number;

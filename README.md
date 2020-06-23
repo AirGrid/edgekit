@@ -74,11 +74,11 @@ EdgeKit will execute the following high level flow:
 > Full developer documentation coming soon!
 
 ```
-$ git clone https://github.com/{UPDATEME}
-$ cd {UPDATEME}
+$ git clone https://github.com/AirGrid/edgekit.git
+$ cd edgekit
 $ npm i
 $ lerna bootstrap
-$ tsc -b packages
+$ npm run build
 ```
 
 ## EdgeKit ❤️ AirGrid
