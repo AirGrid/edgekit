@@ -1,5 +1,5 @@
-on: [push, pull_request]
 name: Build, Test and maybe Publish
+on: [push, pull_request]
 jobs:
   test:
     name: Build & Test
