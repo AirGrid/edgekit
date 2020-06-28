@@ -25,7 +25,7 @@ const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
 
 export const getPageFeatures = async (
   pageFeatureGetters: IPageFeatureGetter[]
-): IPageFeature[] => {
+): Promise<IPageFeature[]> => {
   const wrappedGetters = wrapPageFeatureGetters(pageFeatureGetters);
   const features = await Promise.all(wrappedGetters);
   return features;
