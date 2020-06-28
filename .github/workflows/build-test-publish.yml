@@ -3,8 +3,8 @@ name: Build, Test and maybe Publish
 jobs:
   test:
     name: Build & Test
-      runs-on: ubuntu-latest
-      steps:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 12
         uses: actions/setup-node@v1
