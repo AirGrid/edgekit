@@ -30,6 +30,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
+      - name: Install dependencies
+        run: npm install 
+      - name: Compile code
+        run: npm run build
+      - name: Create UMD bundle 
+        run: npm run bundle 
       - name: Publish if version has been updated
         uses: pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df
         with:
