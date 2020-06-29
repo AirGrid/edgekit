@@ -1,12 +1,5 @@
+import { StorageKeys, IMatchedAudience } from 'types';
 import { storage, timeStampInSecs } from '../utils';
-import { StorageKeys } from 'types';
-
-export interface IMatchedAudience {
-  id: string;
-  matchedAt: number;
-  expiresAt: number;
-  matchedOnCurrentPageView: boolean;
-}
 
 class AudienceStore {
   matchedAudiences: IMatchedAudience[];

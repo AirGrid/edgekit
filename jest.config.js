@@ -3,4 +3,5 @@ module.exports = {
   testEnvironment: 'jsdom',
   automock: false,
   setupFiles: ['./test/setupJest.ts'],
+  modulePaths: ['<rootDir>'],
 };
