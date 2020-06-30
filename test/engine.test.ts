@@ -1,8 +1,8 @@
 import 'jest';
-import { ICondition } from 'types';
+import { Condition } from 'types';
 import { check } from '../src/engine';
 
-const sports1xCondition: ICondition = {
+const sports1xCondition: Condition = {
   filter: {
     any: false,
     queries: [{ property: 'keywords', value: ['sport'] }],
