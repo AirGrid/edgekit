@@ -1,6 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
+![npm (scoped)](https://img.shields.io/npm/v/@edgekit/core?style=flat-square)
+![Build, Test and Publish](https://github.com/AirGrid/edgekit/workflows/Build,%20Test%20and%20maybe%20Publish/badge.svg?style=flat-square)
 
 # EdgeKit | `edkt();`
 
@@ -34,20 +35,31 @@ EdgeKit allows publishers to:
 - No server infrastructure needed.
 - Developed with TypeScript.
 - No external dependencies.
-- Only 10kb gzip & minified.
+- Only 1.5kb gzip & minified.
 
 ## Installation 🚪
 
 Using [npm](https://www.npmjs.com/):
 
 ```shell
-npm i -S @edgekit/core
+npm i -S @airgrid/edgekit
 ```
 
 Using [unpkg](https://unpkg.com/):
 
 ```html
-<Todo></Todo>
+<!--ES module-->
+<script type="module" src="https://unpkg.com/@airgrid/edgekit?module" crossorigin></script>
+
+<!--UMD module-->
+<script src="https://unpkg.com/@airgrid/edgekit" crossorigin></script>
+```
+
+_Note: using the above URLs will always fetch the latest version, which could contain breaking changes, you should pin a version number as shown in the below example:_
+
+```html
+<!--UMD module-->
+<script src="https://unpkg.com/@airgrid/edgekit@0.0.0-dev.1/dist/edkt.umd.js" crossorigin></script>
 ```
 
 ## Usage 🤓
@@ -77,7 +89,7 @@ EdgeKit will execute the following high level flow:
 $ git clone https://github.com/AirGrid/edgekit.git
 $ cd edgekit
 $ npm i
-$ lerna bootstrap
+$ npm test
 $ npm run build
 ```
 
