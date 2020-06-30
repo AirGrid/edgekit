@@ -1,6 +1,6 @@
 {
   "name": "@airgrid/edgekit",
-  "version": "0.0.0-dev.1",
+  "version": "0.0.0-dev.2",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "access": "public"
   },
   "source": "src/index.ts",
-  "unpkg": "dist/edkt.umd.js",
+  "module": "dist/edgekit.js",
+  "unpkg": "dist/edgekit.umd.js",
   "files": [
     "dist"
   ],
@@ -29,7 +30,7 @@
     "clean": "rimraf dist",
     "compile": "tsc",
     "build": "run-s clean compile",
-    "bundle": "microbundle --format umd --name edkt",
+    "bundle": "microbundle --format umd,esm --name edkt",
     "watch": "tsc -w",
     "test": "jest --verbose",
     "lint": "eslint src test --ext js,ts",
