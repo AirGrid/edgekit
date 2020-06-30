@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-![npm (scoped)](https://img.shields.io/npm/v/@edgekit/core?style=flat-square)
+![npm (scoped)](https://img.shields.io/npm/v/@airgrid/edgekit?style=flat-square)
 ![Build, Test and Publish](https://github.com/AirGrid/edgekit/workflows/Build,%20Test%20and%20maybe%20Publish/badge.svg?style=flat-square)
 
 # EdgeKit | `edkt();`
@@ -59,7 +59,7 @@ _Note: using the above URLs will always fetch the latest version, which could co
 
 ```html
 <!--UMD module-->
-<script src="https://unpkg.com/@airgrid/edgekit@0.0.0-dev.1/dist/edkt.umd.js" crossorigin></script>
+<script src="https://unpkg.com/@airgrid/edgekit@0.0.0-dev.2/dist/edgekit.umd.js" crossorigin></script>
 ```
 
 ## Usage 🤓
