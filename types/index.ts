@@ -1,16 +1,16 @@
-export interface IPageFeatureGetter {
+export interface PageFeatureGetter {
   name: string;
   func: () => Promise<string[]>;
 }
 
-export interface IMatchedAudience {
+export interface MatchedAudience {
   id: string;
   matchedAt: number;
   expiresAt: number;
   matchedOnCurrentPageView: boolean;
 }
 
-export interface IPageFeature {
+export interface PageFeature {
   name: string;
   error: boolean;
   value: string[];
@@ -22,19 +22,19 @@ export enum StorageKeys {
   MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
 }
 
-export interface IPageView {
+export interface PageView {
   ts: number;
   features: {
     [name: string]: string[];
   };
 }
 
-export interface IConditionQuery {
+export interface ConditionQuery {
   property: string;
   value: string[];
 }
 
-export interface IConditionRule {
+export interface ConditionRule {
   reducer: {
     name: 'count';
     // args?: string;
@@ -45,11 +45,11 @@ export interface IConditionRule {
   };
 }
 
-export interface ICondition {
+export interface Condition {
   filter: {
     // TODO: return support for any?
     any?: boolean;
-    queries: IConditionQuery[];
+    queries: ConditionQuery[];
   };
-  rules: IConditionRule[];
+  rules: ConditionRule[];
 }

@@ -22,6 +22,9 @@
   },
   "source": "src/index.ts",
   "unpkg": "dist/edkt.umd.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc",

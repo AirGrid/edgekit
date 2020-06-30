@@ -1,8 +1,8 @@
-import { IPageView, StorageKeys, IPageFeature } from 'types';
+import { PageView, StorageKeys, PageFeature } from 'types';
 import { storage, timeStampInSecs } from '../utils';
 
 class ViewStore {
-  pageViews: IPageView[];
+  pageViews: PageView[];
 
   constructor() {
     this.pageViews = [];
@@ -17,7 +17,7 @@ class ViewStore {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _formatIntoPageView(pageFeatures: IPageFeature[]) {
+  _formatIntoPageView(pageFeatures: PageFeature[]) {
     const ts = timeStampInSecs();
 
     const features = pageFeatures.reduce((acc, item) => {
@@ -36,7 +36,7 @@ class ViewStore {
     };
   }
 
-  insert(pageFeatures: IPageFeature[]) {
+  insert(pageFeatures: PageFeature[]) {
     const pageView = this._formatIntoPageView(pageFeatures);
     if (!pageView) return;
     this.pageViews.push(pageView);
