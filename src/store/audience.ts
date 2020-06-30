@@ -1,8 +1,8 @@
-import { StorageKeys, IMatchedAudience } from 'types';
+import { StorageKeys, MatchedAudience } from 'types';
 import { storage, timeStampInSecs } from '../utils';
 
 class AudienceStore {
-  matchedAudiences: IMatchedAudience[];
+  matchedAudiences: MatchedAudience[];
   matchedAudienceIds: string[];
 
   constructor() {
@@ -12,7 +12,7 @@ class AudienceStore {
   }
 
   _load() {
-    const audiences: IMatchedAudience[] =
+    const audiences: MatchedAudience[] =
       storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
     const unExpiredAudiences = audiences
       .filter((audience) => audience.expiresAt > timeStampInSecs())
@@ -35,7 +35,7 @@ class AudienceStore {
     storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
-  setMatchedAudiences(newlyMatchedAudiences: IMatchedAudience[]) {
+  setMatchedAudiences(newlyMatchedAudiences: MatchedAudience[]) {
     // TODO: decide if we need to check duplicate audiences here...
 
     if (newlyMatchedAudiences.length === 0) return;

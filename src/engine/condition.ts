@@ -1,9 +1,9 @@
-import { IPageView, ICondition } from 'types';
+import { PageView, Condition } from 'types';
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 
-const createCondition = (condition: ICondition) => (
-  pageViews: IPageView[]
+const createCondition = (condition: Condition) => (
+  pageViews: PageView[]
 ): boolean => {
   const { filter, rules } = condition;
   const filteredPageViews = filter.queries

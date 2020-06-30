@@ -1,9 +1,9 @@
-import { IPageView, ICondition } from 'types';
+import { PageView, Condition } from 'types';
 import createCondition from './condition';
 
 export const check = (
-  conditions: ICondition[],
-  pageViews: IPageView[],
+  conditions: Condition[],
+  pageViews: PageView[],
   any = false
 ): boolean => {
   const checkedConditions = conditions.map((condition) => {

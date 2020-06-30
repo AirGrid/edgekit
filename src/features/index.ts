@@ -1,6 +1,6 @@
-import { IPageFeatureGetter, IPageFeature } from 'types';
+import { PageFeatureGetter, PageFeature } from 'types';
 
-const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
+const wrapPageFeatureGetters = (pageFeatureGetters: PageFeatureGetter[]) => {
   return pageFeatureGetters.map((getter) => {
     return (async () => {
       let error: boolean;
@@ -24,8 +24,8 @@ const wrapPageFeatureGetters = (pageFeatureGetters: IPageFeatureGetter[]) => {
 };
 
 export const getPageFeatures = async (
-  pageFeatureGetters: IPageFeatureGetter[]
-): Promise<IPageFeature[]> => {
+  pageFeatureGetters: PageFeatureGetter[]
+): Promise<PageFeature[]> => {
   const wrappedGetters = wrapPageFeatureGetters(pageFeatureGetters);
   const features = await Promise.all(wrappedGetters);
   return features;

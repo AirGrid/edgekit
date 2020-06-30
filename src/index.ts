@@ -3,15 +3,15 @@ import audiences from './audiences';
 import { getPageFeatures } from './features';
 import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { IPageFeatureGetter, IMatchedAudience } from 'types';
+import { PageFeatureGetter, MatchedAudience } from 'types';
 
-interface IConfig {
-  pageFeatureGetters: IPageFeatureGetter[];
+interface Config {
+  pageFeatureGetters: PageFeatureGetter[];
 }
 
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
-const run = async (config: IConfig): Promise<void> => {
+const run = async (config: Config): Promise<void> => {
   const { pageFeatureGetters } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   viewStore.insert(pageFeatures);
@@ -34,7 +34,7 @@ const run = async (config: IConfig): Promise<void> => {
   audienceStore.setMatchedAudiences(matchedAudiences);
 };
 
-const getMatchedAudiences = (): IMatchedAudience[] => {
+const getMatchedAudiences = (): MatchedAudience[] => {
   return audienceStore.matchedAudiences;
 };
 

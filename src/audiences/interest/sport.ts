@@ -1,6 +1,6 @@
-import { ICondition } from 'types';
+import { Condition } from 'types';
 
-const condition: ICondition = {
+const condition: Condition = {
   filter: {
     queries: [
       {

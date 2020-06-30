@@ -1,6 +1,6 @@
-import { IPageView } from 'types';
+import { PageView } from 'types';
 
-export const count = () => (pageViews: IPageView[]): number => pageViews.length;
+export const count = () => (pageViews: PageView[]): number => pageViews.length;
 
 // TODO: these are not being used in edgekit, but they are in our project
 // need to figure out how to make them compatible with typescript...
