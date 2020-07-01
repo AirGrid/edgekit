@@ -72,6 +72,6 @@ describe('EdgeKit edkt() API tests', () => {
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
-    expect(edktMatchedAudiences[0]).toHaveProperty('id', 'iab-209');
+    expect(edktMatchedAudiences[0]).toHaveProperty('id', 'iab-607');
   });
 });
