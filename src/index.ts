@@ -1,5 +1,5 @@
 import * as engine from './engine';
-import audiences from './audiences';
+import { allAudienceDefinitions } from './audiences';
 import { getPageFeatures } from './features';
 import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
@@ -16,9 +16,15 @@ const run = async (config: Config): Promise<void> => {
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   viewStore.insert(pageFeatures);
 
-  const matchedAudiences = audiences
+  const matchedAudiences = allAudienceDefinitions
     .filter((audience) => {
       return !audienceStore.matchedAudienceIds.includes(audience.id);
+    })
+    .map((audience) => {
+      return {
+        ...audience,
+        conditions: engine.translate(audience),
+      };
     })
     .map((audience) => {
       return {
