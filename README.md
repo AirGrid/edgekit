@@ -86,7 +86,7 @@ EdgeKit will execute the following high level flow:
 
 A page feature is a list of keywords that describe a pages content.
 
-EdgeKit requires pageFeatureGetters to be passed into the run method that will allow EdgeKit to evaluate the page.
+EdgeKit requires pageFeatureGetters to be passed into the run method that will allow EdgeKit to evaluate the page. A pageFeatureGetter is an object that has a name and and an async function that resolves to a keyword list.
 
 ```typescript
 const examplePageFeatureGetter = {
@@ -122,7 +122,7 @@ const getHtmlKeywords = {
 ##### JS EdgeKit Run
 
 ```typescript
-import { edkt } from '../src';
+import { edkt } from '@airgrid/edgekit';
 
 edkt.run({
   pageFeatureGetters: [getHtmlKeywords],
@@ -149,6 +149,29 @@ export const exampleAudience: AudienceDefinition = {
   // The Keywords used to identify the audience
   keywords: listOfKeywords,
 };
+```
+
+EdgeKit comes with a range of audiences that you can use as examples or to get started straight away in your application.
+
+To use the the built in audiences you can import them from EdgeKit along with 'edkt'
+
+```typescript
+// use all built in audiences
+import { edkt, allAudienceDefinitions } from '@airgrid/edgekit';
+
+edkt.run({
+  pageFeatureGetters: [...],
+  audienceDefinitions: allAudienceDefinitions,
+});
+
+// use only the built in sport audience
+import { edkt, sportInterestAudience } from '@airgrid/edgekit';
+
+edkt.run({
+  pageFeatureGetters: [...],
+  audienceDefinitions: [sportInterestAudience],
+});
+
 ```
 
 #### Bidding Integration
