@@ -49,4 +49,5 @@ export const edkt = {
   getMatchedAudiences,
 };
 
+// This will expose the exported audiences & allow tree shaking
 export * from './audiences';
