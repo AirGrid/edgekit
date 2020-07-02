@@ -1,5 +1,5 @@
 import fetchMock from 'jest-fetch-mock';
-import { edkt } from '../src';
+import { edkt, audienceDefinitions } from '../src';
 
 const sportKeywordsString = 'golf,liverpool,football,stadium';
 // const travelKeywordsString = 'beach,holiday,cruise,mojito'
@@ -38,6 +38,7 @@ describe('EdgeKit edkt() API tests', () => {
 
     await edkt.run({
       pageFeatureGetters: [getHtmlKeywords],
+      audienceDefinitions: audienceDefinitions.all,
     });
 
     const edktPageViews = JSON.parse(
@@ -52,6 +53,7 @@ describe('EdgeKit edkt() API tests', () => {
 
     await edkt.run({
       pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: audienceDefinitions.all,
     });
 
     const edktPageViews = JSON.parse(
@@ -66,6 +68,7 @@ describe('EdgeKit edkt() API tests', () => {
 
     await edkt.run({
       pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: audienceDefinitions.all,
     });
 
     const edktMatchedAudiences = JSON.parse(

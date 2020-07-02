@@ -39,3 +39,10 @@ export const allAudienceDefinitions: AudienceDefinition[] = [
   travelInterestAudience,
   automotiveInterestAudience,
 ];
+
+export const audienceMap = {
+  all: allAudienceDefinitions,
+  sportInterestAudience,
+  travelInterestAudience,
+  automotiveInterestAudience,
+};
