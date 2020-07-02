@@ -1,5 +1,4 @@
 import * as engine from './engine';
-import { audienceMap } from './audiences';
 import { getPageFeatures } from './features';
 import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
@@ -50,4 +49,4 @@ export const edkt = {
   getMatchedAudiences,
 };
 
-export const audienceDefinitions = audienceMap;
+export * from './audiences';
