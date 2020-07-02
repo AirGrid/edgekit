@@ -1,7 +1,7 @@
 import fetchMock from 'jest-fetch-mock';
 import { edkt } from '../src';
 
-const sportKeywordsString = 'sport,news,football,stadium';
+const sportKeywordsString = 'golf,liverpool,football,stadium';
 // const travelKeywordsString = 'beach,holiday,cruise,mojito'
 
 const sportsKeywordsHtml = `<meta charset="UTF-8">
@@ -72,6 +72,6 @@ describe('EdgeKit edkt() API tests', () => {
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
-    expect(edktMatchedAudiences[0]).toHaveProperty('id', 'sport');
+    expect(edktMatchedAudiences[0]).toHaveProperty('id', 'iab-607');
   });
 });

@@ -1,8 +1,9 @@
-import { PageView, Condition } from 'types';
+import { PageView, EngineCondition } from 'types';
 import createCondition from './condition';
+import { translate } from './translate';
 
-export const check = (
-  conditions: Condition[],
+const check = (
+  conditions: EngineCondition[],
   pageViews: PageView[],
   any = false
 ): boolean => {
@@ -14,3 +15,5 @@ export const check = (
     ? checkedConditions.includes(true)
     : !checkedConditions.includes(false);
 };
+
+export { translate, check };

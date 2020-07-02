@@ -1,25 +1,22 @@
+// Storage Keys Enum
+
+export enum StorageKeys {
+  PAGE_VIEWS = 'edkt_page_views',
+  MATCHED_AUDIENCES = 'edkt_matched_audiences',
+  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
+}
+
+// Page Features
+
 export interface PageFeatureGetter {
   name: string;
   func: () => Promise<string[]>;
-}
-
-export interface MatchedAudience {
-  id: string;
-  matchedAt: number;
-  expiresAt: number;
-  matchedOnCurrentPageView: boolean;
 }
 
 export interface PageFeature {
   name: string;
   error: boolean;
   value: string[];
-}
-
-export enum StorageKeys {
-  PAGE_VIEWS = 'edkt_page_views',
-  MATCHED_AUDIENCES = 'edkt_matched_audiences',
-  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
 }
 
 export interface PageView {
@@ -29,12 +26,32 @@ export interface PageView {
   };
 }
 
-export interface ConditionQuery {
+// Audiences
+
+export interface MatchedAudience {
+  id: string;
+  matchedAt: number;
+  expiresAt: number;
+  matchedOnCurrentPageView: boolean;
+}
+
+export interface AudienceDefinition {
+  id: string;
+  name: string;
+  ttl: number;
+  lookback: number;
+  occurrences: number;
+  keywords: string[];
+}
+
+// Engine
+
+export interface EngineConditionQuery {
   property: string;
   value: string[];
 }
 
-export interface ConditionRule {
+export interface EngineConditionRule {
   reducer: {
     name: 'count';
     // args?: string;
@@ -45,11 +62,10 @@ export interface ConditionRule {
   };
 }
 
-export interface Condition {
+export interface EngineCondition {
   filter: {
-    // TODO: return support for any?
     any?: boolean;
-    queries: ConditionQuery[];
+    queries: EngineConditionQuery[];
   };
-  rules: ConditionRule[];
+  rules: EngineConditionRule[];
 }
