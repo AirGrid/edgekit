@@ -63,6 +63,21 @@ describe('EdgeKit edkt() API tests', () => {
     expect(edktPageViews.length).toEqual(2);
   });
 
+  it('sports audience should not be stored in matched audiences when no audience definitions are sent', async () => {
+    fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
+
+    await edkt.run({
+      pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: [],
+    });
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktMatchedAudiences.length).toEqual(0);
+  });
+
   it('sports audience should be stored in matched audiences', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
