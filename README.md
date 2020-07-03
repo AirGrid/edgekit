@@ -49,7 +49,11 @@ Using [unpkg](https://unpkg.com/):
 
 ```html
 <!--ES module-->
-<script type="module" src="https://unpkg.com/@airgrid/edgekit?module" crossorigin></script>
+<script
+  type="module"
+  src="https://unpkg.com/@airgrid/edgekit?module"
+  crossorigin
+></script>
 
 <!--UMD module-->
 <script src="https://unpkg.com/@airgrid/edgekit" crossorigin></script>
@@ -59,7 +63,10 @@ _Note: using the above URLs will always fetch the latest version, which could co
 
 ```html
 <!--UMD module-->
-<script src="https://unpkg.com/@airgrid/edgekit@0.0.0-dev.2/dist/edgekit.umd.js" crossorigin></script>
+<script
+  src="https://unpkg.com/@airgrid/edgekit@0.0.0-dev.2/dist/edgekit.umd.js"
+  crossorigin
+></script>
 ```
 
 ## Usage 🤓
@@ -77,7 +84,95 @@ EdgeKit will execute the following high level flow:
 
 #### Page Features
 
+A page feature is a list of keywords that describe a pages content.
+
+EdgeKit requires pageFeatureGetters to be passed into the run method that will allow EdgeKit to evaluate the page. A pageFeatureGetter is an object that has a name and and an async function that resolves to a keyword list.
+
+```typescript
+const examplePageFeatureGetter = {
+   name: 'example',
+   func: (): Promise<string[]> => { ... }
+}
+```
+
+The following is a working example of a pageFeatureGetter that gets the meta data keywords from the head of the HTML.
+
+##### HTML
+
+```html
+<meta name="keywords" content="goal,liverpool,football,stadium" />
+```
+
+##### JS pageFeatureGetter
+
+```typescript
+const getHtmlKeywords = {
+  name: 'keywords',
+  func: (): Promise<string[]> => {
+    const tag = <HTMLElement>(
+      document.head.querySelector('meta[name="keywords"]')
+    );
+    const keywordString = tag.getAttribute('content') || '';
+    const keywords = keywordString.toLowerCase().split(',');
+    return Promise.resolve(keywords);
+  },
+};
+```
+
+##### JS EdgeKit Run
+
+```typescript
+import { edkt } from '@airgrid/edgekit';
+
+edkt.run({
+  pageFeatureGetters: [getHtmlKeywords],
+  audienceDefinitions: ...,
+});
+```
+
 #### Audience Evaluation
+
+In EdgeKit an audience refers to a group of users you would like to identify based on a list of keywords, the frequency of the user seeing one of the keywords and how long ago or recently they saw it.
+
+```typescript
+export const exampleAudience: AudienceDefinition = {
+  // Unique Identifier
+  id: '1234',
+  // Name of the Audience
+  name: 'Interest | typeOfIntrest',
+  // Time To Live - How long after matching the Audience are you part of it
+  ttl: TTL_IN_SECS,
+  // How long into the past should EdgeKit Look to match you to the audience
+  lookback: LOOKBACK_IN_SECS,
+  // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
+  occurrences: OCCURRENCES,
+  // The Keywords used to identify the audience
+  keywords: listOfKeywords,
+};
+```
+
+EdgeKit comes with a range of audiences that you can use as examples or to get started straight away in your application.
+
+To use the the built in audiences you can import them from EdgeKit along with 'edkt'
+
+```typescript
+// use all built in audiences
+import { edkt, allAudienceDefinitions } from '@airgrid/edgekit';
+
+edkt.run({
+  pageFeatureGetters: [...],
+  audienceDefinitions: allAudienceDefinitions,
+});
+
+// use only the built in sport audience
+import { edkt, sportInterestAudience } from '@airgrid/edgekit';
+
+edkt.run({
+  pageFeatureGetters: [...],
+  audienceDefinitions: [sportInterestAudience],
+});
+
+```
 
 #### Bidding Integration
 
