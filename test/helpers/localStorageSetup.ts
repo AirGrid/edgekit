@@ -1,6 +1,5 @@
 import { PageView } from 'types';
 
-// Not currently used, could help tests
 export const pageViewCreator = (
   timestamp: number,
   keywords: Array<string>,
