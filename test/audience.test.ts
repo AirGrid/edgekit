@@ -1,6 +1,4 @@
-import { edkt } from '../src';
-import { AudienceDefinition } from 'types';
-
+import { edkt, sportInterestAudience } from '../src';
 const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
 
 const sportPageFeatureGetter = {
@@ -10,47 +8,38 @@ const sportPageFeatureGetter = {
   },
 };
 
-const sportAudienceDefinition: AudienceDefinition = {
-  id: 'sport_id',
-  name: 'Sport Audience',
-  ttl: 1,
-  lookback: 2,
-  occurrences: 3,
-  keywords: ['sport'],
-};
-
 describe('Test edkt audience matching', () => {
   beforeAll(async () => {
     localStorage.clear();
     // add one initial view
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudienceDefinition],
+      audienceDefinitions: [sportInterestAudience],
     });
   });
 
   it('First run -> add page view but do not match', async () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudienceDefinition],
+      audienceDefinitions: [sportInterestAudience],
     });
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
     );
 
-    const edktMatchedAudeinces = JSON.parse(
+    const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
     expect(edktPageViews.length).toEqual(2);
-    expect(edktMatchedAudeinces.length).toEqual(0);
+    expect(edktMatchedAudiences.length).toEqual(0);
   });
 
-  it('Second run -> add another page view but do not match', async () => {
+  it('Second run -> add another page view & match', async () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudienceDefinition],
+      audienceDefinitions: [sportInterestAudience],
     });
 
     const edktPageViews = JSON.parse(
@@ -62,24 +51,24 @@ describe('Test edkt audience matching', () => {
     );
 
     expect(edktPageViews.length).toEqual(3);
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(edktMatchedAudiences.length).toEqual(1);
   });
 
-  it('Third run -> add another page view & now match', async () => {
+  it('Third run -> add another page view & match', async () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudienceDefinition],
+      audienceDefinitions: [sportInterestAudience],
     });
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
     );
 
-    const edktMatchedAudeinces = JSON.parse(
+    const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
     expect(edktPageViews.length).toEqual(4);
-    expect(edktMatchedAudeinces.length).toEqual(1);
+    expect(edktMatchedAudiences.length).toEqual(1);
   });
 });
