@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { AudienceDefinition } from '../types';
+import { AudienceDefinition } from 'types';
 
 const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
 
@@ -82,41 +82,4 @@ describe('Test edkt audience matching', () => {
     expect(edktPageViews.length).toEqual(4);
     expect(edktMatchedAudeinces.length).toEqual(1);
   });
-
-  // it('forth run -> add another page view & expect ttl to expire', async () => {
-
-  //   const edktPageViewsinit = JSON.parse(
-  //     localStorage.getItem('edkt_page_views') || '[]'
-  //   );
-
-  //   const edktMatchedAudeincesinit = JSON.parse(
-  //     localStorage.getItem('edkt_matched_audiences') || '[]'
-  //   );
-
-  //   console.log(edktPageViewsinit);
-  //   console.log(edktMatchedAudeincesinit);
-
-  //   await new Promise((r) => setTimeout(r, 2000));
-
-  //   await edkt.run({
-  //     pageFeatureGetters: [sportPageFeatureGetter],
-  //     audienceDefinitions: [sportAudienceDefinition],
-  //   });
-
-  //   await new Promise((r) => setTimeout(r, 2000));
-
-  //   const edktPageViews = JSON.parse(
-  //     localStorage.getItem('edkt_page_views') || '[]'
-  //   );
-
-  //   const edktMatchedAudeinces = JSON.parse(
-  //     localStorage.getItem('edkt_matched_audiences') || '[]'
-  //   );
-
-  //   console.log(edktPageViews);
-  //   console.log(edktMatchedAudeinces);
-
-  //   expect(edktPageViews.length).toEqual(5);
-  //   expect(edktMatchedAudeinces.length).toEqual(0);
-  // });
 });

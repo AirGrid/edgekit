@@ -1,4 +1,4 @@
-import { PageView } from '../../types';
+import { PageView } from 'types';
 
 // Not currently used, could help tests
 export const pageViewCreator = (

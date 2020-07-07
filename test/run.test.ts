@@ -1,7 +1,8 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView } from '../types';
+import { AudienceDefinition, PageView } from 'types';
 import { timeStampInSecs } from 'src/utils';
 import { viewStore, audienceStore } from 'src/store';
+import { pageViewCreator } from './helpers/localStorageSetup';
 
 const sportPageFeatureGetter = {
   name: 'keywords',
@@ -13,7 +14,7 @@ const sportPageFeatureGetter = {
 const travelPageFeatureGetter = {
   name: 'keywords',
   func: (): Promise<string[]> => {
-    return Promise.resolve(['sport']);
+    return Promise.resolve(['travel']);
   },
 };
 
@@ -37,19 +38,21 @@ const travelAudience: AudienceDefinition = {
   keywords: ['travel'],
 };
 
-const ONE_SPORTS_PAGE_VIEW: Array<PageView> = [
-  { ts: timeStampInSecs(), features: { keywords: ['sport'] } },
-];
-
-const TWO_SPORTS_PAGE_VIEW: Array<PageView> = [
-  { ts: timeStampInSecs(), features: { keywords: ['sport'] } },
-  { ts: timeStampInSecs(), features: { keywords: ['sport'] } },
-];
-
-const TWO_SPORTS_PAGE_VIEW_AFTER_TTL: Array<PageView> = [
-  { ts: timeStampInSecs() - TTL, features: { keywords: ['sport'] } },
-  { ts: timeStampInSecs() - TTL, features: { keywords: ['sport'] } },
-];
+const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
+  timeStampInSecs(),
+  ['sport'],
+  1
+);
+const TWO_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
+  timeStampInSecs(),
+  ['sport'],
+  2
+);
+const TWO_SPORTS_PAGE_VIEW_AFTER_TTL: Array<PageView> = pageViewCreator(
+  timeStampInSecs() - TTL,
+  ['sport'],
+  2
+);
 
 const setUpLocalStorage = (pageViews: Array<PageView>) => {
   localStorage.clear();
@@ -72,12 +75,15 @@ describe('Test edkt run', () => {
       localStorage.getItem('edkt_page_views') || '[]'
     );
 
-    const edktMatchedAudeinces = JSON.parse(
+    const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
     expect(edktPageViews.length).toEqual(2);
-    expect(edktMatchedAudeinces.length).toEqual(0);
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
+    expect(latestKeywords).toEqual(['sport']);
+    expect(edktMatchedAudiences.length).toEqual(0);
   });
 
   it('does match with two sport page view', async () => {
@@ -92,12 +98,15 @@ describe('Test edkt run', () => {
       localStorage.getItem('edkt_page_views') || '[]'
     );
 
-    const edktMatchedAudeinces = JSON.parse(
+    const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
     expect(edktPageViews.length).toEqual(3);
-    expect(edktMatchedAudeinces.length).toEqual(1);
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
+    expect(latestKeywords).toEqual(['sport']);
+    expect(edktMatchedAudiences.length).toEqual(1);
   });
 
   it('does not match with two sport page view & one travel view after sport ttl', async () => {
@@ -108,16 +117,16 @@ describe('Test edkt run', () => {
       audienceDefinitions: [travelAudience],
     });
 
-    const edktMatchedAudeinces = edkt.getMatchedAudiences();
+    const edktMatchedAudiences = edkt.getMatchedAudiences();
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
     );
 
-    console.log(edktPageViews);
-    console.log(edktMatchedAudeinces);
-
     expect(edktPageViews.length).toEqual(3);
-    expect(edktMatchedAudeinces.length).toEqual(0);
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
+    expect(latestKeywords).toEqual(['travel']);
+    expect(edktMatchedAudiences.length).toEqual(0);
   });
 });
