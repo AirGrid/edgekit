@@ -18,6 +18,8 @@ export const exampleAudience: AudienceDefinition = {
   occurrences: OCCURRENCES,
   // The Keywords used to identify the audience
   keywords: listOfKeywords,
+  // The version number of the audience for caching
+  version: 1
 };
 ```
 
