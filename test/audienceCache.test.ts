@@ -3,7 +3,7 @@ import {
   travelInterestAudience,
   automotiveInterestAudience,
 } from '../src';
-import { audienceCacheStore } from '../src/store';
+import { audienceCache } from '../src/store';
 import { CachedAudienceMetaData } from 'types';
 import { timeStampInSecs } from 'src/utils';
 
@@ -13,7 +13,7 @@ describe('Test audience cache', () => {
   });
 
   it('Successfully adds audiences to the audience cache with local storage', async () => {
-    audienceCacheStore.setAudienceCache([
+    audienceCache.setAudienceCache([
       sportInterestAudience,
       travelInterestAudience,
       automotiveInterestAudience,
@@ -56,15 +56,15 @@ describe('Test audience cache', () => {
   });
 
   it('Successfully adds audiences to the audience cache with methods', async () => {
-    audienceCacheStore.setAudienceCache([
+    audienceCache.setAudienceCache([
       sportInterestAudience,
       travelInterestAudience,
       automotiveInterestAudience,
     ]);
 
-    const edktCachedAudiences = audienceCacheStore.getAudienceCache();
+    const edktCachedAudiences = audienceCache.getAudienceCache();
 
-    const edktCachedAudienceMetaData = audienceCacheStore.getAudienceCacheMetaData();
+    const edktCachedAudienceMetaData = audienceCache.getAudienceCacheMetaData();
 
     expect(edktCachedAudiences.length).toEqual(3);
 
