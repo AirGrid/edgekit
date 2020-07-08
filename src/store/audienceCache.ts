@@ -1,7 +1,7 @@
 import { StorageKeys, AudienceDefinition, CachedAudienceMetaData } from 'types';
 import { storage, timeStampInSecs } from '../utils';
 
-class AudienceCacheStore {
+class AudienceCache {
   cachedAudiences: AudienceDefinition[];
   cachedAudiencesMetaData: CachedAudienceMetaData;
 
@@ -55,4 +55,4 @@ class AudienceCacheStore {
   }
 }
 
-export const audienceCacheStore = new AudienceCacheStore();
+export const audienceCache = new AudienceCache();
