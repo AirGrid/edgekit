@@ -57,3 +57,4 @@ export const edkt = {
 
 // This will expose the exported audiences & allow tree shaking
 export * from './audiences';
+export { audienceCache } from './store';
