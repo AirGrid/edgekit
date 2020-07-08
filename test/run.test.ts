@@ -34,6 +34,7 @@ const sportAudience: AudienceDefinition = {
   lookBack: 10,
   occurrences: 2,
   keywords: ['sport'],
+  version: 1,
 };
 
 const travelAudience: AudienceDefinition = {
@@ -43,6 +44,7 @@ const travelAudience: AudienceDefinition = {
   lookBack: 10,
   occurrences: 2,
   keywords: ['travel'],
+  version: 1,
 };
 
 const lookBackInfinityAudience: AudienceDefinition = {
@@ -52,6 +54,7 @@ const lookBackInfinityAudience: AudienceDefinition = {
   lookBack: 0,
   occurrences: 2,
   keywords: [''],
+  version: 1,
 };
 
 const lookBackAudience: AudienceDefinition = {
@@ -61,6 +64,7 @@ const lookBackAudience: AudienceDefinition = {
   lookBack: 2,
   occurrences: 2,
   keywords: [''],
+  version: 1,
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
