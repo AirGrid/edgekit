@@ -27,12 +27,18 @@ const run = async (config: Config): Promise<void> => {
       };
     })
     .map((audience) => {
+      const currentTS = timeStampInSecs();
+      const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
+        return audience.lookBack === 0
+          ? true
+          : pageView.ts > currentTS - audience.lookBack;
+      });
       return {
         id: audience.id,
-        matchedAt: timeStampInSecs(),
-        expiresAt: timeStampInSecs() + audience.ttl,
+        matchedAt: currentTS,
+        expiresAt: currentTS + audience.ttl,
         matchedOnCurrentPageView: true,
-        matched: engine.check(audience.conditions, viewStore.pageViews),
+        matched: engine.check(audience.conditions, pageViewsWithinLookBack),
       };
     })
     .filter((audience) => audience.matched);
