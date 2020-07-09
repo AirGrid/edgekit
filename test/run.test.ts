@@ -21,7 +21,7 @@ const travelPageFeatureGetter = {
 const lookBackPageFeatureGetter = {
   name: 'keywords',
   func: (): Promise<string[]> => {
-    return Promise.resolve(['lb']);
+    return Promise.resolve(['']);
   },
 };
 
@@ -51,7 +51,7 @@ const lookBackInfinityAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 0,
   occurrences: 2,
-  keywords: ['lb'],
+  keywords: [''],
 };
 
 const lookBackAudience: AudienceDefinition = {
@@ -60,7 +60,7 @@ const lookBackAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 2,
   occurrences: 2,
-  keywords: ['lb'],
+  keywords: [''],
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -83,13 +83,13 @@ const TWO_SPORTS_PAGE_VIEW_AFTER_TTL: Array<PageView> = pageViewCreator(
 
 const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView> = pageViewCreator(
   0,
-  ['lb'],
+  [''],
   2
 );
 
 const LOOK_BACK_PAGE_VIEW: Array<PageView> = pageViewCreator(
   timeStampInSecs(),
-  ['lb'],
+  [''],
   2
 );
 
@@ -186,7 +186,7 @@ describe('Test look back edkt run', () => {
     expect(edktMatchedAudiences[0].id).toEqual('look_back_infinity_id');
   });
 
-  it('does match with lookBack set to 2 with two lb page view within look back period', async () => {
+  it('does match with lookBack set to 2 with two blank page view within look back period', async () => {
     setUpLocalStorage(LOOK_BACK_PAGE_VIEW);
 
     await edkt.run({
@@ -199,7 +199,7 @@ describe('Test look back edkt run', () => {
     expect(edktMatchedAudiences[0].id).toEqual('look_back_id');
   });
 
-  it('does not match with lookBack set to 2 with two lb page view outside look back period', async () => {
+  it('does not match with lookBack set to 2 with two blank page view outside look back period', async () => {
     setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
     await edkt.run({
