@@ -27,6 +27,7 @@
   "files": [
     "dist"
   ],
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc",
