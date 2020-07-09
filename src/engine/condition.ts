@@ -1,8 +1,8 @@
-import { PageView, Condition } from 'types';
+import { PageView, EngineCondition } from 'types';
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 
-const createCondition = (condition: Condition) => (
+const createCondition = (condition: EngineCondition) => (
   pageViews: PageView[]
 ): boolean => {
   const { filter, rules } = condition;

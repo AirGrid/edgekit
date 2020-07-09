@@ -12,3 +12,4 @@ lerna-debug.log*
 .env
 .env.test
 .DS_Store
+coverage

@@ -1,6 +1,7 @@
 {
   "name": "@airgrid/edgekit",
-  "version": "0.0.0-dev.3",
+  "main": "dist/edgekit.js",
+  "version": "0.0.0-dev.4",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -33,6 +34,7 @@
     "bundle": "microbundle --format umd,esm --name edkt",
     "watch": "tsc -w",
     "test": "jest --verbose",
+    "test:coverage": "jest --coverage",
     "lint": "eslint src test --ext js,ts",
     "lint:fix": "lint --fix"
   },
