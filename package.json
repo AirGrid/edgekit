@@ -1,5 +1,6 @@
 {
   "name": "@airgrid/edgekit",
+  "main": "dist/edgekit.js",
   "version": "0.0.0-dev.3",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
