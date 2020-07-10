@@ -11,13 +11,6 @@ const sportPageFeatureGetter = {
   },
 };
 
-const travelPageFeatureGetter = {
-  name: 'keywords',
-  func: (): Promise<string[]> => {
-    return Promise.resolve(['travel']);
-  },
-};
-
 const lookBackPageFeatureGetter = {
   name: 'keywords',
   func: (): Promise<string[]> => {
@@ -34,16 +27,6 @@ const sportAudience: AudienceDefinition = {
   lookBack: 10,
   occurrences: 2,
   keywords: ['sport'],
-  version: 1,
-};
-
-const travelAudience: AudienceDefinition = {
-  id: 'travel_id',
-  name: 'Travel Audience',
-  ttl: TTL,
-  lookBack: 10,
-  occurrences: 2,
-  keywords: ['travel'],
   version: 1,
 };
 
@@ -79,22 +62,16 @@ const TWO_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
   2
 );
 
-const TWO_SPORTS_PAGE_VIEW_AFTER_TTL: Array<PageView> = pageViewCreator(
-  timeStampInSecs() - TTL,
-  ['sport'],
-  2
-);
-
 const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView> = pageViewCreator(
   0,
   [''],
-  2
+  lookBackInfinityAudience.occurrences
 );
 
 const LOOK_BACK_PAGE_VIEW: Array<PageView> = pageViewCreator(
   timeStampInSecs(),
   [''],
-  2
+  lookBackAudience.occurrences
 );
 
 const setUpLocalStorage = (pageViews: Array<PageView>) => {
@@ -122,7 +99,7 @@ describe('Test basic edkt run', () => {
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
 
-    expect(edktPageViews.length).toEqual(2);
+    expect(edktPageViews.length).toEqual(ONE_SPORTS_PAGE_VIEW.length + 1);
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual(['sport']);
@@ -144,35 +121,12 @@ describe('Test basic edkt run', () => {
     const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
-
-    expect(edktPageViews.length).toEqual(3);
+    // ecuase of the edkt.run adds a page view & audience match is greater than
+    expect(edktPageViews.length).toBeGreaterThan(sportAudience.occurrences);
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual(['sport']);
     expect(edktMatchedAudiences.length).toEqual(1);
-  });
-});
-
-describe('Test ttl edkt run', () => {
-  it('does not match with two sport page view & one travel view after sport ttl', async () => {
-    setUpLocalStorage(TWO_SPORTS_PAGE_VIEW_AFTER_TTL);
-
-    await edkt.run({
-      pageFeatureGetters: [travelPageFeatureGetter],
-      audienceDefinitions: [travelAudience],
-    });
-
-    const edktMatchedAudiences = edkt.getMatchedAudiences();
-
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    expect(edktPageViews.length).toEqual(3);
-    const latestKeywords =
-      edktPageViews[edktPageViews.length - 1].features.keywords;
-    expect(latestKeywords).toEqual(['travel']);
-    expect(edktMatchedAudiences.length).toEqual(0);
   });
 });
 
