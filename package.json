@@ -21,9 +21,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "source": "src/index.ts",
   "module": "dist/edgekit.js",
   "unpkg": "dist/edgekit.umd.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    "import": "./dist/edgekit.js"
+  },
   "files": [
     "dist"
   ],
