@@ -1,6 +1,6 @@
 {
   "name": "@airgrid/edgekit",
-  "version": "0.0.0-dev.4",
+  "version": "0.0.0-dev.5",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -22,17 +22,13 @@
   },
   "type": "module",
   "source": "src/index.ts",
-  "module": "dist/src/index.js",
-  "main": "dist/cjs/src/index.js",
   "unpkg": "dist/edgekit.umd.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "exports": {
-    "import": "dist/src/index.js",
-    "require": "dist/cjs/src/index.js"
+    "import": "dist/src/index.js"
   },
   "files": [
-    "dist",
-    "dist-cjs"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf dist",
