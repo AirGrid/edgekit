@@ -18,13 +18,20 @@ const travelPageFeatureGetter = {
   },
 };
 
+const lookBackPageFeatureGetter = {
+  name: 'keywords',
+  func: (): Promise<string[]> => {
+    return Promise.resolve(['']);
+  },
+};
+
 const TTL = 10;
 
 const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   ttl: TTL,
-  lookback: 10,
+  lookBack: 10,
   occurrences: 2,
   keywords: ['sport'],
 };
@@ -33,9 +40,27 @@ const travelAudience: AudienceDefinition = {
   id: 'travel_id',
   name: 'Travel Audience',
   ttl: TTL,
-  lookback: 10,
+  lookBack: 10,
   occurrences: 2,
   keywords: ['travel'],
+};
+
+const lookBackInfinityAudience: AudienceDefinition = {
+  id: 'look_back_infinity_id',
+  name: 'Look Back Audience',
+  ttl: TTL,
+  lookBack: 0,
+  occurrences: 2,
+  keywords: [''],
+};
+
+const lookBackAudience: AudienceDefinition = {
+  id: 'look_back_id',
+  name: 'Look Back Audience',
+  ttl: TTL,
+  lookBack: 2,
+  occurrences: 2,
+  keywords: [''],
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -43,14 +68,28 @@ const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
   ['sport'],
   1
 );
+
 const TWO_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
   timeStampInSecs(),
   ['sport'],
   2
 );
+
 const TWO_SPORTS_PAGE_VIEW_AFTER_TTL: Array<PageView> = pageViewCreator(
   timeStampInSecs() - TTL,
   ['sport'],
+  2
+);
+
+const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView> = pageViewCreator(
+  0,
+  [''],
+  2
+);
+
+const LOOK_BACK_PAGE_VIEW: Array<PageView> = pageViewCreator(
+  timeStampInSecs(),
+  [''],
   2
 );
 
@@ -62,7 +101,7 @@ const setUpLocalStorage = (pageViews: Array<PageView>) => {
   audienceStore._load();
 };
 
-describe('Test edkt run', () => {
+describe('Test basic edkt run', () => {
   it('does not match with one sport page view', async () => {
     setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
@@ -108,7 +147,9 @@ describe('Test edkt run', () => {
     expect(latestKeywords).toEqual(['sport']);
     expect(edktMatchedAudiences.length).toEqual(1);
   });
+});
 
+describe('Test ttl edkt run', () => {
   it('does not match with two sport page view & one travel view after sport ttl', async () => {
     setUpLocalStorage(TWO_SPORTS_PAGE_VIEW_AFTER_TTL);
 
@@ -127,6 +168,46 @@ describe('Test edkt run', () => {
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual(['travel']);
+    expect(edktMatchedAudiences.length).toEqual(0);
+  });
+});
+
+describe('Test look back edkt run', () => {
+  it('does match with lookBack set to 0 with two demo page view at any point in the past', async () => {
+    setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
+
+    await edkt.run({
+      pageFeatureGetters: [lookBackPageFeatureGetter],
+      audienceDefinitions: [lookBackInfinityAudience],
+    });
+
+    const edktMatchedAudiences = edkt.getMatchedAudiences();
+    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(edktMatchedAudiences[0].id).toEqual('look_back_infinity_id');
+  });
+
+  it('does match with lookBack set to 2 with two blank page view within look back period', async () => {
+    setUpLocalStorage(LOOK_BACK_PAGE_VIEW);
+
+    await edkt.run({
+      pageFeatureGetters: [lookBackPageFeatureGetter],
+      audienceDefinitions: [lookBackAudience],
+    });
+
+    const edktMatchedAudiences = edkt.getMatchedAudiences();
+    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(edktMatchedAudiences[0].id).toEqual('look_back_id');
+  });
+
+  it('does not match with lookBack set to 2 with two blank page view outside look back period', async () => {
+    setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
+
+    await edkt.run({
+      pageFeatureGetters: [lookBackPageFeatureGetter],
+      audienceDefinitions: [lookBackAudience],
+    });
+
+    const edktMatchedAudiences = edkt.getMatchedAudiences();
     expect(edktMatchedAudiences.length).toEqual(0);
   });
 });

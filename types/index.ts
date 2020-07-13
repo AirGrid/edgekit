@@ -39,7 +39,7 @@ export interface AudienceDefinition {
   id: string;
   name: string;
   ttl: number;
-  lookback: number;
+  lookBack: number;
   occurrences: number;
   keywords: string[];
 }
