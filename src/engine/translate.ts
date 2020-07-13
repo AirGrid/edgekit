@@ -1,4 +1,4 @@
-import { AudienceDefinition, EngineCondition } from 'types';
+import { AudienceDefinition, EngineCondition } from '../../types';
 
 export const translate = (
   audienceDefinition: AudienceDefinition

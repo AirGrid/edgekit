@@ -1,4 +1,4 @@
-import { PageFeatureGetter, PageFeature } from 'types';
+import { PageFeatureGetter, PageFeature } from '../../types';
 
 const wrapPageFeatureGetters = (pageFeatureGetters: PageFeatureGetter[]) => {
   return pageFeatureGetters.map((getter) => {

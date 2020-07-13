@@ -1,4 +1,4 @@
-import { AudienceDefinition } from 'types';
+import { AudienceDefinition } from '../../types';
 import sportKeywords from './interest/sport/keywords';
 import travelKeywords from './interest/travel/keywords';
 import automotiveKeywords from './interest/automotive/keywords';

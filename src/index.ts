@@ -1,8 +1,12 @@
 import * as engine from './engine';
 import { getPageFeatures } from './features';
-import { viewStore, audienceStore } from './store';
+import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { PageFeatureGetter, MatchedAudience, AudienceDefinition } from 'types';
+import {
+  PageFeatureGetter,
+  MatchedAudience,
+  AudienceDefinition,
+} from '../types';
 
 interface Config {
   pageFeatureGetters: PageFeatureGetter[];
@@ -18,7 +22,7 @@ const run = async (config: Config): Promise<void> => {
 
   const matchedAudiences = audienceDefinitions
     .filter((audience) => {
-      return !audienceStore.matchedAudienceIds.includes(audience.id);
+      return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
     })
     .map((audience) => {
       return {
@@ -43,11 +47,11 @@ const run = async (config: Config): Promise<void> => {
     })
     .filter((audience) => audience.matched);
 
-  audienceStore.setMatchedAudiences(matchedAudiences);
+  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };
 
 const getMatchedAudiences = (): MatchedAudience[] => {
-  return audienceStore.matchedAudiences;
+  return matchedAudienceStore.matchedAudiences;
 };
 
 export const edkt = {
