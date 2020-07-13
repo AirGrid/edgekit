@@ -3,7 +3,7 @@ import {
   travelInterestAudience,
   automotiveInterestAudience,
 } from '../src';
-import { audienceCache } from '../src/store';
+import { cachedAudienceStore } from '../src/store';
 import { CachedAudienceMetaData } from '../types';
 import { timeStampInSecs } from 'src/utils';
 
@@ -13,7 +13,7 @@ describe('Test audience cache', () => {
   });
 
   it('Successfully adds audiences to the audience cache with local storage', async () => {
-    audienceCache.setAudienceCache([
+    cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,
       travelInterestAudience,
       automotiveInterestAudience,
@@ -30,7 +30,7 @@ describe('Test audience cache', () => {
     expect(edktCachedAudiences.length).toEqual(3);
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
-      checkedAt: timeStampInSecs(),
+      cachedAt: timeStampInSecs(),
       audiences: [
         {
           id: sportInterestAudience.id,
@@ -47,7 +47,7 @@ describe('Test audience cache', () => {
       ],
     };
     // - 2 seconds incase slow test run
-    expect(edktCachedAudienceMetaData.checkedAt).toBeGreaterThanOrEqual(
+    expect(edktCachedAudienceMetaData.cachedAt).toBeGreaterThanOrEqual(
       timeStampInSecs() - 1
     );
     expect(edktCachedAudienceMetaData.audiences).toEqual(
@@ -55,21 +55,33 @@ describe('Test audience cache', () => {
     );
   });
 
-  it('Successfully adds audiences to the audience cache with methods', async () => {
-    audienceCache.setAudienceCache([
+  it('Successfully update the audience cache', async () => {
+    cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,
       travelInterestAudience,
+    ]);
+
+    const newVersion = 2;
+
+    const newTravelAudience = {
+      ...travelInterestAudience,
+      version: newVersion,
+    };
+
+    cachedAudienceStore.updateAudienceCache([
+      newTravelAudience,
       automotiveInterestAudience,
     ]);
 
-    const edktCachedAudiences = audienceCache.getAudienceCache();
+    const edktCachedAudiences = cachedAudienceStore.cachedAudiences;
 
-    const edktCachedAudienceMetaData = audienceCache.getAudienceCacheMetaData();
+    const edktCachedAudienceMetaData =
+      cachedAudienceStore.cachedAudiencesMetaData;
 
     expect(edktCachedAudiences.length).toEqual(3);
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
-      checkedAt: timeStampInSecs(),
+      cachedAt: timeStampInSecs(),
       audiences: [
         {
           id: sportInterestAudience.id,
@@ -77,7 +89,7 @@ describe('Test audience cache', () => {
         },
         {
           id: travelInterestAudience.id,
-          version: travelInterestAudience.version,
+          version: newVersion,
         },
         {
           id: automotiveInterestAudience.id,
@@ -86,11 +98,13 @@ describe('Test audience cache', () => {
       ],
     };
     // - 2 seconds incase slow test run
-    expect(edktCachedAudienceMetaData.checkedAt).toBeGreaterThanOrEqual(
+    expect(edktCachedAudienceMetaData.cachedAt).toBeGreaterThanOrEqual(
       timeStampInSecs() - 1
     );
     expect(edktCachedAudienceMetaData.audiences).toEqual(
       expectedCachedAudienceMetaData.audiences
     );
+    // 3 because we have only updated the version of the travel audience not the id
+    expect(edktCachedAudiences.length).toEqual(3);
   });
 });
