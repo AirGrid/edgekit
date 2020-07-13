@@ -1,7 +1,7 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView } from 'types';
+import { AudienceDefinition, PageView } from '../types';
 import { timeStampInSecs } from 'src/utils';
-import { viewStore, audienceStore } from 'src/store';
+import { viewStore, matchedAudienceStore } from 'src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';
 
 const sportPageFeatureGetter = {
@@ -10,7 +10,6 @@ const sportPageFeatureGetter = {
     return Promise.resolve(['sport']);
   },
 };
-
 
 const lookBackPageFeatureGetter = {
   name: 'keywords',
@@ -80,7 +79,7 @@ const setUpLocalStorage = (pageViews: Array<PageView>) => {
   localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
   //We need to reload from local storage because its only done on construction
   viewStore._load();
-  audienceStore._load();
+  matchedAudienceStore._load();
 };
 
 describe('Test basic edkt run', () => {

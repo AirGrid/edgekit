@@ -4,7 +4,7 @@ import {
   automotiveInterestAudience,
 } from '../src';
 import { audienceCache } from '../src/store';
-import { CachedAudienceMetaData } from 'types';
+import { CachedAudienceMetaData } from '../types';
 import { timeStampInSecs } from 'src/utils';
 
 describe('Test audience cache', () => {
@@ -30,7 +30,7 @@ describe('Test audience cache', () => {
     expect(edktCachedAudiences.length).toEqual(3);
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
-      timeChecked: timeStampInSecs(),
+      checkedAt: timeStampInSecs(),
       audiences: [
         {
           id: sportInterestAudience.id,
@@ -47,7 +47,7 @@ describe('Test audience cache', () => {
       ],
     };
     // - 2 seconds incase slow test run
-    expect(edktCachedAudienceMetaData.timeChecked).toBeGreaterThanOrEqual(
+    expect(edktCachedAudienceMetaData.checkedAt).toBeGreaterThanOrEqual(
       timeStampInSecs() - 1
     );
     expect(edktCachedAudienceMetaData.audiences).toEqual(
@@ -69,7 +69,7 @@ describe('Test audience cache', () => {
     expect(edktCachedAudiences.length).toEqual(3);
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
-      timeChecked: timeStampInSecs(),
+      checkedAt: timeStampInSecs(),
       audiences: [
         {
           id: sportInterestAudience.id,
@@ -86,7 +86,7 @@ describe('Test audience cache', () => {
       ],
     };
     // - 2 seconds incase slow test run
-    expect(edktCachedAudienceMetaData.timeChecked).toBeGreaterThanOrEqual(
+    expect(edktCachedAudienceMetaData.checkedAt).toBeGreaterThanOrEqual(
       timeStampInSecs() - 1
     );
     expect(edktCachedAudienceMetaData.audiences).toEqual(

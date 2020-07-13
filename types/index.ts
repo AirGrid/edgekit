@@ -48,7 +48,7 @@ export interface AudienceDefinition {
 }
 
 export interface CachedAudienceMetaData {
-  timeChecked: number;
+  checkedAt: number;
   audiences: AudienceMetaData[];
 }
 

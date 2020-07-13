@@ -1,4 +1,4 @@
-import { PageView } from 'types';
+import { PageView } from '../../types';
 
 export const pageViewCreator = (
   timestamp: number,
