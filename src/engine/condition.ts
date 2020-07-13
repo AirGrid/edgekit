@@ -1,4 +1,4 @@
-import { PageView, EngineCondition } from 'types';
+import { PageView, EngineCondition } from '../../types';
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 
