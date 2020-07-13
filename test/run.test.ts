@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView } from 'types';
+import { AudienceDefinition, PageView } from '../types';
 import { timeStampInSecs } from 'src/utils';
 import { viewStore, audienceStore } from 'src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';

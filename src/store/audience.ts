@@ -1,5 +1,5 @@
-import { StorageKeys, MatchedAudience } from 'types';
 import { storage, timeStampInSecs } from '../utils';
+import { StorageKeys, MatchedAudience } from '../../types';
 
 class AudienceStore {
   matchedAudiences: MatchedAudience[];

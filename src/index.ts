@@ -2,7 +2,11 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, audienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { PageFeatureGetter, MatchedAudience, AudienceDefinition } from 'types';
+import {
+  PageFeatureGetter,
+  MatchedAudience,
+  AudienceDefinition,
+} from '../types';
 
 interface Config {
   pageFeatureGetters: PageFeatureGetter[];

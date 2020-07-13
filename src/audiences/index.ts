@@ -1,7 +1,7 @@
-import { AudienceDefinition } from 'types';
 import sportKeywords from './interest/sport/keywords';
 import travelKeywords from './interest/travel/keywords';
 import automotiveKeywords from './interest/automotive/keywords';
+import { AudienceDefinition } from '../../types';
 
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
