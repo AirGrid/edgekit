@@ -5,14 +5,14 @@ import {
 } from '../../types';
 import { storage, timeStampInSecs } from '../utils';
 
-class AudienceCache {
+class CachedAudienceStore {
   cachedAudiences: AudienceDefinition[];
   cachedAudiencesMetaData: CachedAudienceMetaData;
 
   constructor() {
     this.cachedAudiences = [];
     this.cachedAudiencesMetaData = {
-      checkedAt: 0,
+      cachedAt: 0,
       audiences: [],
     };
     this._load();
@@ -24,7 +24,7 @@ class AudienceCache {
     const audiencesMetaData: CachedAudienceMetaData = storage.get(
       StorageKeys.CACHED_AUDIENCE_META_DATA
     ) || {
-      checkedAt: 0,
+      cachedAt: 0,
       audiences: [],
     };
     this.cachedAudiences = audiences;
@@ -40,11 +40,10 @@ class AudienceCache {
     );
   }
 
-  setAudienceCache(audiencesToCache: AudienceDefinition[]) {
-    this.cachedAudiences = audiencesToCache;
+  _setAudienceCacheMetaData() {
     this.cachedAudiencesMetaData = {
-      checkedAt: timeStampInSecs(),
-      audiences: audiencesToCache.map((audience) => {
+      cachedAt: timeStampInSecs(),
+      audiences: this.cachedAudiences.map((audience) => {
         return {
           id: audience.id,
           version: audience.version,
@@ -54,13 +53,20 @@ class AudienceCache {
     this._save();
   }
 
-  getAudienceCache() {
-    return this.cachedAudiences;
-  }
-
-  getAudienceCacheMetaData() {
-    return this.cachedAudiencesMetaData;
+  updateAudienceCache(audiencesToCache: AudienceDefinition[]) {
+    audiencesToCache.map((audience) => {
+      const foundAudienceIndex = this.cachedAudiences.findIndex(
+        (cachedAudience) => cachedAudience.id === audience.id
+      );
+      if (foundAudienceIndex === -1) {
+        this.cachedAudiences.push(audience);
+      } else {
+        this.cachedAudiences[foundAudienceIndex] = audience;
+      }
+    });
+    this._setAudienceCacheMetaData();
+    this._save();
   }
 }
 
-export const audienceCache = new AudienceCache();
+export const cachedAudienceStore = new CachedAudienceStore();

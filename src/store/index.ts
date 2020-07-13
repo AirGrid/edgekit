@@ -1,3 +1,3 @@
-export { matchedAudienceStore } from './matchedAudiences';
 export { viewStore } from './pageview';
-export { audienceCache } from './audienceCache';
+export { matchedAudienceStore } from './matchedAudiences';
+export { cachedAudienceStore } from './cachedAudiences';
