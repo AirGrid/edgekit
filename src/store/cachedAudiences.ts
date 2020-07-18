@@ -54,7 +54,7 @@ class CachedAudienceStore {
   }
 
   updateAudienceCache(audiencesToCache: AudienceDefinition[]) {
-    audiencesToCache.map((audience) => {
+    audiencesToCache.forEach((audience) => {
       const foundAudienceIndex = this.cachedAudiences.findIndex(
         (cachedAudience) => cachedAudience.id === audience.id
       );
