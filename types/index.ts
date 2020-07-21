@@ -1,3 +1,7 @@
+export interface Edkt {
+  run: () => Promise<void>;
+}
+
 // Storage Keys Enum
 
 export enum StorageKeys {

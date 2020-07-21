@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "test"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "dist",
@@ -7,9 +7,6 @@
     "importHelpers": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {
-      "types/*": ["types/*"]
-    },
     "composite": true,
     "declaration": true,
     "declarationMap": true,
@@ -21,6 +18,6 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "target": "es5",
-    "module": "commonjs"
+    "module": "es6"
   }
 }

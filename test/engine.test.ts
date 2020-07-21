@@ -1,6 +1,6 @@
 import 'jest';
-import { EngineCondition } from '../types';
 import { check } from '../src/engine';
+import { EngineCondition } from '../types';
 
 const sports1xConditionGt: EngineCondition = {
   filter: {

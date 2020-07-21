@@ -1,6 +1,6 @@
-import { PageView, EngineCondition } from '../../types';
 import createCondition from './condition';
 import { translate } from './translate';
+import { PageView, EngineCondition } from '../../types';
 
 const check = (
   conditions: EngineCondition[],
