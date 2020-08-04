@@ -6,6 +6,7 @@ import { AudienceDefinition } from '../../types';
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
 const OCCURRENCES = 2;
+const VERSION = 1;
 
 export const sportInterestAudience: AudienceDefinition = {
   id: 'iab-607',
@@ -14,6 +15,7 @@ export const sportInterestAudience: AudienceDefinition = {
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
   keywords: sportKeywords,
+  version: VERSION,
 };
 
 export const travelInterestAudience: AudienceDefinition = {
@@ -23,6 +25,7 @@ export const travelInterestAudience: AudienceDefinition = {
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
   keywords: travelKeywords,
+  version: VERSION,
 };
 
 export const automotiveInterestAudience: AudienceDefinition = {
@@ -32,6 +35,7 @@ export const automotiveInterestAudience: AudienceDefinition = {
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
   keywords: automotiveKeywords,
+  version: VERSION,
 };
 
 export const allAudienceDefinitions: AudienceDefinition[] = [

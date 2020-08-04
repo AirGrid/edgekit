@@ -1,6 +1,6 @@
 import * as engine from './engine';
 import { getPageFeatures } from './features';
-import { viewStore, audienceStore } from './store';
+import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import {
   PageFeatureGetter,
@@ -22,7 +22,7 @@ const run = async (config: Config): Promise<void> => {
 
   const matchedAudiences = audienceDefinitions
     .filter((audience) => {
-      return !audienceStore.matchedAudienceIds.includes(audience.id);
+      return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
     })
     .map((audience) => {
       return {
@@ -47,11 +47,11 @@ const run = async (config: Config): Promise<void> => {
     })
     .filter((audience) => audience.matched);
 
-  audienceStore.setMatchedAudiences(matchedAudiences);
+  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };
 
 const getMatchedAudiences = (): MatchedAudience[] => {
-  return audienceStore.matchedAudiences;
+  return matchedAudienceStore.matchedAudiences;
 };
 
 export const edkt = {
@@ -61,3 +61,5 @@ export const edkt = {
 
 // This will expose the exported audiences & allow tree shaking
 export * from './audiences';
+export * from './store';
+export * from '../types';
