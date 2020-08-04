@@ -1,7 +1,7 @@
-import { StorageKeys, MatchedAudience } from 'types';
 import { storage, timeStampInSecs } from '../utils';
+import { StorageKeys, MatchedAudience } from '../../types';
 
-class AudienceStore {
+class MatchedAudienceStore {
   matchedAudiences: MatchedAudience[];
   matchedAudienceIds: string[];
 
@@ -51,4 +51,4 @@ class AudienceStore {
   }
 }
 
-export const audienceStore = new AudienceStore();
+export const matchedAudienceStore = new MatchedAudienceStore();

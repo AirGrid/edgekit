@@ -1,7 +1,6 @@
 {
   "name": "@airgrid/edgekit",
-  "main": "dist/edgekit.js",
-  "version": "0.0.0-dev.4",
+  "version": "0.0.0-dev.7",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -21,15 +20,19 @@
   "publishConfig": {
     "access": "public"
   },
-  "source": "src/index.ts",
-  "module": "dist/edgekit.js",
+  "main": "dist/cjs/src/index.js",
+  "types": "dist/cjs/src/index.d.ts",
+  "module": "dist/esm/src/index.js",
   "unpkg": "dist/edgekit.umd.js",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "compile": "tsc",
+    "compile": "run-p compile-esm compile-cjs",
+    "compile-esm": "tsc --module es6 --outDir dist/esm",
+    "compile-cjs": "tsc --module commonjs --outDir dist/cjs",
     "build": "run-s clean compile",
     "bundle": "microbundle --format umd,esm --name edkt",
     "watch": "tsc -w",

@@ -143,11 +143,13 @@ export const exampleAudience: AudienceDefinition = {
   // Time To Live - How long after matching the Audience are you part of it
   ttl: TTL_IN_SECS,
   // How long into the past should EdgeKit Look to match you to the audience
-  lookback: LOOKBACK_IN_SECS,
+  lookBack: LOOK_BACK_IN_SECS,
   // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
   occurrences: OCCURRENCES,
   // The Keywords used to identify the audience
   keywords: listOfKeywords,
+  // The version number of the audience for caching
+  version: 1
 };
 ```
 

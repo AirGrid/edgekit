@@ -1,9 +1,15 @@
+export interface Edkt {
+  run: () => Promise<void>;
+}
+
 // Storage Keys Enum
 
 export enum StorageKeys {
   PAGE_VIEWS = 'edkt_page_views',
   MATCHED_AUDIENCES = 'edkt_matched_audiences',
   MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
+  CACHED_AUDIENCES = 'edkt_cached_audiences',
+  CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
 }
 
 // Page Features
@@ -39,9 +45,20 @@ export interface AudienceDefinition {
   id: string;
   name: string;
   ttl: number;
-  lookback: number;
+  lookBack: number;
   occurrences: number;
   keywords: string[];
+  version: number;
+}
+
+export interface CachedAudienceMetaData {
+  cachedAt: number;
+  audiences: AudienceMetaData[];
+}
+
+export interface AudienceMetaData {
+  id: string;
+  version: number;
 }
 
 // Engine

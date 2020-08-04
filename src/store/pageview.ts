@@ -1,5 +1,5 @@
-import { PageView, StorageKeys, PageFeature } from 'types';
 import { storage, timeStampInSecs } from '../utils';
+import { PageView, StorageKeys, PageFeature } from '../../types';
 
 class ViewStore {
   pageViews: PageView[];
