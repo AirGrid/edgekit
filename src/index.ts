@@ -15,7 +15,8 @@ interface Config {
 
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
-const run = async (config: Config): Promise<void> => {
+const run = async (config: Config, hasGdprConsent?: boolean): Promise<void> => {
+  if (!hasGdprConsent) return;
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
   viewStore.insert(pageFeatures);
@@ -62,4 +63,5 @@ export const edkt = {
 // This will expose the exported audiences & allow tree shaking
 export * from './audiences';
 export * from './store';
+export * from './gdpr';
 export * from '../types';
