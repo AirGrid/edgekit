@@ -13,7 +13,7 @@ interface PingResponse {
   gdprApplies?: boolean;
 }
 
-interface TCData {
+export interface TCData {
   gdprApplies?: boolean;
   vendor: {
     consents: { [vendorId: number]: boolean | undefined };

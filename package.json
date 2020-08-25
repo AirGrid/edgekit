@@ -37,6 +37,7 @@
     "bundle": "microbundle --format umd,esm --name edkt",
     "watch": "tsc -w",
     "test": "jest --verbose",
+    "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage",
     "lint": "eslint src test --ext js,ts",
     "lint:fix": "lint --fix"

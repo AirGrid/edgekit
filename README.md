@@ -75,11 +75,22 @@ _Note: using the above URLs will always fetch the latest version, which could co
 
 EdgeKit will execute the following high level flow:
 
-1. **Register, run and store user defined `pageFeatureGetters`.**
+1. **Check for GDPR compliance.**
+   The IAB has an [API][iabapi] to check for GDPR compliance. Edgekit provides a simplified wrapper
+   around this API in order to check for compliance. A list of vendor ids is passed to the function.
+
+   You can find the list of vendors and their ids that are participating in the Transparency and
+   Consent Framework [here][vendorids].
+
+   Quoting the definition from [IAB policy site][iabpolicysite], a vendor is:
+
+   > “Vendor” means a company that participates in the delivery of digital advertising within a Publisher’s website, app, or other digital content, to the extent that company is not acting as a Publisher or CMP, and that either accesses an end user’s device or processes personal data about end users visiting the Publisher’s content and adheres to the Policies...
+
+2. **Register, run and store user defined `pageFeatureGetters`.**
    In this step the library will fetch `keywords` to describe the current page load, which will be stored locally to create a history of the pages viewed by the user visiting your site.
-2. **Run audience definitions against the local page views.**
+3. **Run audience definitions against the local page views.**
    The library now checks the users local history to see if they match any of the audience definitions, storing any matched audiences.
-3. **Make matched audiences available to bidding.**
+4. **Make matched audiences available to bidding.**
    The final step is to pass the newly defined audience signals to third party bidders, for example via Prebid.
 
 #### Page Features
@@ -122,12 +133,19 @@ const getHtmlKeywords = {
 ##### JS EdgeKit Run
 
 ```typescript
-import { edkt } from '@airgrid/edgekit';
+import { edkt, hasGdprConsent } from '@airgrid/edgekit';
 
+// Vendor ids to check for consent
+const vendorIds = [...]
+
+// Check for GDPR compliance for the provided vendor ids
+const hasConsent = await hasGdprConsent(vendorIds)
+
+// This function won't do anything unless `hasConsent` is `true`
 edkt.run({
   pageFeatureGetters: [getHtmlKeywords],
   audienceDefinitions: ...,
-});
+}, hasConsent);
 ```
 
 #### Audience Evaluation
@@ -205,3 +223,7 @@ See Contributing.
 ## Licence 💮
 
 MIT License | Copyright (c) 2020 AirGrid LTD | [Link](./LICENSE)
+
+[iabapi]: https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md
+[iabpolicysite]: https://iabeurope.eu/iab-europe-transparency-consent-framework-policies/
+[vendorids]: https://iabeurope.eu/vendor-list-tcf-v2-0/

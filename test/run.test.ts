@@ -86,10 +86,13 @@ describe('Test basic edkt run', () => {
   it('does not match with one sport page view', async () => {
     setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportAudience],
+      },
+      true
+    );
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -109,10 +112,13 @@ describe('Test basic edkt run', () => {
   it('does match with two sport page view', async () => {
     setUpLocalStorage(TWO_SPORTS_PAGE_VIEW);
 
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportAudience],
+      },
+      true
+    );
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -134,10 +140,13 @@ describe('Test look back edkt run', () => {
   it('does match with lookBack set to 0 with two demo page view at any point in the past', async () => {
     setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
-    await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
-      audienceDefinitions: [lookBackInfinityAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [lookBackPageFeatureGetter],
+        audienceDefinitions: [lookBackInfinityAudience],
+      },
+      true
+    );
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
     expect(edktMatchedAudiences.length).toEqual(1);
@@ -147,10 +156,13 @@ describe('Test look back edkt run', () => {
   it('does match with lookBack set to 2 with two blank page view within look back period', async () => {
     setUpLocalStorage(LOOK_BACK_PAGE_VIEW);
 
-    await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
-      audienceDefinitions: [lookBackAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [lookBackPageFeatureGetter],
+        audienceDefinitions: [lookBackAudience],
+      },
+      true
+    );
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
     expect(edktMatchedAudiences.length).toEqual(1);
@@ -160,10 +172,13 @@ describe('Test look back edkt run', () => {
   it('does not match with lookBack set to 2 with two blank page view outside look back period', async () => {
     setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
-    await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
-      audienceDefinitions: [lookBackAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [lookBackPageFeatureGetter],
+        audienceDefinitions: [lookBackAudience],
+      },
+      true
+    );
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
     expect(edktMatchedAudiences.length).toEqual(0);

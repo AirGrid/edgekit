@@ -12,17 +12,23 @@ describe('Test edkt audience matching', () => {
   beforeAll(async () => {
     localStorage.clear();
     // add one initial view
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportInterestAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportInterestAudience],
+      },
+      true
+    );
   });
 
   it('First run -> add page view but do not match', async () => {
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportInterestAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportInterestAudience],
+      },
+      true
+    );
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -37,10 +43,13 @@ describe('Test edkt audience matching', () => {
   });
 
   it('Second run -> add another page view & match', async () => {
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportInterestAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportInterestAudience],
+      },
+      true
+    );
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -55,10 +64,13 @@ describe('Test edkt audience matching', () => {
   });
 
   it('Third run -> add another page view & match', async () => {
-    await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
-      audienceDefinitions: [sportInterestAudience],
-    });
+    await edkt.run(
+      {
+        pageFeatureGetters: [sportPageFeatureGetter],
+        audienceDefinitions: [sportInterestAudience],
+      },
+      true
+    );
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
