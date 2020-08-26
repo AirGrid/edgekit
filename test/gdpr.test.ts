@@ -1,17 +1,6 @@
-import { edkt, hasGdprConsent } from '../src';
-import { TCData } from '../src/gdpr';
-import { AudienceDefinition } from '../types';
-// import { viewStore, matchedAudienceStore } from '../src/store';
-
-declare global {
-  interface Window {
-    __tcfapi(
-      command: 'getTCData',
-      version: number,
-      cb: (tcData: TCData, success: boolean) => void
-    ): void;
-  }
-}
+import { edkt } from '../src';
+import { hasGdprConsent } from '../src/gdpr';
+import { TCData, AudienceDefinition } from '../types';
 
 const TTL = 10;
 const airgridVendorId = 782;
@@ -40,16 +29,6 @@ const sportAudience: AudienceDefinition = {
   version: 1,
 };
 
-/*
-const setUpLocalStorage = (pageViews: Array<PageView>) => {
-  localStorage.clear();
-  localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
-  //We need to reload from local storage because its only done on construction
-  viewStore._load();
-  matchedAudienceStore._load();
-};
-*/
-
 const sportPageFeatureGetter = {
   name: 'keywords',
   func: (): Promise<string[]> => {
@@ -58,87 +37,86 @@ const sportPageFeatureGetter = {
 };
 
 describe.only('EdgeKit GDPR tests', () => {
-  it('should fail to consent if the Transparency and Consent Framework API is missing', async () => {
-    expect(window.__tcfapi).toBeUndefined();
-    const hasConsent = await hasGdprConsent([airgridVendorId]);
-    expect(hasConsent).toBe(false);
+  describe('hasGdprConsent', () => {
+    it('should fail to consent if the Transparency and Consent Framework API is missing', async () => {
+      expect(window.__tcfapi).toBeUndefined();
+      const hasConsent = await hasGdprConsent([airgridVendorId]);
+      expect(hasConsent).toBe(false);
+    });
+
+    it('should fail to consent if the api is there but gdprApplies is undefined or false', async () => {
+      injectTcfApi();
+
+      expect(window.__tcfapi).not.toBeUndefined();
+      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+
+      gdprApplies = false;
+      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+    });
+
+    it(`should not consent if GDPR applies but the vendor does't consent`, async () => {
+      gdprApplies = true;
+      expect(consents[airgridVendorId]).toBe(false);
+      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+    });
+
+    it('should consent if GDPR applies and the vender consents', async () => {
+      consents = { [airgridVendorId]: true };
+      expect(window.__tcfapi).not.toBeUndefined();
+      expect(await hasGdprConsent([airgridVendorId])).toBe(true);
+    });
   });
 
-  it('should fail to consent if the api is there but gdprApplies is undefined or false', async () => {
-    injectTcfApi();
-
-    expect(window.__tcfapi).not.toBeUndefined();
-    expect(await hasGdprConsent([airgridVendorId])).toBe(false);
-
-    gdprApplies = false;
-    expect(await hasGdprConsent([airgridVendorId])).toBe(false);
-  });
-
-  it(`should not consent if GDPR applies but the vendor does't consent`, async () => {
-    gdprApplies = true;
-    expect(consents[airgridVendorId]).toBe(false);
-    expect(await hasGdprConsent([airgridVendorId])).toBe(false);
-  });
-
-  it('should consent if GDPR applies and the vender consents', async () => {
-    consents = { [airgridVendorId]: true };
-    expect(window.__tcfapi).not.toBeUndefined();
-    expect(await hasGdprConsent([airgridVendorId])).toBe(true);
-  });
-
-  it('should not run edgekit if there is no GDPR consent', async () => {
-    const hasConsent = false;
-    await edkt.run(
-      {
+  describe('run', () => {
+    it('should not run edgekit if there is no GDPR consent', async () => {
+      consents = { [airgridVendorId]: false };
+      await edkt.run({
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
-      },
-      hasConsent
-    );
+        vendorIds: [airgridVendorId],
+      });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
+      const edktPageViews = JSON.parse(
+        localStorage.getItem('edkt_page_views') || '[]'
+      );
 
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+      const edktMatchedAudiences = JSON.parse(
+        localStorage.getItem('edkt_matched_audiences') || '[]'
+      );
 
-    expect(edktPageViews).toHaveLength(0);
-    expect(edktMatchedAudiences).toHaveLength(0);
-  });
+      expect(edktPageViews).toHaveLength(0);
+      expect(edktMatchedAudiences).toHaveLength(0);
+    });
 
-  it('should run edgekit if there is GDPR consent', async () => {
-    const hasConsent = await hasGdprConsent([airgridVendorId]);
-    expect(hasConsent).toBe(true);
+    it('should run edgekit if there is GDPR consent', async () => {
+      consents = { [airgridVendorId]: true };
 
-    await edkt.run(
-      {
+      await edkt.run({
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
-      },
-      hasConsent
-    );
+        vendorIds: [airgridVendorId],
+      });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
+      const edktPageViews = JSON.parse(
+        localStorage.getItem('edkt_page_views') || '[]'
+      );
 
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+      const edktMatchedAudiences = JSON.parse(
+        localStorage.getItem('edkt_matched_audiences') || '[]'
+      );
 
-    expect(edktPageViews).toEqual([
-      { features: { keywords: ['sport'] }, ts: edktPageViews[0].ts },
-    ]);
+      expect(edktPageViews).toEqual([
+        { features: { keywords: ['sport'] }, ts: edktPageViews[0].ts },
+      ]);
 
-    expect(edktMatchedAudiences).toEqual([
-      {
-        id: 'sport_id',
-        matched: true,
-        matchedOnCurrentPageView: true,
-        ...edktMatchedAudiences[0],
-      },
-    ]);
+      expect(edktMatchedAudiences).toEqual([
+        {
+          id: 'sport_id',
+          matched: true,
+          matchedOnCurrentPageView: true,
+          ...edktMatchedAudiences[0],
+        },
+      ]);
+    });
   });
 });

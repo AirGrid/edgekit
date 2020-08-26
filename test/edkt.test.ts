@@ -36,13 +36,11 @@ describe('EdgeKit edkt() API tests', () => {
   it('expects edkt_page_views length to be 1', async () => {
     document.head.innerHTML = sportsKeywordsHtml;
 
-    await edkt.run(
-      {
-        pageFeatureGetters: [getHtmlKeywords],
-        audienceDefinitions: allAudienceDefinitions,
-      },
-      true
-    );
+    await edkt.run({
+      pageFeatureGetters: [getHtmlKeywords],
+      audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
+    });
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -54,13 +52,11 @@ describe('EdgeKit edkt() API tests', () => {
   it('expects edkt_page_views length to be 2', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
-    await edkt.run(
-      {
-        pageFeatureGetters: [getHttpKeywords],
-        audienceDefinitions: allAudienceDefinitions,
-      },
-      true
-    );
+    await edkt.run({
+      pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
+    });
 
     const edktPageViews = JSON.parse(
       localStorage.getItem('edkt_page_views') || '[]'
@@ -72,13 +68,11 @@ describe('EdgeKit edkt() API tests', () => {
   it('sports audience should not be stored in matched audiences when no audience definitions are sent', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
-    await edkt.run(
-      {
-        pageFeatureGetters: [getHttpKeywords],
-        audienceDefinitions: [],
-      },
-      true
-    );
+    await edkt.run({
+      pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: [],
+      omitGdprConsent: true,
+    });
 
     const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
@@ -90,13 +84,11 @@ describe('EdgeKit edkt() API tests', () => {
   it('sports audience should be stored in matched audiences', async () => {
     fetchMock.mockOnce(JSON.stringify(sportKeywordsString));
 
-    await edkt.run(
-      {
-        pageFeatureGetters: [getHttpKeywords],
-        audienceDefinitions: allAudienceDefinitions,
-      },
-      true
-    );
+    await edkt.run({
+      pageFeatureGetters: [getHttpKeywords],
+      audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
+    });
 
     const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'

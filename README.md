@@ -76,13 +76,15 @@ _Note: using the above URLs will always fetch the latest version, which could co
 EdgeKit will execute the following high level flow:
 
 1. **Check for GDPR compliance.**
-   The IAB has an [API][iabapi] to check for GDPR compliance. Edgekit provides a simplified wrapper
-   around this API in order to check for compliance. A list of vendor ids is passed to the function.
+   The IAB has an [API](https://cdn.edkt.io/sdk/edgekit.min.js) to check for GDPR compliance.
+   Edgekit provides a simplified wrapper around this API in order to check for compliance. A list of
+   vendor ids is passed to the function.
 
    You can find the list of vendors and their ids that are participating in the Transparency and
-   Consent Framework [here][vendorids].
+   Consent Framework [here](https://iabeurope.eu/vendor-list-tcf-v2-0/).
 
-   Quoting the definition from [IAB policy site][iabpolicysite], a vendor is:
+   Quoting the definition from [IAB policy site](https://cdn.edkt.io/sdk/edgekit.min.js), a vendor
+   is:
 
    > “Vendor” means a company that participates in the delivery of digital advertising within a Publisher’s website, app, or other digital content, to the extent that company is not acting as a Publisher or CMP, and that either accesses an end user’s device or processes personal data about end users visiting the Publisher’s content and adheres to the Policies...
 
@@ -133,19 +135,24 @@ const getHtmlKeywords = {
 ##### JS EdgeKit Run
 
 ```typescript
-import { edkt, hasGdprConsent } from '@airgrid/edgekit';
+import { edkt } from '@airgrid/edgekit';
 
-// Vendor ids to check for consent
-const vendorIds = [...]
-
-// Check for GDPR compliance for the provided vendor ids
-const hasConsent = await hasGdprConsent(vendorIds)
-
-// This function won't do anything unless `hasConsent` is `true`
+// If GDPR applies and consent has not been established then this function won't do anything
 edkt.run({
   pageFeatureGetters: [getHtmlKeywords],
   audienceDefinitions: ...,
-}, hasConsent);
+  vendorIds: ..., // vendor ids to check for consent
+});
+```
+
+Alternatively, pass in a flag to omit the GDPR check if it's not necessary for your use case:
+
+```typescript
+edkt.run({
+  pageFeatureGetters: [getHtmlKeywords],
+  audienceDefinitions: ...,
+  omitGdprConsent: true
+});
 ```
 
 #### Audience Evaluation
@@ -223,7 +230,3 @@ See Contributing.
 ## Licence 💮
 
 MIT License | Copyright (c) 2020 AirGrid LTD | [Link](./LICENSE)
-
-[iabapi]: https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md
-[iabpolicysite]: https://iabeurope.eu/iab-europe-transparency-consent-framework-policies/
-[vendorids]: https://iabeurope.eu/vendor-list-tcf-v2-0/
