@@ -89,6 +89,7 @@ describe('Test basic edkt run', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportAudience],
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -112,6 +113,7 @@ describe('Test basic edkt run', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportAudience],
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -137,6 +139,7 @@ describe('Test look back edkt run', () => {
     await edkt.run({
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackInfinityAudience],
+      omitGdprConsent: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
@@ -150,6 +153,7 @@ describe('Test look back edkt run', () => {
     await edkt.run({
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackAudience],
+      omitGdprConsent: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
@@ -163,6 +167,7 @@ describe('Test look back edkt run', () => {
     await edkt.run({
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackAudience],
+      omitGdprConsent: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
