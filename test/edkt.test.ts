@@ -39,6 +39,7 @@ describe('EdgeKit edkt() API tests', () => {
     await edkt.run({
       pageFeatureGetters: [getHtmlKeywords],
       audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -54,6 +55,7 @@ describe('EdgeKit edkt() API tests', () => {
     await edkt.run({
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -69,6 +71,7 @@ describe('EdgeKit edkt() API tests', () => {
     await edkt.run({
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: [],
+      omitGdprConsent: true,
     });
 
     const edktMatchedAudiences = JSON.parse(
@@ -84,6 +87,7 @@ describe('EdgeKit edkt() API tests', () => {
     await edkt.run({
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: allAudienceDefinitions,
+      omitGdprConsent: true,
     });
 
     const edktMatchedAudiences = JSON.parse(

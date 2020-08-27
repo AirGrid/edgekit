@@ -86,3 +86,30 @@ export interface EngineCondition {
   };
   rules: EngineConditionRule[];
 }
+
+export interface PingResponse {
+  gdprApplies?: boolean;
+}
+
+export interface TCData {
+  gdprApplies?: boolean;
+  vendor: {
+    consents: { [vendorId: number]: boolean | undefined };
+  };
+}
+
+declare global {
+  interface Window {
+    __tcfapi(
+      command: 'ping',
+      version: number,
+      cb: (response: PingResponse) => void
+    ): void;
+
+    __tcfapi(
+      command: 'getTCData',
+      version: number,
+      cb: (tcData: TCData, success: boolean) => void
+    ): void;
+  }
+}

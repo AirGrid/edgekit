@@ -75,11 +75,24 @@ _Note: using the above URLs will always fetch the latest version, which could co
 
 EdgeKit will execute the following high level flow:
 
-1. **Register, run and store user defined `pageFeatureGetters`.**
+1. **Check for GDPR compliance.**
+   The IAB has an [API](https://cdn.edkt.io/sdk/edgekit.min.js) to check for GDPR compliance.
+   Edgekit provides a simplified wrapper around this API in order to check for compliance. A list of
+   vendor ids is passed to the function.
+
+   You can find the list of vendors and their ids that are participating in the Transparency and
+   Consent Framework [here](https://iabeurope.eu/vendor-list-tcf-v2-0/).
+
+   Quoting the definition from [IAB policy site](https://cdn.edkt.io/sdk/edgekit.min.js), a vendor
+   is:
+
+   > “Vendor” means a company that participates in the delivery of digital advertising within a Publisher’s website, app, or other digital content, to the extent that company is not acting as a Publisher or CMP, and that either accesses an end user’s device or processes personal data about end users visiting the Publisher’s content and adheres to the Policies...
+
+2. **Register, run and store user defined `pageFeatureGetters`.**
    In this step the library will fetch `keywords` to describe the current page load, which will be stored locally to create a history of the pages viewed by the user visiting your site.
-2. **Run audience definitions against the local page views.**
+3. **Run audience definitions against the local page views.**
    The library now checks the users local history to see if they match any of the audience definitions, storing any matched audiences.
-3. **Make matched audiences available to bidding.**
+4. **Make matched audiences available to bidding.**
    The final step is to pass the newly defined audience signals to third party bidders, for example via Prebid.
 
 #### Page Features
@@ -124,9 +137,21 @@ const getHtmlKeywords = {
 ```typescript
 import { edkt } from '@airgrid/edgekit';
 
+// If GDPR applies and consent has not been established then this function won't do anything
 edkt.run({
   pageFeatureGetters: [getHtmlKeywords],
   audienceDefinitions: ...,
+  vendorIds: ..., // vendor ids to check for consent
+});
+```
+
+Alternatively, pass in a flag to omit the GDPR check if it's not necessary for your use case:
+
+```typescript
+edkt.run({
+  pageFeatureGetters: [getHtmlKeywords],
+  audienceDefinitions: ...,
+  omitGdprConsent: true
 });
 ```
 
