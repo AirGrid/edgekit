@@ -15,6 +15,7 @@ describe('Test edkt audience matching', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
+      omitGdprConsent: true,
     });
   });
 
@@ -22,6 +23,7 @@ describe('Test edkt audience matching', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -40,6 +42,7 @@ describe('Test edkt audience matching', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -58,6 +61,7 @@ describe('Test edkt audience matching', () => {
     await edkt.run({
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
+      omitGdprConsent: true,
     });
 
     const edktPageViews = JSON.parse(
