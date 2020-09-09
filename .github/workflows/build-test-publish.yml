@@ -1,47 +1,89 @@
-name: Build, Test and maybe Publish
-on: [push, pull_request]
+name: "[Edgekit] Build, Test and *Publish"
+
+on:
+  pull_request:
+    branches: [ develop ]
+  push:
+    branches:
+      - master
+      - develop
+  release:
+    types: [ published ]
 
 jobs:
-  
-  test:
+  build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Use Node v12
         uses: actions/setup-node@v1
         with:
           node-version: 12
+
       - name: Build
         run: npm install
+
       - name: Test
         run: npm test
-  
-  publish:
-    name: Publish to NPM
-    needs: test
+
+  build-and-release:
+    name: Create a release
+    if: ${{ github.event_name == 'push' && endsWith(github.ref, '/master') }}
+    needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    steps:      
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Edgekit NPM version
+        run: |
+          EDGEKIT_NPM_VERSION=$(node -p "require('./package.json').version")
+          EDGEKIT_VERSION="v$EDGEKIT_NPM_VERSION"
+          if git rev-parse "$EDGEKIT_VERSION"; then
+            IS_NEW_EDGEKIT_VERSION=false
+          else
+            IS_NEW_EDGEKIT_VERSION=true
+          fi
+          echo "::set-env name=EDGEKIT_VERSION::$EDGEKIT_VERSION"
+          echo "::set-env name=IS_NEW_EDGEKIT_VERSION::$IS_NEW_EDGEKIT_VERSION"
+
+      - name: Create Release
+        if: ${{ env.IS_NEW_EDGEKIT_VERSION }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ env.EDGEKIT_VERSION }}
+          release_name: Release ${{ env.EDGEKIT_VERSION }}
+
+  build-and-publish:
+    name: Publish to NPM
+    if: ${{ github.event_name == 'release' && endsWith(github.ref, '/master') }}
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Use Node v12
         uses: actions/setup-node@v1
         with:
           node-version: 12
+
       - name: Install dependencies
-        run: npm install 
+        run: npm install
+
       - name: Compile code
         run: npm run build
-      - name: Create UMD bundle 
-        run: npm run bundle 
-      - name: Publish if version has been updated
-        uses: pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df
-        with:
-          tag_name: "v%s"
-          tag_message: "v%s"
-          commit_pattern: "^release: (\\S+)"
+
+      - name: Create UMD bundle
+        run: npm run bundle
+        
+      - run: npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
