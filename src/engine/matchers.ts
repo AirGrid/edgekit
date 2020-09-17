@@ -1,3 +1,5 @@
+import { VectorCondition } from '../../types';
+
 /*
  * Example usage:
  * const greaterThan10 = gt(10);
@@ -13,3 +15,12 @@ export const lt = (a: number) => (b: number): boolean => b < a;
 export const ge = (a: number) => (b: number): boolean => b >= a;
 
 export const le = (a: number) => (b: number): boolean => b <= a;
+
+export const isVectorSimilar = (condition: VectorCondition) => (
+  vectors: number[]
+): boolean => {
+  return (
+    vectors.filter((vector) => vector > condition.threshold).length >=
+    condition.occurrences
+  );
+};

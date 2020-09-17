@@ -50,31 +50,31 @@ const lookBackAudience: AudienceDefinition = {
   version: 1,
 };
 
-const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
+const ONE_SPORTS_PAGE_VIEW: Array<PageView<void>> = pageViewCreator(
   timeStampInSecs(),
   ['sport'],
   1
 );
 
-const TWO_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
+const TWO_SPORTS_PAGE_VIEW: Array<PageView<void>> = pageViewCreator(
   timeStampInSecs(),
   ['sport'],
   2
 );
 
-const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView> = pageViewCreator(
+const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView<void>> = pageViewCreator(
   0,
   [''],
   lookBackInfinityAudience.occurrences
 );
 
-const LOOK_BACK_PAGE_VIEW: Array<PageView> = pageViewCreator(
+const LOOK_BACK_PAGE_VIEW: Array<PageView<void>> = pageViewCreator(
   timeStampInSecs(),
   [''],
   lookBackAudience.occurrences
 );
 
-const setUpLocalStorage = (pageViews: Array<PageView>) => {
+const setUpLocalStorage = (pageViews: Array<PageView<void>>) => {
   localStorage.clear();
   localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
   //We need to reload from local storage because its only done on construction

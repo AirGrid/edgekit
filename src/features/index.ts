@@ -1,10 +1,19 @@
-import { PageFeatureGetter, PageFeature } from '../../types';
+import {
+  PageFeatureGetter,
+  PageFeature,
+  PageFeatureValue,
+  PageFeatureKeyword,
+  PageFeatureTopicModel,
+  PageFeatureCustom,
+} from '../../types';
 
-const wrapPageFeatureGetters = (pageFeatureGetters: PageFeatureGetter[]) => {
+const wrapPageFeatureGetters = <T>(
+  pageFeatureGetters: PageFeatureGetter<T>[]
+): Promise<PageFeature<T>>[] => {
   return pageFeatureGetters.map((getter) => {
     return (async () => {
       let error: boolean;
-      let value: string[];
+      let value: PageFeatureValue<T>;
       const { name } = getter;
       try {
         value = await getter.func();
@@ -14,19 +23,34 @@ const wrapPageFeatureGetters = (pageFeatureGetters: PageFeatureGetter[]) => {
         error = true;
       }
 
-      return {
-        name,
-        error,
-        value,
-      };
+      if (name === 'keyword' && value instanceof Array) {
+        const pageFeatureKeyword: PageFeatureKeyword = { name, error, value };
+        return pageFeatureKeyword;
+      } else if (
+        name === 'topicModel' &&
+        !(value instanceof Array) &&
+        value instanceof Object &&
+        typeof value.vector === 'number' &&
+        typeof value.version === 'number'
+      ) {
+        const pageFeatureTopicModel: PageFeatureTopicModel = {
+          name,
+          error,
+          value,
+        };
+        return pageFeatureTopicModel;
+      } else {
+        const pageFeatureCustom: PageFeatureCustom<T> = { name, error, value };
+        return pageFeatureCustom;
+      }
     })();
   });
 };
 
-export const getPageFeatures = async (
-  pageFeatureGetters: PageFeatureGetter[]
-): Promise<PageFeature[]> => {
-  const wrappedGetters = wrapPageFeatureGetters(pageFeatureGetters);
+export const getPageFeatures = async <T>(
+  pageFeatureGetters: PageFeatureGetter<T>[]
+): Promise<PageFeature<T>[]> => {
+  const wrappedGetters = wrapPageFeatureGetters<T>(pageFeatureGetters);
   const features = await Promise.all(wrappedGetters);
   return features;
 };

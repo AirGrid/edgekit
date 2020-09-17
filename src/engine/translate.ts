@@ -1,8 +1,40 @@
-import { AudienceDefinition, EngineCondition } from '../../types';
+import {
+  AudienceDefinition,
+  EngineCondition,
+  VectorCondition,
+} from '../../types';
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
+  const topicModelRule:
+    | [
+        {
+          reducer: {
+            name: 'dotProducts';
+            args: number[];
+          };
+          matcher: {
+            name: 'isVectorSimilar';
+            args: VectorCondition;
+          };
+        }
+      ]
+    | [] = audienceDefinition.topicModel
+    ? [
+        {
+          reducer: {
+            name: 'dotProducts',
+            args: audienceDefinition.topicModel.vector,
+          },
+          matcher: {
+            name: 'isVectorSimilar',
+            args: audienceDefinition.topicModel.condition,
+          },
+        },
+      ]
+    : [];
+
   const condition: EngineCondition = {
     filter: {
       queries: [
@@ -22,6 +54,7 @@ export const translate = (
           args: audienceDefinition.occurrences,
         },
       },
+      ...topicModelRule,
     ],
   };
 

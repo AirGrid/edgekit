@@ -1,8 +1,14 @@
 import { storage, timeStampInSecs } from '../utils';
-import { PageView, StorageKeys, PageFeature } from '../../types';
+import {
+  PageView,
+  StorageKeys,
+  PageFeature,
+  PageFeatureValue,
+  TopicModelFeature,
+} from '../../types';
 
-class ViewStore {
-  pageViews: PageView[];
+class ViewStore<T> {
+  pageViews: PageView<T>[];
 
   constructor() {
     this.pageViews = [];
@@ -17,27 +23,54 @@ class ViewStore {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _formatIntoPageView(pageFeatures: PageFeature[]) {
+  _formatIntoPageView<T>(
+    pageFeatures: PageFeature<T>[]
+  ): PageView<T> | undefined {
     const ts = timeStampInSecs();
 
-    const features = pageFeatures.reduce((acc, item) => {
-      if (!item.error) {
-        acc[item.name] = item.value;
-        return acc;
+    let keywords: string[] | null = null;
+    let topicModel: TopicModelFeature | undefined = undefined;
+    const otherFeatures: Record<string, PageFeatureValue<T>> = {};
+    for (const pageFeature of pageFeatures) {
+      if (!pageFeature.error) {
+        switch (pageFeature.name) {
+          case 'keywords':
+            keywords =
+              pageFeature.value instanceof Array ? pageFeature.value : null;
+            break;
+          case 'topicModel':
+            topicModel =
+              !(pageFeature.value instanceof Array) &&
+              pageFeature.value instanceof Object &&
+              typeof pageFeature.value.vector === 'number' &&
+              typeof pageFeature.value.version === 'number'
+                ? pageFeature.value
+                : undefined;
+            break;
+          default:
+            otherFeatures[pageFeature.name] = pageFeature.value;
+        }
       }
-      return acc;
-    }, {} as Record<string, string[]>);
+    }
 
-    if (Object.keys(features).length < 1) return undefined;
-
-    return {
-      ts,
-      features,
-    };
+    if (keywords) {
+      return {
+        ts,
+        features: topicModel
+          ? {
+              keywords,
+              topicModel,
+            }
+          : { keywords },
+        ...otherFeatures,
+      };
+    } else {
+      return undefined;
+    }
   }
 
-  insert(pageFeatures: PageFeature[]) {
-    const pageView = this._formatIntoPageView(pageFeatures);
+  insert(pageFeatures: PageFeature<T>[]) {
+    const pageView = this._formatIntoPageView<T>(pageFeatures);
     if (!pageView) return;
     this.pageViews.push(pageView);
     this._save();

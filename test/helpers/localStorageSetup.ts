@@ -4,10 +4,13 @@ export const pageViewCreator = (
   timestamp: number,
   keywords: Array<string>,
   numberOfPageViews: number
-): Array<PageView> => {
+): Array<PageView<void>> => {
   const pageViews = [];
   for (let index = 0; index < numberOfPageViews; index++) {
-    pageViews.push({ ts: timestamp, features: { keywords } });
+    pageViews.push({
+      ts: timestamp,
+      features: { keywords },
+    });
   }
   return pageViews;
 };

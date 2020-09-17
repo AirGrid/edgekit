@@ -14,22 +14,47 @@ export enum StorageKeys {
 
 // Page Features
 
-export interface PageFeatureGetter {
-  name: string;
-  func: () => Promise<string[]>;
+export interface TopicModelFeature {
+  version: number;
+  vector: number[];
 }
 
-export interface PageFeature {
+export type PageFeatureValue<T> = string[] | TopicModelFeature | T;
+
+export interface PageFeatureGetter<T> {
   name: string;
+  func: () => Promise<PageFeatureValue<T>>;
+}
+
+export type PageFeatureKeyword = {
+  name: 'keyword';
   error: boolean;
   value: string[];
-}
+};
 
-export interface PageView {
+export type PageFeatureTopicModel = {
+  name: 'topicModel';
+  error: boolean;
+  value: TopicModelFeature;
+};
+
+export type PageFeatureCustom<T> = {
+  name: string;
+  error: boolean;
+  value: string[] | TopicModelFeature | T;
+};
+
+export type PageFeature<T> =
+  | PageFeatureKeyword
+  | PageFeatureTopicModel
+  | PageFeatureCustom<T>;
+
+export interface PageView<T> {
   ts: number;
   features: {
-    [name: string]: string[];
-  };
+    keywords: string[];
+    topicModel?: TopicModelFeature;
+  } & Record<string, PageFeatureValue<T>>;
 }
 
 // Audiences
@@ -41,6 +66,11 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
+export interface VectorCondition {
+  occurrences: number;
+  threshold: number;
+}
+
 export interface AudienceDefinition {
   id: string;
   name: string;
@@ -49,6 +79,11 @@ export interface AudienceDefinition {
   occurrences: number;
   keywords: string[];
   version: number;
+  topicModel?: {
+    version: number;
+    vector: number[];
+    condition: VectorCondition;
+  };
 }
 
 export interface CachedAudienceMetaData {
@@ -69,14 +104,20 @@ export interface EngineConditionQuery {
 }
 
 export interface EngineConditionRule {
-  reducer: {
-    name: 'count';
-    // args?: string;
-  };
-  matcher: {
-    name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
-    args: number;
-  };
+  reducer:
+    | {
+        name: 'count';
+      }
+    | { name: 'dotProducts'; args: number[] };
+  matcher:
+    | {
+        name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
+        args: number;
+      }
+    | {
+        name: 'isVectorSimilar';
+        args: VectorCondition;
+      };
 }
 
 export interface EngineCondition {

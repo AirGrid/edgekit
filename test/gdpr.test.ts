@@ -105,6 +105,7 @@ describe.only('EdgeKit GDPR tests', () => {
         localStorage.getItem('edkt_matched_audiences') || '[]'
       );
 
+      expect(edktPageViews).toHaveLength(1);
       expect(edktPageViews).toEqual([
         { features: { keywords: ['sport'] }, ts: edktPageViews[0].ts },
       ]);

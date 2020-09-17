@@ -1,6 +1,20 @@
 import { PageView } from '../../types';
 
-export const count = () => (pageViews: PageView[]): number => pageViews.length;
+export const count = <T>() => (pageViews: PageView<T>[]): number =>
+  pageViews.length;
+
+export const dotProducts = <T>(vector: number[]) => (
+  pageViews: PageView<T>[]
+): number[] => {
+  const vectorDistance = pageViews.map(({ features }) => {
+    if (!features.topicModel) return 0;
+    return features.topicModel.vector.reduce(
+      (acc, cur, idx) => acc + cur * vector[idx],
+      0
+    );
+  });
+  return vectorDistance;
+};
 
 // TODO: these are not being used in edgekit, but they are in our project
 // need to figure out how to make them compatible with typescript...
