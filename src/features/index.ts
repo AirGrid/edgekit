@@ -27,7 +27,7 @@ const wrapPageFeatureGetters = <T>(
         const pageFeatureKeyword: PageFeatureKeyword = { name, error, value };
         return pageFeatureKeyword;
       } else if (
-        name === 'topicModel' &&
+        name === 'topicModelFeatures' &&
         !(value instanceof Array) &&
         value instanceof Object &&
         typeof value.vector === 'number' &&

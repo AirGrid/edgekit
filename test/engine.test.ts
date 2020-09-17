@@ -95,17 +95,24 @@ const sports1xConditionLe: EngineCondition = {
 const vectorCondition: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      {
+        property: 'topicModel',
+        value: {
+          vector: [0.4, 0.8, 0.3],
+          threshold: 0.5,
+        },
+      },
+    ],
   },
   rules: [
     {
       reducer: {
-        name: 'dotProducts',
-        args: [0.4, 0.8, 0.3],
+        name: 'count',
       },
       matcher: {
-        name: 'isVectorSimilar',
-        args: { occurrences: 1, threshold: 0.5 },
+        name: 'ge',
+        args: 1,
       },
     },
   ],
@@ -317,7 +324,6 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
             topicModel: {
               version: 1,
               vector: [0.2, 0.5, 0.1],
@@ -338,7 +344,6 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
             topicModel: {
               version: 1,
               vector: [0.3, 0.2, 0.1],
@@ -348,7 +353,6 @@ describe('Engine test', () => {
         {
           ts: 101,
           features: {
-            keywords: ['sport', 'football'],
             topicModel: {
               version: 1,
               vector: [0.3, 0.2, 0.2],

@@ -24,3 +24,11 @@ export const storage = {
   set,
   get,
 };
+
+export const dotProduct = (vectorA: number[], vectorB: number[]): number => {
+  const vectorDistance = vectorA.reduce(
+    (acc, cur, idx) => acc + cur * vectorB[idx],
+    0
+  );
+  return vectorDistance;
+};

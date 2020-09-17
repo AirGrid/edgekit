@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView } from '../types';
+import { AudienceDefinition, PageView, TopicModelFeature } from '../types';
 import { timeStampInSecs } from 'src/utils';
 import { viewStore, matchedAudienceStore } from 'src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';
@@ -15,6 +15,16 @@ const lookBackPageFeatureGetter = {
   name: 'keywords',
   func: (): Promise<string[]> => {
     return Promise.resolve(['']);
+  },
+};
+
+const topicModelPageFeatureGetter = {
+  name: 'topicModelFeatures',
+  func: (): Promise<TopicModelFeature> => {
+    return Promise.resolve({
+      vector: [0.2, 0.5, 0.1],
+      version: 1,
+    });
   },
 };
 
@@ -48,6 +58,19 @@ const lookBackAudience: AudienceDefinition = {
   occurrences: 2,
   keywords: [''],
   version: 1,
+};
+
+const topicModelAudience: AudienceDefinition = {
+  id: 'look_back_id',
+  name: 'Look Back Audience',
+  ttl: 100,
+  lookBack: 2,
+  occurrences: 1,
+  version: 1,
+  topicModel: {
+    vector: [0.4, 0.8, 0.3],
+    threshold: 0.5,
+  },
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView<void>> = pageViewCreator(
@@ -123,8 +146,10 @@ describe('Test basic edkt run', () => {
     const edktMatchedAudiences = JSON.parse(
       localStorage.getItem('edkt_matched_audiences') || '[]'
     );
-    // ecuase of the edkt.run adds a page view & audience match is greater than
+
+    // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(sportAudience.occurrences);
+
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual(['sport']);
@@ -172,5 +197,92 @@ describe('Test look back edkt run', () => {
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
     expect(edktMatchedAudiences.length).toEqual(0);
+  });
+});
+
+describe('Topic model run', () => {
+  beforeAll(() => {
+    setUpLocalStorage([]);
+  });
+
+  it('does not match with one page view', async () => {
+    await edkt.run({
+      pageFeatureGetters: [topicModelPageFeatureGetter],
+      audienceDefinitions: [topicModelAudience],
+      omitGdprConsent: true,
+    });
+
+    const edktPageViews = JSON.parse(
+      localStorage.getItem('edkt_page_views') || '[]'
+    );
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktPageViews).toEqual([
+      {
+        ts: edktPageViews[0].ts,
+        features: {
+          topicModel: {
+            vector: [0.2, 0.5, 0.1],
+            version: 1,
+          },
+        },
+      },
+    ]);
+
+    expect(edktMatchedAudiences.length).toEqual(0);
+  });
+
+  it('does match with two page views', async () => {
+    await edkt.run({
+      pageFeatureGetters: [topicModelPageFeatureGetter],
+      audienceDefinitions: [topicModelAudience],
+      omitGdprConsent: true,
+    });
+
+    const edktPageViews = JSON.parse(
+      localStorage.getItem('edkt_page_views') || '[]'
+    );
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktPageViews).toEqual([
+      {
+        ts: edktPageViews[0].ts,
+        features: {
+          topicModel: {
+            vector: [0.2, 0.5, 0.1],
+            version: 1,
+          },
+        },
+      },
+      {
+        ts: edktPageViews[1].ts,
+        features: {
+          topicModel: {
+            vector: [0.2, 0.5, 0.1],
+            version: 1,
+          },
+        },
+      },
+    ]);
+
+    // The default audience condition matches on (>=) -- see engine/translate.ts
+    expect(edktPageViews.length).toBeGreaterThan(
+      topicModelAudience.occurrences
+    );
+    expect(edktMatchedAudiences).toEqual([
+      {
+        id: 'look_back_id',
+        matchedAt: edktMatchedAudiences[0].matchedAt,
+        expiresAt: edktMatchedAudiences[0].expiresAt,
+        matchedOnCurrentPageView: true,
+        matched: true,
+      },
+    ]);
   });
 });

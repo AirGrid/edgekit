@@ -38,12 +38,10 @@ class ViewStore<T> {
             keywords =
               pageFeature.value instanceof Array ? pageFeature.value : null;
             break;
-          case 'topicModel':
+          case 'topicModelFeatures':
             topicModel =
               !(pageFeature.value instanceof Array) &&
-              pageFeature.value instanceof Object &&
-              typeof pageFeature.value.vector === 'number' &&
-              typeof pageFeature.value.version === 'number'
+              pageFeature.value instanceof Object
                 ? pageFeature.value
                 : undefined;
             break;
@@ -53,16 +51,15 @@ class ViewStore<T> {
       }
     }
 
-    if (keywords) {
+    if (topicModel) {
       return {
         ts,
-        features: topicModel
-          ? {
-              keywords,
-              topicModel,
-            }
-          : { keywords },
-        ...otherFeatures,
+        features: { topicModel, ...otherFeatures },
+      };
+    } else if (keywords) {
+      return {
+        ts,
+        features: { keywords, ...otherFeatures },
       };
     } else {
       return undefined;

@@ -1,48 +1,25 @@
-import {
-  AudienceDefinition,
-  EngineCondition,
-  VectorCondition,
-} from '../../types';
+import { AudienceDefinition, EngineCondition } from '../../types';
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
-  const topicModelRule:
-    | [
-        {
-          reducer: {
-            name: 'dotProducts';
-            args: number[];
-          };
-          matcher: {
-            name: 'isVectorSimilar';
-            args: VectorCondition;
-          };
-        }
-      ]
-    | [] = audienceDefinition.topicModel
-    ? [
-        {
-          reducer: {
-            name: 'dotProducts',
-            args: audienceDefinition.topicModel.vector,
-          },
-          matcher: {
-            name: 'isVectorSimilar',
-            args: audienceDefinition.topicModel.condition,
-          },
-        },
-      ]
-    : [];
-
   const condition: EngineCondition = {
     filter: {
-      queries: [
-        {
-          property: 'keywords',
-          value: audienceDefinition.keywords,
-        },
-      ],
+      queries: audienceDefinition.keywords
+        ? [
+            {
+              property: 'keywords',
+              value: audienceDefinition.keywords,
+            },
+          ]
+        : audienceDefinition.topicModel
+        ? [
+            {
+              property: 'topicModel',
+              value: audienceDefinition.topicModel,
+            },
+          ]
+        : [],
     },
     rules: [
       {
@@ -54,7 +31,6 @@ export const translate = (
           args: audienceDefinition.occurrences,
         },
       },
-      ...topicModelRule,
     ],
   };
 

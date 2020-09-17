@@ -33,7 +33,7 @@ export type PageFeatureKeyword = {
 };
 
 export type PageFeatureTopicModel = {
-  name: 'topicModel';
+  name: 'topicModelFeatures';
   error: boolean;
   value: TopicModelFeature;
 };
@@ -52,7 +52,7 @@ export type PageFeature<T> =
 export interface PageView<T> {
   ts: number;
   features: {
-    keywords: string[];
+    keywords?: string[];
     topicModel?: TopicModelFeature;
   } & Record<string, PageFeatureValue<T>>;
 }
@@ -77,12 +77,11 @@ export interface AudienceDefinition {
   ttl: number;
   lookBack: number;
   occurrences: number;
-  keywords: string[];
   version: number;
+  keywords?: string[];
   topicModel?: {
-    version: number;
     vector: number[];
-    condition: VectorCondition;
+    threshold: number;
   };
 }
 
@@ -98,26 +97,27 @@ export interface AudienceMetaData {
 
 // Engine
 
-export interface EngineConditionQuery {
-  property: string;
-  value: string[];
-}
+export type EngineConditionQuery =
+  | {
+      property: 'keywords';
+      value: string[];
+    }
+  | {
+      property: 'topicModel';
+      value: {
+        vector: number[];
+        threshold: number;
+      };
+    };
 
 export interface EngineConditionRule {
-  reducer:
-    | {
-        name: 'count';
-      }
-    | { name: 'dotProducts'; args: number[] };
-  matcher:
-    | {
-        name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
-        args: number;
-      }
-    | {
-        name: 'isVectorSimilar';
-        args: VectorCondition;
-      };
+  reducer: {
+    name: 'count';
+  };
+  matcher: {
+    name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
+    args: number;
+  };
 }
 
 export interface EngineCondition {
