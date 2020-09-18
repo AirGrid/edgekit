@@ -97,7 +97,7 @@ const vectorCondition: EngineCondition = {
     any: false,
     queries: [
       {
-        property: 'topicModel',
+        property: 'topicDist',
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,
@@ -324,10 +324,7 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicModel: {
-              version: 1,
-              vector: [0.2, 0.5, 0.1],
-            },
+            topicDist: [0.2, 0.5, 0.1],
           },
         },
       ];
@@ -344,19 +341,13 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicModel: {
-              version: 1,
-              vector: [0.3, 0.2, 0.1],
-            },
+            topicDist: [0.3, 0.2, 0.1],
           },
         },
         {
           ts: 101,
           features: {
-            topicModel: {
-              version: 1,
-              vector: [0.3, 0.2, 0.2],
-            },
+            topicDist: [0.3, 0.2, 0.2],
           },
         },
       ];

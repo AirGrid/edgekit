@@ -1,11 +1,5 @@
-import {
-  PageFeatureGetter,
-  PageFeature,
-  PageFeatureValue,
-  PageFeatureKeyword,
-  PageFeatureTopicModel,
-  PageFeatureCustom,
-} from '../../types';
+import { PageFeatureGetter, PageFeature, PageFeatureValue } from '../../types';
+import { isStringArray, isNumberArray } from '../utils';
 
 const wrapPageFeatureGetters = <T>(
   pageFeatureGetters: PageFeatureGetter<T>[]
@@ -23,26 +17,11 @@ const wrapPageFeatureGetters = <T>(
         error = true;
       }
 
-      if (name === 'keyword' && value instanceof Array) {
-        const pageFeatureKeyword: PageFeatureKeyword = { name, error, value };
-        return pageFeatureKeyword;
-      } else if (
-        name === 'topicModelFeatures' &&
-        !(value instanceof Array) &&
-        value instanceof Object &&
-        typeof value.vector === 'number' &&
-        typeof value.version === 'number'
-      ) {
-        const pageFeatureTopicModel: PageFeatureTopicModel = {
-          name,
-          error,
-          value,
-        };
-        return pageFeatureTopicModel;
-      } else {
-        const pageFeatureCustom: PageFeatureCustom<T> = { name, error, value };
-        return pageFeatureCustom;
-      }
+      return name === 'keyword' && isStringArray(value)
+        ? { name, error, value }
+        : name === 'topicDist' && isNumberArray(value)
+        ? { name, error, value }
+        : { name, error, value };
     })();
   });
 };

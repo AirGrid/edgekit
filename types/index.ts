@@ -14,12 +14,7 @@ export enum StorageKeys {
 
 // Page Features
 
-export interface TopicModelFeature {
-  version: number;
-  vector: number[];
-}
-
-export type PageFeatureValue<T> = string[] | TopicModelFeature | T;
+export type PageFeatureValue<T> = string[] | number[] | T;
 
 export interface PageFeatureGetter<T> {
   name: string;
@@ -33,15 +28,15 @@ export type PageFeatureKeyword = {
 };
 
 export type PageFeatureTopicModel = {
-  name: 'topicModelFeatures';
+  name: 'topicDist';
   error: boolean;
-  value: TopicModelFeature;
+  value: number[];
 };
 
 export type PageFeatureCustom<T> = {
   name: string;
   error: boolean;
-  value: string[] | TopicModelFeature | T;
+  value: string[] | number[] | T;
 };
 
 export type PageFeature<T> =
@@ -53,7 +48,7 @@ export interface PageView<T> {
   ts: number;
   features: {
     keywords?: string[];
-    topicModel?: TopicModelFeature;
+    topicDist?: number[];
   } & Record<string, PageFeatureValue<T>>;
 }
 
@@ -103,7 +98,7 @@ export type EngineConditionQuery =
       value: string[];
     }
   | {
-      property: 'topicModel';
+      property: 'topicDist';
       value: {
         vector: number[];
         threshold: number;

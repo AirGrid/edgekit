@@ -1,10 +1,14 @@
-import { storage, timeStampInSecs } from '../utils';
+import {
+  storage,
+  timeStampInSecs,
+  isStringArray,
+  isNumberArray,
+} from '../utils';
 import {
   PageView,
   StorageKeys,
   PageFeature,
   PageFeatureValue,
-  TopicModelFeature,
 } from '../../types';
 
 class ViewStore<T> {
@@ -29,21 +33,21 @@ class ViewStore<T> {
     const ts = timeStampInSecs();
 
     let keywords: string[] | null = null;
-    let topicModel: TopicModelFeature | undefined = undefined;
+    let topicDist: number[] | null = null;
     const otherFeatures: Record<string, PageFeatureValue<T>> = {};
+
     for (const pageFeature of pageFeatures) {
       if (!pageFeature.error) {
         switch (pageFeature.name) {
           case 'keywords':
-            keywords =
-              pageFeature.value instanceof Array ? pageFeature.value : null;
+            keywords = isStringArray(pageFeature.value)
+              ? pageFeature.value
+              : null;
             break;
-          case 'topicModelFeatures':
-            topicModel =
-              !(pageFeature.value instanceof Array) &&
-              pageFeature.value instanceof Object
-                ? pageFeature.value
-                : undefined;
+          case 'topicDist':
+            topicDist = isNumberArray(pageFeature.value)
+              ? pageFeature.value
+              : null;
             break;
           default:
             otherFeatures[pageFeature.name] = pageFeature.value;
@@ -51,15 +55,14 @@ class ViewStore<T> {
       }
     }
 
-    if (topicModel) {
+    if (keywords || topicDist) {
       return {
         ts,
-        features: { topicModel, ...otherFeatures },
-      };
-    } else if (keywords) {
-      return {
-        ts,
-        features: { keywords, ...otherFeatures },
+        features: {
+          ...(keywords && { keywords }),
+          ...(topicDist && { topicDist }),
+          ...otherFeatures,
+        },
       };
     } else {
       return undefined;

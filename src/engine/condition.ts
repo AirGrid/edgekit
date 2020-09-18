@@ -15,10 +15,11 @@ const createCondition = <T>(condition: EngineCondition) => (
           return (queryFeatures || []).some(
             (v) => query.value.indexOf(v) !== -1
           );
-        } else if (query.property === 'topicModel') {
+        } else if (query.property === 'topicDist') {
           const queryFeatures = pageView.features[query.property];
-          return queryFeatures
-            ? dotProduct(queryFeatures.vector, query.value.vector) >
+          return queryFeatures &&
+            queryFeatures.length === query.value.vector.length
+            ? dotProduct(queryFeatures, query.value.vector) >
                 query.value.threshold
             : false;
         } else {

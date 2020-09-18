@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView, TopicModelFeature } from '../types';
+import { AudienceDefinition, PageView } from '../types';
 import { timeStampInSecs } from 'src/utils';
 import { viewStore, matchedAudienceStore } from 'src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';
@@ -19,12 +19,9 @@ const lookBackPageFeatureGetter = {
 };
 
 const topicModelPageFeatureGetter = {
-  name: 'topicModelFeatures',
-  func: (): Promise<TopicModelFeature> => {
-    return Promise.resolve({
-      vector: [0.2, 0.5, 0.1],
-      version: 1,
-    });
+  name: 'topicDist',
+  func: (): Promise<number[]> => {
+    return Promise.resolve([0.2, 0.5, 0.1]);
   },
 };
 
@@ -224,10 +221,7 @@ describe('Topic model run', () => {
       {
         ts: edktPageViews[0].ts,
         features: {
-          topicModel: {
-            vector: [0.2, 0.5, 0.1],
-            version: 1,
-          },
+          topicDist: [0.2, 0.5, 0.1],
         },
       },
     ]);
@@ -254,19 +248,13 @@ describe('Topic model run', () => {
       {
         ts: edktPageViews[0].ts,
         features: {
-          topicModel: {
-            vector: [0.2, 0.5, 0.1],
-            version: 1,
-          },
+          topicDist: [0.2, 0.5, 0.1],
         },
       },
       {
         ts: edktPageViews[1].ts,
         features: {
-          topicModel: {
-            vector: [0.2, 0.5, 0.1],
-            version: 1,
-          },
+          topicDist: [0.2, 0.5, 0.1],
         },
       },
     ]);
@@ -278,6 +266,94 @@ describe('Topic model run', () => {
     expect(edktMatchedAudiences).toEqual([
       {
         id: 'look_back_id',
+        matchedAt: edktMatchedAudiences[0].matchedAt,
+        expiresAt: edktMatchedAudiences[0].expiresAt,
+        matchedOnCurrentPageView: true,
+        matched: true,
+      },
+    ]);
+  });
+});
+
+describe('Topic model run 2', () => {
+  const run = async () => {
+    await edkt.run({
+      pageFeatureGetters: [
+        topicModelPageFeatureGetter,
+        {
+          name: 'keywords',
+          func: (): Promise<string[]> => {
+            return Promise.resolve(['dummy']);
+          },
+        },
+      ],
+      audienceDefinitions: [
+        {
+          id: 'iab-608',
+          name: 'Interest | Sport',
+          topicModel: {
+            threshold: 0.5,
+            vector: [0.4, 0.8, 0.3],
+          },
+          occurrences: 1,
+          ttl: 1000,
+          lookBack: 1000,
+          version: 1,
+        },
+        {
+          id: 'iab-607',
+          name: 'Interest | Sport',
+          keywords: ['sport', 'Leeds United A.F.C.'],
+          occurrences: 1,
+          ttl: 1000,
+          lookBack: 1000,
+          version: 1,
+        },
+      ],
+      omitGdprConsent: true,
+    });
+  };
+
+  beforeAll(() => {
+    setUpLocalStorage([]);
+  });
+
+  it('does match with two page views', async () => {
+    await run();
+    await run();
+
+    const edktPageViews = JSON.parse(
+      localStorage.getItem('edkt_page_views') || '[]'
+    );
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktPageViews).toEqual([
+      {
+        ts: edktPageViews[0].ts,
+        features: {
+          keywords: ['dummy'],
+          topicDist: [0.2, 0.5, 0.1],
+        },
+      },
+      {
+        ts: edktPageViews[1].ts,
+        features: {
+          keywords: ['dummy'],
+          topicDist: [0.2, 0.5, 0.1],
+        },
+      },
+    ]);
+
+    // The default audience condition matches on (>=) -- see engine/translate.ts
+    expect(edktPageViews.length).toBeGreaterThan(
+      topicModelAudience.occurrences
+    );
+    expect(edktMatchedAudiences).toEqual([
+      {
+        id: 'iab-608',
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,

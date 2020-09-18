@@ -15,7 +15,7 @@ export const translate = (
         : audienceDefinition.topicModel
         ? [
             {
-              property: 'topicModel',
+              property: 'topicDist',
               value: audienceDefinition.topicModel,
             },
           ]
