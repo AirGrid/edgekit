@@ -31,10 +31,7 @@ export const storage = {
   get,
 };
 
-export const vectorDistance = (
-  vectorA: number[],
-  vectorB: number[]
-): number => {
+export const dotProduct = (vectorA: number[], vectorB: number[]): number => {
   return vectorA.reduce((acc, cur, idx) => acc + cur * vectorB[idx], 0);
 };
 

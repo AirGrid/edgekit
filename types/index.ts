@@ -41,28 +41,27 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-export interface KeywordsAudienceDefinition {
+interface BaseAudienceDefinition {
   id: string;
   name: string;
   ttl: number;
   lookBack: number;
   occurrences: number;
   version: number;
-  keywords: string[];
+  queryProperty: string;
+  queryFilterComparisonType: 'includes' | 'dotProduct';
 }
 
-export interface TopicModelAudienceDefinition {
-  id: string;
-  name: string;
-  ttl: number;
-  lookBack: number;
-  occurrences: number;
-  version: number;
+export type KeywordsAudienceDefinition = BaseAudienceDefinition & {
+  keywords: string[];
+};
+
+export type TopicModelAudienceDefinition = BaseAudienceDefinition & {
   topicModel: {
     vector: number[];
     threshold: number;
   };
-}
+};
 
 export type AudienceDefinition =
   | KeywordsAudienceDefinition
@@ -83,12 +82,12 @@ export interface AudienceMetaData {
 export type EngineConditionQuery =
   | {
       property: string;
-      filterType: 'includes';
+      filterComparisonType: 'includes';
       value: string[];
     }
   | {
       property: string;
-      filterType: 'dotProduct';
+      filterComparisonType: 'dotProduct';
       value: {
         vector: number[];
         threshold: number;

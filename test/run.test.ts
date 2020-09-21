@@ -35,6 +35,8 @@ const sportAudience: AudienceDefinition = {
   occurrences: 2,
   keywords: ['sport'],
   version: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 const lookBackInfinityAudience: AudienceDefinition = {
@@ -45,6 +47,8 @@ const lookBackInfinityAudience: AudienceDefinition = {
   occurrences: 2,
   keywords: [''],
   version: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 const lookBackAudience: AudienceDefinition = {
@@ -55,6 +59,8 @@ const lookBackAudience: AudienceDefinition = {
   occurrences: 2,
   keywords: [''],
   version: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 const topicModelAudience: AudienceDefinition = {
@@ -68,6 +74,8 @@ const topicModelAudience: AudienceDefinition = {
     vector: [0.4, 0.8, 0.3],
     threshold: 0.5,
   },
+  queryProperty: 'topicModel',
+  queryFilterComparisonType: 'dotProduct',
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -299,6 +307,8 @@ describe('Topic model run 2', () => {
           ttl: 1000,
           lookBack: 1000,
           version: 1,
+          queryProperty: 'topicModel',
+          queryFilterComparisonType: 'dotProduct',
         },
         {
           id: 'iab-607',
@@ -308,6 +318,8 @@ describe('Topic model run 2', () => {
           ttl: 1000,
           lookBack: 1000,
           version: 1,
+          queryProperty: 'keywords',
+          queryFilterComparisonType: 'includes',
         },
       ],
       omitGdprConsent: true,

@@ -16,6 +16,8 @@ export const sportInterestAudience: AudienceDefinition = {
   occurrences: OCCURRENCES,
   keywords: sportKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 export const travelInterestAudience: AudienceDefinition = {
@@ -26,6 +28,8 @@ export const travelInterestAudience: AudienceDefinition = {
   occurrences: OCCURRENCES,
   keywords: travelKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 export const automotiveInterestAudience: AudienceDefinition = {
@@ -36,6 +40,8 @@ export const automotiveInterestAudience: AudienceDefinition = {
   occurrences: OCCURRENCES,
   keywords: automotiveKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 export const allAudienceDefinitions: AudienceDefinition[] = [

@@ -13,13 +13,16 @@ const createCondition = (condition: EngineCondition) => (
       return pageViews.filter((pageView) => {
         const queryFeatures = pageView.features[query.property];
 
-        if (query.filterType === 'includes' && isStringArray(queryFeatures)) {
+        if (
+          query.filterComparisonType === 'includes' &&
+          isStringArray(queryFeatures)
+        ) {
           return filters.includes(queryFeatures, query.value);
         } else if (
-          query.filterType === 'dotProduct' &&
+          query.filterComparisonType === 'dotProduct' &&
           isNumberArray(queryFeatures)
         ) {
-          return filters.dotProduct(queryFeatures, query.value);
+          return filters.vectorDistance(queryFeatures, query.value);
         } else {
           return true;
         }

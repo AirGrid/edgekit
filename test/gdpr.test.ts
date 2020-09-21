@@ -27,6 +27,8 @@ const sportAudience: AudienceDefinition = {
   occurrences: 0,
   keywords: ['sport'],
   version: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'includes',
 };
 
 const sportPageFeatureGetter = {

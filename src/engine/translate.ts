@@ -1,31 +1,19 @@
 import { AudienceDefinition, EngineCondition } from '../../types';
-import {
-  isKeywordsAudienceDefinition,
-  isTopicModelAudienceDefinition,
-} from '../utils';
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
   const condition: EngineCondition = {
     filter: {
-      queries: isKeywordsAudienceDefinition(audienceDefinition)
-        ? [
-            {
-              property: 'keywords',
-              filterType: 'includes',
-              value: audienceDefinition.keywords,
-            },
-          ]
-        : isTopicModelAudienceDefinition(audienceDefinition)
-        ? [
-            {
-              property: 'topicDist',
-              filterType: 'dotProduct',
-              value: audienceDefinition.topicModel,
-            },
-          ]
-        : [],
+      queries: [
+        {
+          property: audienceDefinition.queryProperty,
+          filterComparisonType: audienceDefinition.queryFilterComparisonType,
+          // TODO: avoid coercing the type
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          value: (audienceDefinition as any)[audienceDefinition.queryProperty],
+        },
+      ],
     },
     rules: [
       {
