@@ -21,24 +21,6 @@ export interface PageFeatureGetter {
   func: () => Promise<PageFeatureValue>;
 }
 
-export type PageFeatureKeyword = {
-  name: 'keyword';
-  error: boolean;
-  value: string[];
-};
-
-export type PageFeatureTopicModel = {
-  name: 'topicDist';
-  error: boolean;
-  value: number[];
-};
-
-export type PageFeatureCustom<T> = {
-  name: string;
-  error: boolean;
-  value: string[] | number[] | T;
-};
-
 export type PageFeature = {
   name: string;
   error: boolean;
@@ -59,19 +41,32 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-export interface AudienceDefinition {
+export interface KeywordsAudienceDefinition {
   id: string;
   name: string;
   ttl: number;
   lookBack: number;
   occurrences: number;
   version: number;
-  keywords?: string[];
-  topicModel?: {
+  keywords: string[];
+}
+
+export interface TopicModelAudienceDefinition {
+  id: string;
+  name: string;
+  ttl: number;
+  lookBack: number;
+  occurrences: number;
+  version: number;
+  topicModel: {
     vector: number[];
     threshold: number;
   };
 }
+
+export type AudienceDefinition =
+  | KeywordsAudienceDefinition
+  | TopicModelAudienceDefinition;
 
 export interface CachedAudienceMetaData {
   cachedAt: number;

@@ -1,11 +1,15 @@
 import { AudienceDefinition, EngineCondition } from '../../types';
+import {
+  isKeywordsAudienceDefinition,
+  isTopicModelAudienceDefinition,
+} from '../utils';
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
   const condition: EngineCondition = {
     filter: {
-      queries: audienceDefinition.keywords
+      queries: isKeywordsAudienceDefinition(audienceDefinition)
         ? [
             {
               property: 'keywords',
@@ -13,7 +17,7 @@ export const translate = (
               value: audienceDefinition.keywords,
             },
           ]
-        : audienceDefinition.topicModel
+        : isTopicModelAudienceDefinition(audienceDefinition)
         ? [
             {
               property: 'topicDist',
