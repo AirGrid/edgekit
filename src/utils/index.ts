@@ -25,12 +25,11 @@ export const storage = {
   get,
 };
 
-export const dotProduct = (vectorA: number[], vectorB: number[]): number => {
-  const vectorDistance = vectorA.reduce(
-    (acc, cur, idx) => acc + cur * vectorB[idx],
-    0
-  );
-  return vectorDistance;
+export const vectorDistance = (
+  vectorA: number[],
+  vectorB: number[]
+): number => {
+  return vectorA.reduce((acc, cur, idx) => acc + cur * vectorB[idx], 0);
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any

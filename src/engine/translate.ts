@@ -9,6 +9,7 @@ export const translate = (
         ? [
             {
               property: 'keywords',
+              filterType: 'includes',
               value: audienceDefinition.keywords,
             },
           ]
@@ -16,6 +17,7 @@ export const translate = (
         ? [
             {
               property: 'topicDist',
+              filterType: 'dotProduct',
               value: audienceDefinition.topicModel,
             },
           ]

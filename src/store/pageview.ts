@@ -1,9 +1,4 @@
-import {
-  storage,
-  timeStampInSecs,
-  isStringArray,
-  isNumberArray,
-} from '../utils';
+import { storage, timeStampInSecs } from '../utils';
 import {
   PageView,
   StorageKeys,
@@ -11,8 +6,8 @@ import {
   PageFeatureValue,
 } from '../../types';
 
-class ViewStore<T> {
-  pageViews: PageView<T>[];
+class ViewStore {
+  pageViews: PageView[];
 
   constructor() {
     this.pageViews = [];
@@ -27,50 +22,27 @@ class ViewStore<T> {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _formatIntoPageView<T>(
-    pageFeatures: PageFeature<T>[]
-  ): PageView<T> | undefined {
+  _formatIntoPageView(pageFeatures: PageFeature[]): PageView | undefined {
     const ts = timeStampInSecs();
 
-    let keywords: string[] | null = null;
-    let topicDist: number[] | null = null;
-    const otherFeatures: Record<string, PageFeatureValue<T>> = {};
-
-    for (const pageFeature of pageFeatures) {
-      if (!pageFeature.error) {
-        switch (pageFeature.name) {
-          case 'keywords':
-            keywords = isStringArray(pageFeature.value)
-              ? pageFeature.value
-              : null;
-            break;
-          case 'topicDist':
-            topicDist = isNumberArray(pageFeature.value)
-              ? pageFeature.value
-              : null;
-            break;
-          default:
-            otherFeatures[pageFeature.name] = pageFeature.value;
-        }
+    const features = pageFeatures.reduce((acc, item) => {
+      if (!item.error) {
+        acc[item.name] = item.value;
+        return acc;
       }
-    }
+      return acc;
+    }, {} as Record<string, PageFeatureValue>);
 
-    if (keywords || topicDist) {
-      return {
-        ts,
-        features: {
-          ...(keywords && { keywords }),
-          ...(topicDist && { topicDist }),
-          ...otherFeatures,
-        },
-      };
-    } else {
-      return undefined;
-    }
+    if (Object.keys(features).length < 1) return undefined;
+
+    return {
+      ts,
+      features,
+    };
   }
 
-  insert(pageFeatures: PageFeature<T>[]) {
-    const pageView = this._formatIntoPageView<T>(pageFeatures);
+  insert(pageFeatures: PageFeature[]) {
+    const pageView = this._formatIntoPageView(pageFeatures);
     if (!pageView) return;
     this.pageViews.push(pageView);
     this._save();

@@ -5,7 +5,9 @@ import { EngineCondition } from '../types';
 const sports1xConditionGt: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      { property: 'keywords', filterType: 'includes', value: ['sport'] },
+    ],
   },
   rules: [
     {
@@ -23,7 +25,9 @@ const sports1xConditionGt: EngineCondition = {
 const sports1xConditionLt: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      { property: 'keywords', filterType: 'includes', value: ['sport'] },
+    ],
   },
   rules: [
     {
@@ -41,7 +45,9 @@ const sports1xConditionLt: EngineCondition = {
 const sports1xConditionEq: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      { property: 'keywords', filterType: 'includes', value: ['sport'] },
+    ],
   },
   rules: [
     {
@@ -59,7 +65,9 @@ const sports1xConditionEq: EngineCondition = {
 const sports1xConditionGe: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      { property: 'keywords', filterType: 'includes', value: ['sport'] },
+    ],
   },
   rules: [
     {
@@ -77,7 +85,9 @@ const sports1xConditionGe: EngineCondition = {
 const sports1xConditionLe: EngineCondition = {
   filter: {
     any: false,
-    queries: [{ property: 'keywords', value: ['sport'] }],
+    queries: [
+      { property: 'keywords', filterType: 'includes', value: ['sport'] },
+    ],
   },
   rules: [
     {
@@ -98,6 +108,7 @@ const vectorCondition: EngineCondition = {
     queries: [
       {
         property: 'topicDist',
+        filterType: 'dotProduct',
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,

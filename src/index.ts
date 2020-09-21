@@ -9,8 +9,8 @@ import {
   AudienceDefinition,
 } from '../types';
 
-interface Config<T> {
-  pageFeatureGetters: PageFeatureGetter<T>[];
+interface Config {
+  pageFeatureGetters: PageFeatureGetter[];
   audienceDefinitions: AudienceDefinition[];
   vendorIds?: number[];
   omitGdprConsent?: boolean;
@@ -18,14 +18,14 @@ interface Config<T> {
 
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
-const run = async <T>(config: Config<T>): Promise<void> => {
+const run = async (config: Config): Promise<void> => {
   if (config.omitGdprConsent !== true) {
     const hasConsent = await hasGdprConsent(config.vendorIds);
     if (!hasConsent) return;
   }
 
   const { pageFeatureGetters, audienceDefinitions } = config;
-  const pageFeatures = await getPageFeatures<T>(pageFeatureGetters);
+  const pageFeatures = await getPageFeatures(pageFeatureGetters);
   viewStore.insert(pageFeatures);
 
   const matchedAudiences = audienceDefinitions

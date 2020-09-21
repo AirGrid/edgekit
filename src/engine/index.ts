@@ -2,13 +2,13 @@ import createCondition from './condition';
 import { translate } from './translate';
 import { PageView, EngineCondition } from '../../types';
 
-const check = <T>(
+const check = (
   conditions: EngineCondition[],
-  pageViews: PageView<T>[],
+  pageViews: PageView[],
   any = false
 ): boolean => {
   const checkedConditions = conditions.map((condition) => {
-    return createCondition<T>(condition)(pageViews);
+    return createCondition(condition)(pageViews);
   });
 
   return any

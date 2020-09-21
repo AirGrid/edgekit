@@ -14,11 +14,11 @@ export enum StorageKeys {
 
 // Page Features
 
-export type PageFeatureValue<T> = string[] | number[] | T;
+export type PageFeatureValue = string[] | number[];
 
-export interface PageFeatureGetter<T> {
+export interface PageFeatureGetter {
   name: string;
-  func: () => Promise<PageFeatureValue<T>>;
+  func: () => Promise<PageFeatureValue>;
 }
 
 export type PageFeatureKeyword = {
@@ -39,17 +39,15 @@ export type PageFeatureCustom<T> = {
   value: string[] | number[] | T;
 };
 
-export type PageFeature<T> =
-  | PageFeatureKeyword
-  | PageFeatureTopicModel
-  | PageFeatureCustom<T>;
+export type PageFeature = {
+  name: string;
+  error: boolean;
+  value: PageFeatureValue;
+};
 
-export interface PageView<T> {
+export interface PageView {
   ts: number;
-  features: {
-    keywords?: string[];
-    topicDist?: number[];
-  } & Record<string, PageFeatureValue<T>>;
+  features: Record<string, PageFeatureValue>;
 }
 
 // Audiences
@@ -59,11 +57,6 @@ export interface MatchedAudience {
   matchedAt: number;
   expiresAt: number;
   matchedOnCurrentPageView: boolean;
-}
-
-export interface VectorCondition {
-  occurrences: number;
-  threshold: number;
 }
 
 export interface AudienceDefinition {
@@ -94,11 +87,13 @@ export interface AudienceMetaData {
 
 export type EngineConditionQuery =
   | {
-      property: 'keywords';
+      property: string;
+      filterType: 'includes';
       value: string[];
     }
   | {
-      property: 'topicDist';
+      property: string;
+      filterType: 'dotProduct';
       value: {
         vector: number[];
         threshold: number;

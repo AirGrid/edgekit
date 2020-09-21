@@ -1,27 +1,25 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
+import * as filters from './filters';
 import { PageView, EngineCondition } from '../../types';
-import { dotProduct } from '../utils';
+import { isNumberArray, isStringArray } from '../utils';
 
-const createCondition = <T>(condition: EngineCondition) => (
-  pageViews: PageView<T>[]
+const createCondition = (condition: EngineCondition) => (
+  pageViews: PageView[]
 ): boolean => {
   const { filter, rules } = condition;
   const filteredPageViews = filter.queries
     .map((query) => {
       return pageViews.filter((pageView) => {
-        if (query.property === 'keywords') {
-          const queryFeatures = pageView.features[query.property];
-          return (queryFeatures || []).some(
-            (v) => query.value.indexOf(v) !== -1
-          );
-        } else if (query.property === 'topicDist') {
-          const queryFeatures = pageView.features[query.property];
-          return queryFeatures &&
-            queryFeatures.length === query.value.vector.length
-            ? dotProduct(queryFeatures, query.value.vector) >
-                query.value.threshold
-            : false;
+        const queryFeatures = pageView.features[query.property];
+
+        if (query.filterType === 'includes' && isStringArray(queryFeatures)) {
+          return filters.includes(queryFeatures, query.value);
+        } else if (
+          query.filterType === 'dotProduct' &&
+          isNumberArray(queryFeatures)
+        ) {
+          return filters.dotProduct(queryFeatures, query.value);
         } else {
           return true;
         }
