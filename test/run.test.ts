@@ -64,13 +64,13 @@ const lookBackAudience: AudienceDefinition = {
 };
 
 const topicModelAudience: AudienceDefinition = {
-  id: 'look_back_id',
+  id: 'topic_model_id',
   name: 'Look Back Audience',
   ttl: 100,
   lookBack: 2,
   occurrences: 1,
   version: 1,
-  queryProperty: 'topicModel',
+  queryProperty: 'topicDist',
   queryFilterComparisonType: 'dotProduct',
   queryValue: {
     vector: [0.4, 0.8, 0.3],
@@ -273,7 +273,7 @@ describe('Topic model run', () => {
     );
     expect(edktMatchedAudiences).toEqual([
       {
-        id: 'look_back_id',
+        id: topicModelAudience.id,
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,
@@ -284,6 +284,33 @@ describe('Topic model run', () => {
 });
 
 describe('Topic model run 2', () => {
+  const topicModelAudience: AudienceDefinition = {
+    id: 'iab-608',
+    name: 'Interest | Sport',
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    version: 1,
+    queryProperty: 'topicDist',
+    queryFilterComparisonType: 'dotProduct',
+    queryValue: {
+      threshold: 0.5,
+      vector: [0.4, 0.8, 0.3],
+    },
+  };
+
+  const keywordsAudience: AudienceDefinition = {
+    id: 'iab-607',
+    name: 'Interest | Sport',
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    version: 1,
+    queryProperty: 'keywords',
+    queryFilterComparisonType: 'includes',
+    queryValue: ['sport', 'Leeds United A.F.C.'],
+  };
+
   const run = async () => {
     await edkt.run({
       pageFeatureGetters: [
@@ -295,33 +322,7 @@ describe('Topic model run 2', () => {
           },
         },
       ],
-      audienceDefinitions: [
-        {
-          id: 'iab-608',
-          name: 'Interest | Sport',
-          occurrences: 1,
-          ttl: 1000,
-          lookBack: 1000,
-          version: 1,
-          queryProperty: 'topicModel',
-          queryFilterComparisonType: 'dotProduct',
-          queryValue: {
-            threshold: 0.5,
-            vector: [0.4, 0.8, 0.3],
-          },
-        },
-        {
-          id: 'iab-607',
-          name: 'Interest | Sport',
-          occurrences: 1,
-          ttl: 1000,
-          lookBack: 1000,
-          version: 1,
-          queryProperty: 'keywords',
-          queryFilterComparisonType: 'includes',
-          queryValue: ['sport', 'Leeds United A.F.C.'],
-        },
-      ],
+      audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
     });
   };
@@ -365,7 +366,7 @@ describe('Topic model run 2', () => {
     );
     expect(edktMatchedAudiences).toEqual([
       {
-        id: 'iab-608',
+        id: topicModelAudience.id,
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,
