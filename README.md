@@ -171,10 +171,14 @@ export const exampleAudience: AudienceDefinition = {
   lookBack: LOOK_BACK_IN_SECS,
   // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
   occurrences: OCCURRENCES,
-  // The Keywords used to identify the audience
-  keywords: listOfKeywords,
   // The version number of the audience for caching
-  version: 1
+  version: 1,
+  // The query property to look up, this is the name of the key that will be looked up in the stored page view features object
+  queryProperty: 'keywords',
+  // The name of the function to use for filtering the page view features
+  queryFilterComparisonType: 'includes',
+  // The value to pass into the function determined by the queryFilterComparisonType along with the page view feature (if it exists)
+  queryValue: ['sport', 'football'],
 };
 ```
 
