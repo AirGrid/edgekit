@@ -56,7 +56,7 @@ export interface AudienceDefinition {
   version: number;
   queryProperty: string;
   queryValue: StringArrayQueryValue | VectorQueryValue;
-  queryFilterComparisonType: 'includes' | 'vectorDistance';
+  queryFilterComparisonType: 'arrayIntersects' | 'vectorDistance';
 }
 
 export interface CachedAudienceMetaData {
@@ -74,7 +74,7 @@ export interface AudienceMetaData {
 export type EngineConditionQuery =
   | {
       property: string;
-      filterComparisonType: 'includes';
+      filterComparisonType: 'arrayIntersects';
       value: StringArrayQueryValue;
     }
   | {

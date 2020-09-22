@@ -17,7 +17,7 @@ export const sportInterestAudience: AudienceDefinition = {
   version: VERSION,
   queryProperty: 'keywords',
   queryValue: sportKeywords,
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const travelInterestAudience: AudienceDefinition = {
@@ -29,7 +29,7 @@ export const travelInterestAudience: AudienceDefinition = {
   version: VERSION,
   queryProperty: 'keywords',
   queryValue: travelKeywords,
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const automotiveInterestAudience: AudienceDefinition = {
@@ -41,7 +41,7 @@ export const automotiveInterestAudience: AudienceDefinition = {
   version: VERSION,
   queryProperty: 'keywords',
   queryValue: automotiveKeywords,
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const allAudienceDefinitions: AudienceDefinition[] = [

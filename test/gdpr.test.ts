@@ -27,7 +27,7 @@ const sportAudience: AudienceDefinition = {
   occurrences: 0,
   version: 1,
   queryProperty: 'keywords',
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
   queryValue: ['sport'],
 };
 

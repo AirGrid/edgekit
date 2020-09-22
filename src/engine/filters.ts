@@ -1,6 +1,6 @@
 import { dotProduct } from '../utils';
 
-export const includes = (
+export const arrayIntersects = (
   queryFeatures: string[],
   queryValue: string[]
 ): boolean =>

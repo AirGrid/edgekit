@@ -35,7 +35,7 @@ const sportAudience: AudienceDefinition = {
   occurrences: 2,
   version: 1,
   queryProperty: 'keywords',
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
   queryValue: ['sport'],
 };
 
@@ -47,7 +47,7 @@ const lookBackInfinityAudience: AudienceDefinition = {
   occurrences: 2,
   version: 1,
   queryProperty: 'keywords',
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
   queryValue: [''],
 };
 
@@ -59,7 +59,7 @@ const lookBackAudience: AudienceDefinition = {
   occurrences: 2,
   version: 1,
   queryProperty: 'keywords',
-  queryFilterComparisonType: 'includes',
+  queryFilterComparisonType: 'arrayIntersects',
   queryValue: [''],
 };
 
@@ -307,7 +307,7 @@ describe('Topic model run 2', () => {
     lookBack: 1000,
     version: 1,
     queryProperty: 'keywords',
-    queryFilterComparisonType: 'includes',
+    queryFilterComparisonType: 'arrayIntersects',
     queryValue: ['sport', 'Leeds United A.F.C.'],
   };
 

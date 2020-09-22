@@ -7,7 +7,7 @@ export const translate = (
   const condition: EngineCondition = {
     filter: {
       queries:
-        audienceDefinition.queryFilterComparisonType === 'includes' &&
+        audienceDefinition.queryFilterComparisonType === 'arrayIntersects' &&
         isStringArray(audienceDefinition.queryValue)
           ? [
               {

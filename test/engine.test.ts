@@ -8,7 +8,7 @@ const sports1xConditionGt: EngineCondition = {
     queries: [
       {
         property: 'keywords',
-        filterComparisonType: 'includes',
+        filterComparisonType: 'arrayIntersects',
         value: ['sport'],
       },
     ],
@@ -32,7 +32,7 @@ const sports1xConditionLt: EngineCondition = {
     queries: [
       {
         property: 'keywords',
-        filterComparisonType: 'includes',
+        filterComparisonType: 'arrayIntersects',
         value: ['sport'],
       },
     ],
@@ -56,7 +56,7 @@ const sports1xConditionEq: EngineCondition = {
     queries: [
       {
         property: 'keywords',
-        filterComparisonType: 'includes',
+        filterComparisonType: 'arrayIntersects',
         value: ['sport'],
       },
     ],
@@ -80,7 +80,7 @@ const sports1xConditionGe: EngineCondition = {
     queries: [
       {
         property: 'keywords',
-        filterComparisonType: 'includes',
+        filterComparisonType: 'arrayIntersects',
         value: ['sport'],
       },
     ],
@@ -104,7 +104,7 @@ const sports1xConditionLe: EngineCondition = {
     queries: [
       {
         property: 'keywords',
-        filterComparisonType: 'includes',
+        filterComparisonType: 'arrayIntersects',
         value: ['sport'],
       },
     ],

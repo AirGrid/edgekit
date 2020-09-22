@@ -13,10 +13,10 @@ const createCondition = (condition: EngineCondition) => (
       return pageViews.filter((pageView) => {
         const queryFeatures = pageView.features[query.property];
 
-        if (query.filterComparisonType === 'includes') {
+        if (query.filterComparisonType === 'arrayIntersects') {
           return (
             isStringArray(queryFeatures) &&
-            filters.includes(queryFeatures, query.value)
+            filters.arrayIntersects(queryFeatures, query.value)
           );
         } else if (query.filterComparisonType === 'vectorDistance') {
           return (
