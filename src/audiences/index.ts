@@ -14,8 +14,10 @@ export const sportInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: sportKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryValue: sportKeywords,
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const travelInterestAudience: AudienceDefinition = {
@@ -24,8 +26,10 @@ export const travelInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: travelKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryValue: travelKeywords,
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const automotiveInterestAudience: AudienceDefinition = {
@@ -34,8 +38,10 @@ export const automotiveInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: automotiveKeywords,
   version: VERSION,
+  queryProperty: 'keywords',
+  queryValue: automotiveKeywords,
+  queryFilterComparisonType: 'arrayIntersects',
 };
 
 export const allAudienceDefinitions: AudienceDefinition[] = [

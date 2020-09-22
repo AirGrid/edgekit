@@ -24,3 +24,15 @@
   yet to be determined. However, for the `getTCData` request, the API spec [also
   specifies](https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md#tcdata)
   that the callback should not be invoked until `gdprApplies` is known.
+
+
+
+## Implementation notes
+
+Checking for `window.__tcfapi` should be enough according to the API docs:
+
+1. The stub should be created before any scripts relying on it (ie. Edgekit) are used and push the callbacks onto the stub's queue  
+https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md#how-can-scripts-determine-if-the-cmp-script-is-loaded-yet
+
+2. It won't execute until the CMP implementation script fully loads and executes. Based on this section, it should start calling the callbacks only when it's done loading in a FIFO order  
+https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md#how-does-the-cmp-stub-api-work

@@ -31,9 +31,15 @@ The return object will be, once again an array of all the audiences passed, but 
 
 Below is a list of commands you will probably find useful.
 
+### `npm run bundle`
+
+Creates a UMD bundle of the SDK
+
 ### `npx http-server ./dist --cors -c-1`
 
-### `npm start` or `yarn start --name edkt --format umd `
+Serves the `dist` folder with CORS enabled and caching disabled
+
+### `npm run watch`
 
 Runs the project in development/watch mode. Your project will be rebuilt upon changes. 
 

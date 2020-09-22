@@ -7,7 +7,10 @@ export const pageViewCreator = (
 ): Array<PageView> => {
   const pageViews = [];
   for (let index = 0; index < numberOfPageViews; index++) {
-    pageViews.push({ ts: timestamp, features: { keywords } });
+    pageViews.push({
+      ts: timestamp,
+      features: { keywords },
+    });
   }
   return pageViews;
 };
