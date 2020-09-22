@@ -128,7 +128,7 @@ const vectorCondition: EngineCondition = {
     queries: [
       {
         property: 'topicDist',
-        filterComparisonType: 'dotProduct',
+        filterComparisonType: 'vectorDistance',
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,

@@ -18,7 +18,7 @@ const createCondition = (condition: EngineCondition) => (
             isStringArray(queryFeatures) &&
             filters.includes(queryFeatures, query.value)
           );
-        } else if (query.filterComparisonType === 'dotProduct') {
+        } else if (query.filterComparisonType === 'vectorDistance') {
           return (
             isNumberArray(queryFeatures) &&
             filters.vectorDistance(queryFeatures, query.value)

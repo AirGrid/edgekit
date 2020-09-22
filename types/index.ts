@@ -56,7 +56,7 @@ export interface AudienceDefinition {
   version: number;
   queryProperty: string;
   queryValue: StringArrayQueryValue | VectorQueryValue;
-  queryFilterComparisonType: 'includes' | 'dotProduct';
+  queryFilterComparisonType: 'includes' | 'vectorDistance';
 }
 
 export interface CachedAudienceMetaData {
@@ -79,7 +79,7 @@ export type EngineConditionQuery =
     }
   | {
       property: string;
-      filterComparisonType: 'dotProduct';
+      filterComparisonType: 'vectorDistance';
       value: VectorQueryValue;
     };
 

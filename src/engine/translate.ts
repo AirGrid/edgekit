@@ -17,7 +17,7 @@ export const translate = (
                 value: audienceDefinition.queryValue,
               },
             ]
-          : audienceDefinition.queryFilterComparisonType === 'dotProduct' &&
+          : audienceDefinition.queryFilterComparisonType === 'vectorDistance' &&
             isVectorQueryValue(audienceDefinition.queryValue)
           ? [
               {

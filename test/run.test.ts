@@ -71,7 +71,7 @@ const topicModelAudience: AudienceDefinition = {
   occurrences: 1,
   version: 1,
   queryProperty: 'topicDist',
-  queryFilterComparisonType: 'dotProduct',
+  queryFilterComparisonType: 'vectorDistance',
   queryValue: {
     vector: [0.4, 0.8, 0.3],
     threshold: 0.5,
@@ -292,7 +292,7 @@ describe('Topic model run 2', () => {
     lookBack: 1000,
     version: 1,
     queryProperty: 'topicDist',
-    queryFilterComparisonType: 'dotProduct',
+    queryFilterComparisonType: 'vectorDistance',
     queryValue: {
       threshold: 0.5,
       vector: [0.4, 0.8, 0.3],
