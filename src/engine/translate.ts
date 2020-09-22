@@ -1,16 +1,33 @@
 import { AudienceDefinition, EngineCondition } from '../../types';
+import { isStringArray, isVectorQueryValue } from '../utils';
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
   const condition: EngineCondition = {
     filter: {
-      queries: [
-        {
-          property: 'keywords',
-          value: audienceDefinition.keywords,
-        },
-      ],
+      queries:
+        audienceDefinition.queryFilterComparisonType === 'arrayIntersects' &&
+        isStringArray(audienceDefinition.queryValue)
+          ? [
+              {
+                property: audienceDefinition.queryProperty,
+                filterComparisonType:
+                  audienceDefinition.queryFilterComparisonType,
+                value: audienceDefinition.queryValue,
+              },
+            ]
+          : audienceDefinition.queryFilterComparisonType === 'vectorDistance' &&
+            isVectorQueryValue(audienceDefinition.queryValue)
+          ? [
+              {
+                property: audienceDefinition.queryProperty,
+                filterComparisonType:
+                  audienceDefinition.queryFilterComparisonType,
+                value: audienceDefinition.queryValue,
+              },
+            ]
+          : [],
     },
     rules: [
       {

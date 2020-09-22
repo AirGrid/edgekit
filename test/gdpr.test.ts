@@ -25,8 +25,10 @@ const sportAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 10,
   occurrences: 0,
-  keywords: ['sport'],
   version: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: 'arrayIntersects',
+  queryValue: ['sport'],
 };
 
 const sportPageFeatureGetter = {
@@ -105,6 +107,7 @@ describe.only('EdgeKit GDPR tests', () => {
         localStorage.getItem('edkt_matched_audiences') || '[]'
       );
 
+      expect(edktPageViews).toHaveLength(1);
       expect(edktPageViews).toEqual([
         { features: { keywords: ['sport'] }, ts: edktPageViews[0].ts },
       ]);

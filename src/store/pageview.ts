@@ -1,5 +1,10 @@
 import { storage, timeStampInSecs } from '../utils';
-import { PageView, StorageKeys, PageFeature } from '../../types';
+import {
+  PageView,
+  StorageKeys,
+  PageFeature,
+  PageFeatureValue,
+} from '../../types';
 
 class ViewStore {
   pageViews: PageView[];
@@ -17,7 +22,7 @@ class ViewStore {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _formatIntoPageView(pageFeatures: PageFeature[]) {
+  _formatIntoPageView(pageFeatures: PageFeature[]): PageView | undefined {
     const ts = timeStampInSecs();
 
     const features = pageFeatures.reduce((acc, item) => {
@@ -26,7 +31,7 @@ class ViewStore {
         return acc;
       }
       return acc;
-    }, {} as Record<string, string[]>);
+    }, {} as Record<string, PageFeatureValue>);
 
     if (Object.keys(features).length < 1) return undefined;
 

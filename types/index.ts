@@ -14,22 +14,22 @@ export enum StorageKeys {
 
 // Page Features
 
+export type PageFeatureValue = string[] | number[];
+
 export interface PageFeatureGetter {
   name: string;
-  func: () => Promise<string[]>;
+  func: () => Promise<PageFeatureValue>;
 }
 
-export interface PageFeature {
+export type PageFeature = {
   name: string;
   error: boolean;
-  value: string[];
-}
+  value: PageFeatureValue;
+};
 
 export interface PageView {
   ts: number;
-  features: {
-    [name: string]: string[];
-  };
+  features: Record<string, PageFeatureValue>;
 }
 
 // Audiences
@@ -41,14 +41,22 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
+export type StringArrayQueryValue = string[];
+export type VectorQueryValue = {
+  vector: number[];
+  threshold: number;
+};
+
 export interface AudienceDefinition {
   id: string;
   name: string;
   ttl: number;
   lookBack: number;
   occurrences: number;
-  keywords: string[];
   version: number;
+  queryProperty: string;
+  queryValue: StringArrayQueryValue | VectorQueryValue;
+  queryFilterComparisonType: 'arrayIntersects' | 'vectorDistance';
 }
 
 export interface CachedAudienceMetaData {
@@ -63,15 +71,21 @@ export interface AudienceMetaData {
 
 // Engine
 
-export interface EngineConditionQuery {
-  property: string;
-  value: string[];
-}
+export type EngineConditionQuery =
+  | {
+      property: string;
+      filterComparisonType: 'arrayIntersects';
+      value: StringArrayQueryValue;
+    }
+  | {
+      property: string;
+      filterComparisonType: 'vectorDistance';
+      value: VectorQueryValue;
+    };
 
 export interface EngineConditionRule {
   reducer: {
     name: 'count';
-    // args?: string;
   };
   matcher: {
     name: 'eq' | 'gt' | 'lt' | 'ge' | 'le';
