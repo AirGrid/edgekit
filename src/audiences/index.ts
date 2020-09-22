@@ -14,9 +14,9 @@ export const sportInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: sportKeywords,
   version: VERSION,
   queryProperty: 'keywords',
+  queryValue: sportKeywords,
   queryFilterComparisonType: 'includes',
 };
 
@@ -26,9 +26,9 @@ export const travelInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: travelKeywords,
   version: VERSION,
   queryProperty: 'keywords',
+  queryValue: travelKeywords,
   queryFilterComparisonType: 'includes',
 };
 
@@ -38,9 +38,9 @@ export const automotiveInterestAudience: AudienceDefinition = {
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
   occurrences: OCCURRENCES,
-  keywords: automotiveKeywords,
   version: VERSION,
   queryProperty: 'keywords',
+  queryValue: automotiveKeywords,
   queryFilterComparisonType: 'includes',
 };
 

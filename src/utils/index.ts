@@ -1,8 +1,4 @@
-import {
-  AudienceDefinition,
-  KeywordsAudienceDefinition,
-  TopicModelAudienceDefinition,
-} from '../../types';
+import { VectorQueryValue } from '../../types';
 
 export const timeStampInSecs = (): number => Math.round(Date.now() / 1000);
 
@@ -43,12 +39,8 @@ export const isStringArray = (value: any): value is string[] =>
 export const isNumberArray = (value: any): value is number[] =>
   value instanceof Array && value.every((item) => typeof item === 'number');
 
-export const isKeywordsAudienceDefinition = (
-  definition: AudienceDefinition
-): definition is KeywordsAudienceDefinition =>
-  definition.hasOwnProperty('keywords');
-
-export const isTopicModelAudienceDefinition = (
-  definition: AudienceDefinition
-): definition is TopicModelAudienceDefinition =>
-  definition.hasOwnProperty('topicModel');
+export const isVectorQueryValue = (
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  value: any
+): value is VectorQueryValue =>
+  isNumberArray(value.vector) && typeof value.threshold === 'number';

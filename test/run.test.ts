@@ -33,10 +33,10 @@ const sportAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 10,
   occurrences: 2,
-  keywords: ['sport'],
   version: 1,
   queryProperty: 'keywords',
   queryFilterComparisonType: 'includes',
+  queryValue: ['sport'],
 };
 
 const lookBackInfinityAudience: AudienceDefinition = {
@@ -45,10 +45,10 @@ const lookBackInfinityAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 0,
   occurrences: 2,
-  keywords: [''],
   version: 1,
   queryProperty: 'keywords',
   queryFilterComparisonType: 'includes',
+  queryValue: [''],
 };
 
 const lookBackAudience: AudienceDefinition = {
@@ -57,10 +57,10 @@ const lookBackAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 2,
   occurrences: 2,
-  keywords: [''],
   version: 1,
   queryProperty: 'keywords',
   queryFilterComparisonType: 'includes',
+  queryValue: [''],
 };
 
 const topicModelAudience: AudienceDefinition = {
@@ -70,12 +70,12 @@ const topicModelAudience: AudienceDefinition = {
   lookBack: 2,
   occurrences: 1,
   version: 1,
-  topicModel: {
+  queryProperty: 'topicModel',
+  queryFilterComparisonType: 'dotProduct',
+  queryValue: {
     vector: [0.4, 0.8, 0.3],
     threshold: 0.5,
   },
-  queryProperty: 'topicModel',
-  queryFilterComparisonType: 'dotProduct',
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -299,27 +299,27 @@ describe('Topic model run 2', () => {
         {
           id: 'iab-608',
           name: 'Interest | Sport',
-          topicModel: {
-            threshold: 0.5,
-            vector: [0.4, 0.8, 0.3],
-          },
           occurrences: 1,
           ttl: 1000,
           lookBack: 1000,
           version: 1,
           queryProperty: 'topicModel',
           queryFilterComparisonType: 'dotProduct',
+          queryValue: {
+            threshold: 0.5,
+            vector: [0.4, 0.8, 0.3],
+          },
         },
         {
           id: 'iab-607',
           name: 'Interest | Sport',
-          keywords: ['sport', 'Leeds United A.F.C.'],
           occurrences: 1,
           ttl: 1000,
           lookBack: 1000,
           version: 1,
           queryProperty: 'keywords',
           queryFilterComparisonType: 'includes',
+          queryValue: ['sport', 'Leeds United A.F.C.'],
         },
       ],
       omitGdprConsent: true,

@@ -41,7 +41,13 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-interface BaseAudienceDefinition {
+export type StringArrayQueryValue = string[];
+export type VectorQueryValue = {
+  vector: number[];
+  threshold: number;
+};
+
+export interface AudienceDefinition {
   id: string;
   name: string;
   ttl: number;
@@ -49,23 +55,9 @@ interface BaseAudienceDefinition {
   occurrences: number;
   version: number;
   queryProperty: string;
+  queryValue: StringArrayQueryValue | VectorQueryValue;
   queryFilterComparisonType: 'includes' | 'dotProduct';
 }
-
-export type KeywordsAudienceDefinition = BaseAudienceDefinition & {
-  keywords: string[];
-};
-
-export type TopicModelAudienceDefinition = BaseAudienceDefinition & {
-  topicModel: {
-    vector: number[];
-    threshold: number;
-  };
-};
-
-export type AudienceDefinition =
-  | KeywordsAudienceDefinition
-  | TopicModelAudienceDefinition;
 
 export interface CachedAudienceMetaData {
   cachedAt: number;
@@ -83,15 +75,12 @@ export type EngineConditionQuery =
   | {
       property: string;
       filterComparisonType: 'includes';
-      value: string[];
+      value: StringArrayQueryValue;
     }
   | {
       property: string;
       filterComparisonType: 'dotProduct';
-      value: {
-        vector: number[];
-        threshold: number;
-      };
+      value: VectorQueryValue;
     };
 
 export interface EngineConditionRule {

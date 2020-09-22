@@ -1,6 +1,9 @@
 import { dotProduct } from '../utils';
 
-export const includes = <T>(queryFeatures: T[], queryValue: T[]): boolean =>
+export const includes = (
+  queryFeatures: string[],
+  queryValue: string[]
+): boolean =>
   queryFeatures.some((feature) => queryValue.indexOf(feature) !== -1);
 
 export const vectorDistance = (

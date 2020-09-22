@@ -25,10 +25,10 @@ const sportAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 10,
   occurrences: 0,
-  keywords: ['sport'],
   version: 1,
   queryProperty: 'keywords',
   queryFilterComparisonType: 'includes',
+  queryValue: ['sport'],
 };
 
 const sportPageFeatureGetter = {
