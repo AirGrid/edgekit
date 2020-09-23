@@ -71,7 +71,7 @@ _Note: using the above URLs will always fetch the latest version, which could co
 
 ## Usage 🤓
 
-### Full Flow
+### Summary
 
 EdgeKit will execute the following high level flow:
 
@@ -79,67 +79,52 @@ EdgeKit will execute the following high level flow:
    The IAB has an [API](https://cdn.edkt.io/sdk/edgekit.min.js) to check for GDPR compliance.
    Edgekit provides a simplified wrapper around this API in order to check for compliance. A list of
    vendor ids is passed to the function.
-
-   You can find the list of vendors and their ids that are participating in the Transparency and
-   Consent Framework [here](https://iabeurope.eu/vendor-list-tcf-v2-0/).
-
-   Quoting the definition from [IAB policy site](https://cdn.edkt.io/sdk/edgekit.min.js), a vendor
-   is:
-
-   > “Vendor” means a company that participates in the delivery of digital advertising within a Publisher’s website, app, or other digital content, to the extent that company is not acting as a Publisher or CMP, and that either accesses an end user’s device or processes personal data about end users visiting the Publisher’s content and adheres to the Policies...
-
 2. **Register, run and store user defined `pageFeatureGetters`.**
-   In this step the library will fetch `keywords` to describe the current page load, which will be stored locally to create a history of the pages viewed by the user visiting your site.
+   In this step the library will run getters that fetch page features describing the current page load, which will be stored locally to create a history of the pages viewed by the user visiting your site.
 3. **Run audience definitions against the local page views.**
    The library now checks the users local history to see if they match any of the audience definitions, storing any matched audiences.
 4. **Make matched audiences available to bidding.**
    The final step is to pass the newly defined audience signals to third party bidders, for example via Prebid.
 
-#### Page Features
 
-A page feature is a list of keywords that describe a pages content.
+### Full Flow
 
-EdgeKit requires pageFeatureGetters to be passed into the run method that will allow EdgeKit to evaluate the page. A pageFeatureGetter is an object that has a name and and an async function that resolves to a keyword list.
+#### Page Feature Getters
 
-```typescript
-const examplePageFeatureGetter = {
-   name: 'example',
-   func: (): Promise<string[]> => { ... }
-}
-```
+A page feature is a value that describe a pages content. The features can be something concrete like
+a list of keywords on a page, or something more abstract like a vector. [Learn
+more](./docs/features.md)
 
-The following is a working example of a pageFeatureGetter that gets the meta data keywords from the head of the HTML.
 
-##### HTML
+#### Audience Definitions
 
-```html
-<meta name="keywords" content="goal,liverpool,football,stadium" />
-```
+In EdgeKit an audience refers to a group of users you would like to identify based on a feature, the
+frequency of the user seeing the feature and how long ago or recently they saw it. [Learn
+more](./docs/audiences.md)
 
-##### JS pageFeatureGetter
 
-```typescript
-const getHtmlKeywords = {
-  name: 'keywords',
-  func: (): Promise<string[]> => {
-    const tag = <HTMLElement>(
-      document.head.querySelector('meta[name="keywords"]')
-    );
-    const keywordString = tag.getAttribute('content') || '';
-    const keywords = keywordString.toLowerCase().split(',');
-    return Promise.resolve(keywords);
-  },
-};
-```
+#### Vendor Ids
 
-##### JS EdgeKit Run
+Vendors are companies that are participating in the Transparency and Consent Framework. Quoting the
+definition from [IAB policy site](https://iabeurope.eu/iab-europe-transparency-consent-framework-policies), a vendor is:
+
+> “Vendor” means a company that participates in the delivery of digital advertising within a Publisher’s website, app, or other digital content, to the extent that company is not acting as a Publisher or CMP, and that either accesses an end user’s device or processes personal data about end users visiting the Publisher’s content and adheres to the Policies...
+
+You can find the list of vendors (including `Airgrid LTD`) and their ids
+[here](https://iabeurope.eu/vendor-list-tcf-v2-0/).
+
+
+#### Running Edgekit
+
+Edgekit is run by calling the `edkt.run` function with page feature getters, audience definitions
+and vendor ids:
 
 ```typescript
 import { edkt } from '@airgrid/edgekit';
 
 // If GDPR applies and consent has not been established then this function won't do anything
 edkt.run({
-  pageFeatureGetters: [getHtmlKeywords],
+  pageFeatureGetters: ...,
   audienceDefinitions: ...,
   vendorIds: ..., // vendor ids to check for consent
 });
@@ -149,61 +134,12 @@ Alternatively, pass in a flag to omit the GDPR check if it's not necessary for y
 
 ```typescript
 edkt.run({
-  pageFeatureGetters: [getHtmlKeywords],
+  pageFeatureGetters: ...,
   audienceDefinitions: ...,
   omitGdprConsent: true
 });
 ```
 
-#### Audience Evaluation
-
-In EdgeKit an audience refers to a group of users you would like to identify based on a list of keywords, the frequency of the user seeing one of the keywords and how long ago or recently they saw it.
-
-```typescript
-export const exampleAudience: AudienceDefinition = {
-  // Unique Identifier
-  id: '1234',
-  // Name of the Audience
-  name: 'Interest | typeOfIntrest',
-  // Time To Live - How long after matching the Audience are you part of it
-  ttl: TTL_IN_SECS,
-  // How long into the past should EdgeKit Look to match you to the audience
-  lookBack: LOOK_BACK_IN_SECS,
-  // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
-  occurrences: OCCURRENCES,
-  // The version number of the audience for caching
-  version: 1,
-  // The query property to look up, this is the name of the key that will be looked up in the stored page view features object
-  queryProperty: 'keywords',
-  // The name of the function to use for filtering the page view features
-  queryFilterComparisonType: 'arrayIntersects',
-  // The value to pass into the function determined by the queryFilterComparisonType along with the page view feature (if it exists)
-  queryValue: ['sport', 'football'],
-};
-```
-
-EdgeKit comes with a range of audiences that you can use as examples or to get started straight away in your application.
-
-To use the the built in audiences you can import them from EdgeKit along with 'edkt'
-
-```typescript
-// use all built in audiences
-import { edkt, allAudienceDefinitions } from '@airgrid/edgekit';
-
-edkt.run({
-  pageFeatureGetters: [...],
-  audienceDefinitions: allAudienceDefinitions,
-});
-
-// use only the built in sport audience
-import { edkt, sportInterestAudience } from '@airgrid/edgekit';
-
-edkt.run({
-  pageFeatureGetters: [...],
-  audienceDefinitions: [sportInterestAudience],
-});
-
-```
 
 #### Bidding Integration
 
