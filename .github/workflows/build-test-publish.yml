@@ -62,7 +62,7 @@ jobs:
 
   build-and-publish:
     name: Publish to NPM
-    if: ${{ github.event_name == 'release' && endsWith(github.ref, '/master') }}
+    if: ${{ github.event_name == 'release' }}
     needs: build-and-test
     runs-on: ubuntu-latest
 
