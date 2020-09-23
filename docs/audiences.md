@@ -6,7 +6,7 @@ frequency of the user seeing the feature and how long ago or recently they saw i
 ## Usage
 
 Suppose that Edgekit is run with the page feature getters in the example from the [features
-doc](./docs/features.md) and the following audience definition:
+doc](./features.md) and the following audience definition:
 
 ```typescript
 const TTL_IN_SECS = 60 * 60 * 24;  // 1 day in seconds
@@ -48,7 +48,7 @@ The engine will filter the page views based on the provided `query*` values in t
 The `queryProperty` is set to `keywords`, so it will look up the features object on the stored
 page views to see if there is a feature with this name.
 
-Since this example will run the feature getter from the [features doc](./docs/features.md), the
+Since this example will run the feature getter from the [features doc](./features.md), the
 page views will look something like:
 
 ```js

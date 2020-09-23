@@ -66,4 +66,4 @@ stored in the features object (in this case `keywords`).
 
 The audience definitions that are passed into Edgekit define whether or not the page views match the
 audience. If any of the audiences match then they will also get stored in local storage.  [Learn
-more about audiences](./docs/audiences.md)
+more about audiences](./audiences.md)
