@@ -44,7 +44,7 @@ If this `getHtmlKeywords` feature getter is passed to Edgekit with a page that l
 Then Edgekit will store this feature, and any other features that were provided, in local storage as
 a _page view_:
 
-```
+```js
 > JSON.parse(localStorage.getItem('edkt_page_views'))
 [
   {
