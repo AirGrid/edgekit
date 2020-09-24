@@ -29,8 +29,8 @@ jobs:
       - name: Test
         run: npm test
 
-  build-and-release:
-    name: Create a release
+  build-release-and-publish:
+    name: Build, Release & Publish
     if: ${{ github.event_name == 'push' && endsWith(github.ref, '/master') }}
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -51,24 +51,8 @@ jobs:
           echo "::set-env name=EDGEKIT_VERSION::$EDGEKIT_VERSION"
           echo "::set-env name=IS_NEW_EDGEKIT_VERSION::$IS_NEW_EDGEKIT_VERSION"
 
-      - name: Create Release
-        if: ${{ env.IS_NEW_EDGEKIT_VERSION }}
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ env.EDGEKIT_VERSION }}
-          release_name: Release ${{ env.EDGEKIT_VERSION }}
-
-  build-and-publish:
-    name: Publish to NPM
-    if: ${{ github.event_name == 'release' }}
-    needs: build-and-test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Check if new Edgekit version
+        run: ([ "$IS_NEW_EDGEKIT_VERSION" = true ] || exit 1)
 
       - name: Use Node v12
         uses: actions/setup-node@v1
@@ -83,7 +67,15 @@ jobs:
 
       - name: Create UMD bundle
         run: npm run bundle
-        
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ env.EDGEKIT_VERSION }}
+          release_name: Release ${{ env.EDGEKIT_VERSION }}
+
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
