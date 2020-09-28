@@ -6,25 +6,28 @@ export const translate = (
 ): EngineCondition[] => {
   const condition: EngineCondition = {
     filter: {
+      version: audienceDefinition.version,
       queries:
-        audienceDefinition.queryFilterComparisonType === 'arrayIntersects' &&
-        isStringArray(audienceDefinition.queryValue)
+        audienceDefinition.definition.queryFilterComparisonType ===
+          'arrayIntersects' &&
+        isStringArray(audienceDefinition.definition.queryValue)
           ? [
               {
-                property: audienceDefinition.queryProperty,
+                property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
-                  audienceDefinition.queryFilterComparisonType,
-                value: audienceDefinition.queryValue,
+                  audienceDefinition.definition.queryFilterComparisonType,
+                value: audienceDefinition.definition.queryValue,
               },
             ]
-          : audienceDefinition.queryFilterComparisonType === 'vectorDistance' &&
-            isVectorQueryValue(audienceDefinition.queryValue)
+          : audienceDefinition.definition.queryFilterComparisonType ===
+              'vectorDistance' &&
+            isVectorQueryValue(audienceDefinition.definition.queryValue)
           ? [
               {
-                property: audienceDefinition.queryProperty,
+                property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
-                  audienceDefinition.queryFilterComparisonType,
-                value: audienceDefinition.queryValue,
+                  audienceDefinition.definition.queryFilterComparisonType,
+                value: audienceDefinition.definition.queryValue,
               },
             ]
           : [],
@@ -36,7 +39,7 @@ export const translate = (
         },
         matcher: {
           name: 'gt',
-          args: audienceDefinition.occurrences,
+          args: audienceDefinition.definition.occurrences,
         },
       },
     ],

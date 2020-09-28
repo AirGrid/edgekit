@@ -5,6 +5,7 @@ import { EngineCondition } from '../types';
 const sports1xConditionGt: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'keywords',
@@ -29,6 +30,7 @@ const sports1xConditionGt: EngineCondition = {
 const sports1xConditionLt: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'keywords',
@@ -53,6 +55,7 @@ const sports1xConditionLt: EngineCondition = {
 const sports1xConditionEq: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'keywords',
@@ -77,6 +80,7 @@ const sports1xConditionEq: EngineCondition = {
 const sports1xConditionGe: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'keywords',
@@ -101,6 +105,7 @@ const sports1xConditionGe: EngineCondition = {
 const sports1xConditionLe: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'keywords',
@@ -125,6 +130,7 @@ const sports1xConditionLe: EngineCondition = {
 const vectorCondition: EngineCondition = {
   filter: {
     any: false,
+    version: 1,
     queries: [
       {
         property: 'topicDist',
@@ -158,13 +164,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
       ];
@@ -181,13 +193,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -204,13 +222,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -227,13 +251,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -246,13 +276,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
       ];
@@ -269,13 +305,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -288,13 +330,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -311,13 +359,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -330,13 +384,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -355,7 +415,10 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicDist: [0.2, 0.5, 0.1],
+            topicDist: {
+              version: 1,
+              value: [0.2, 0.5, 0.1],
+            },
           },
         },
       ];
@@ -372,13 +435,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicDist: [0.3, 0.2, 0.1],
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.1],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            topicDist: [0.3, 0.2, 0.2],
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.2],
+            },
           },
         },
       ];

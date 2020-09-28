@@ -1,3 +1,4 @@
+import { PageFeatureResult } from '../types';
 import { getPageFeatures } from '../src/features';
 
 describe('EdgeKit | Features Module', () => {
@@ -10,13 +11,16 @@ describe('EdgeKit | Features Module', () => {
 
     const getHtmlKeywords = {
       name: 'keywords',
-      func: (): Promise<string[]> => {
+      func: (): Promise<PageFeatureResult> => {
         const tag = <HTMLElement>(
           document.head.querySelector('meta[name="keywords"]')
         );
         const keywordString = tag.getAttribute('content') || '';
         const keywords = keywordString.toLowerCase().split(',');
-        return Promise.resolve(keywords);
+        return Promise.resolve({
+          version: 1,
+          value: keywords,
+        });
       },
     };
 
@@ -25,6 +29,7 @@ describe('EdgeKit | Features Module', () => {
     expect(features[0]).toEqual({
       error: false,
       name: 'keywords',
+      version: 1,
       value: ['sport', 'news', 'football', 'stadium'],
     });
   });

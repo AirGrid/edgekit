@@ -41,14 +41,14 @@ const run = async (config: Config): Promise<void> => {
     .map((audience) => {
       const currentTS = timeStampInSecs();
       const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
-        return audience.lookBack === 0
+        return audience.definition.lookBack === 0
           ? true
-          : pageView.ts > currentTS - audience.lookBack;
+          : pageView.ts > currentTS - audience.definition.lookBack;
       });
       return {
         id: audience.id,
         matchedAt: currentTS,
-        expiresAt: currentTS + audience.ttl,
+        expiresAt: currentTS + audience.definition.ttl,
         matchedOnCurrentPageView: true,
         matched: engine.check(audience.conditions, pageViewsWithinLookBack),
       };
