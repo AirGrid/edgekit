@@ -19,19 +19,22 @@ export const exampleAudience: AudienceDefinition = {
   // Name of the Audience
   name: 'Interest | typeOfIntrest',
   // Time To Live - How long after matching the Audience are you part of it
-  ttl: TTL_IN_SECS,
-  // How long into the past should EdgeKit Look to match you to the audience 
-  lookBack: LOOK_BACK_IN_SECS, // set value to 0 to use the users full local data
-  // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
-  occurrences: OCCURRENCES,
   // The version number of the audience for caching
   version: 1,
-  // The query property to look up, this is the name of the key that will be looked up in the stored page view features object
-  queryProperty: 'keywords',
-  // The name of the function to use for filtering the page view features
-  queryFilterComparisonType: 'arrayIntersects',
-  // The value to pass into the function determined by the queryFilterComparisonType along with the page view feature (if it exists)
-  queryValue: ['sport', 'football'],
+  // The audience definition description
+  description: {
+    ttl: TTL_IN_SECS,
+    // How long into the past should EdgeKit Look to match you to the audience 
+    lookBack: LOOK_BACK_IN_SECS, // set value to 0 to use the users full local data
+    // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
+    occurrences: OCCURRENCES,
+    // The query property to look up, this is the name of the key that will be looked up in the stored page view features object
+    queryProperty: 'keywords',
+    // The name of the function to use for filtering the page view features
+    queryFilterComparisonType: 'arrayIntersects',
+    // The value to pass into the function determined by the queryFilterComparisonType along with the page view feature (if it exists)
+    queryValue: ['sport', 'football'],
+  }
 };
 ```
 
@@ -41,7 +44,17 @@ export const exampleAudience: AudienceDefinition = {
 
 #### 1. Filter the page views
 
-The engine will filter the page views based on the provided `query*` values in the audience definition:
+The engine will filter the page views. It will first check if the page feature version matches the
+version of the audience definition, and then it will filter based on the provided `query*` values in
+the audience definition:
+
+
+##### Version matching
+
+Edgekit page feature getters and audience definitions come with a versioning system. During the
+filtering step, the engine will check if the version of the stored page feature matches that of the
+audience definition.
+
 
 ##### Audience Definition `queryProperty`
 
