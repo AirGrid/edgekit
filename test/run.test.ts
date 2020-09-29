@@ -422,3 +422,103 @@ describe('Topic model run 2', () => {
     ]);
   });
 });
+
+describe('Topic model run version mismatch', () => {
+  const topicModelAudience: AudienceDefinition = {
+    id: 'iab-608',
+    name: 'Interest | Sport',
+    version: 2,
+    definition: {
+      occurrences: 1,
+      ttl: 1000,
+      lookBack: 1000,
+      queryProperty: 'topicDist',
+      queryFilterComparisonType: 'vectorDistance',
+      queryValue: {
+        threshold: 0.5,
+        vector: [0.4, 0.8, 0.3],
+      },
+    },
+  };
+
+  const keywordsAudience: AudienceDefinition = {
+    id: 'iab-607',
+    name: 'Interest | Sport',
+    version: 2,
+    definition: {
+      occurrences: 1,
+      ttl: 1000,
+      lookBack: 1000,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: 'arrayIntersects',
+      queryValue: ['sport', 'Leeds United A.F.C.'],
+    },
+  };
+
+  const run = async () => {
+    await edkt.run({
+      pageFeatureGetters: [
+        topicModelPageFeatureGetter,
+        {
+          name: 'keywords',
+          func: (): Promise<PageFeatureResult> => {
+            return Promise.resolve({
+              version: 1,
+              value: ['dummy'],
+            });
+          },
+        },
+      ],
+      audienceDefinitions: [topicModelAudience, keywordsAudience],
+      omitGdprConsent: true,
+    });
+  };
+
+  beforeAll(() => {
+    setUpLocalStorage([]);
+  });
+
+  it('does not match with two page views since version is mismatched', async () => {
+    await run();
+    await run();
+
+    const edktPageViews = JSON.parse(
+      localStorage.getItem('edkt_page_views') || '[]'
+    );
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktPageViews).toEqual([
+      {
+        ts: edktPageViews[0].ts,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['dummy'],
+          },
+          topicDist: {
+            version: 1,
+            value: [0.2, 0.5, 0.1],
+          },
+        },
+      },
+      {
+        ts: edktPageViews[1].ts,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['dummy'],
+          },
+          topicDist: {
+            version: 1,
+            value: [0.2, 0.5, 0.1],
+          },
+        },
+      },
+    ]);
+
+    expect(edktMatchedAudiences).toEqual([]);
+  });
+});
