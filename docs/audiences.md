@@ -9,8 +9,8 @@ Suppose that Edgekit is run with the page feature getters in the example from th
 doc](./features.md) and the following audience definition:
 
 ```typescript
-const TTL_IN_SECS = 60 * 60 * 24;  // 1 day in seconds
-const LOOK_BACK_IN_SECS = 60 * 60 * 24 * 7;  // 1 week in seconds
+const TTL_IN_SECS = 60 * 24;  // 1 day in seconds
+const LOOK_BACK_IN_SECS = 60 * 24 * 7;  // 1 week in seconds
 const OCCURRENCES = 2;
 
 export const exampleAudience: AudienceDefinition = {
@@ -18,13 +18,13 @@ export const exampleAudience: AudienceDefinition = {
   id: '1234',
   // Name of the Audience
   name: 'Interest | typeOfIntrest',
-  // Time To Live - How long after matching the Audience are you part of it
   // The version number of the audience for caching
   version: 1,
   // The audience definition description
   description: {
+    // Time To Live - How long after matching the Audience are you part of it (in seconds)
     ttl: TTL_IN_SECS,
-    // How long into the past should EdgeKit Look to match you to the audience 
+    // How long into the past should EdgeKit Look to match you to the audience (in seconds)
     lookBack: LOOK_BACK_IN_SECS, // set value to 0 to use the users full local data
     // Number of times the pageFeatureGetter must match a keyword to the keywords listed below
     occurrences: OCCURRENCES,
