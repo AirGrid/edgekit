@@ -70,12 +70,15 @@ page views will look something like:
   {
     "ts": 1600858202179,
     "features": {
-      "keywords": [
-        "goal",
-        "liverpool",
-        "football",
-        "stadium"
-      ]
+      "keywords": {
+        "version": 1,
+        "value": [
+          "goal",
+          "liverpool",
+          "football",
+          "stadium"
+        ]
+      }
     }
   }
 ]
