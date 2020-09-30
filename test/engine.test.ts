@@ -5,9 +5,9 @@ import { EngineCondition } from '../types';
 const sports1xConditionGt: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -30,9 +30,9 @@ const sports1xConditionGt: EngineCondition = {
 const sports1xConditionLt: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -55,9 +55,9 @@ const sports1xConditionLt: EngineCondition = {
 const sports1xConditionEq: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -80,9 +80,9 @@ const sports1xConditionEq: EngineCondition = {
 const sports1xConditionGe: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -105,9 +105,9 @@ const sports1xConditionGe: EngineCondition = {
 const sports1xConditionLe: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -130,9 +130,9 @@ const sports1xConditionLe: EngineCondition = {
 const vectorCondition: EngineCondition = {
   filter: {
     any: false,
-    version: 1,
     queries: [
       {
+        version: 1,
         property: 'topicDist',
         filterComparisonType: 'vectorDistance',
         value: {
@@ -155,12 +155,13 @@ const vectorCondition: EngineCondition = {
   ],
 };
 
+// Vector condition with a bumped version
 const vectorConditionV2: EngineCondition = {
   filter: {
     any: false,
-    version: 2,
     queries: [
       {
+        version: 2,
         property: 'topicDist',
         filterComparisonType: 'vectorDistance',
         value: {
@@ -486,7 +487,7 @@ describe('Engine test', () => {
     });
   });
 
-  describe('Vector condition v2', () => {
+  describe('Vector condition with a bumped version', () => {
     it('matches the page view if similar enough and has the same version', async () => {
       const conditions = [vectorConditionV2];
 

@@ -311,7 +311,7 @@ describe('Topic model run', () => {
   });
 });
 
-describe('Topic model run 2', () => {
+describe('Topic model run with additional audience', () => {
   const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
     name: 'Interest | Sport',

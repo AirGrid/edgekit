@@ -6,13 +6,13 @@ export const translate = (
 ): EngineCondition[] => {
   const condition: EngineCondition = {
     filter: {
-      version: audienceDefinition.version,
       queries:
         audienceDefinition.definition.queryFilterComparisonType ===
           'arrayIntersects' &&
         isStringArray(audienceDefinition.definition.queryValue)
           ? [
               {
+                version: audienceDefinition.version,
                 property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
                   audienceDefinition.definition.queryFilterComparisonType,
@@ -24,6 +24,7 @@ export const translate = (
             isVectorQueryValue(audienceDefinition.definition.queryValue)
           ? [
               {
+                version: audienceDefinition.version,
                 property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
                   audienceDefinition.definition.queryFilterComparisonType,

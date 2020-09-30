@@ -16,14 +16,14 @@ const createCondition = (condition: EngineCondition) => (
         if (query.filterComparisonType === 'arrayIntersects') {
           return (
             !!queryFeatures &&
-            filter.version === queryFeatures.version &&
+            queryFeatures.version === query.version &&
             isStringArray(queryFeatures.value) &&
             filters.arrayIntersects(queryFeatures.value, query.value)
           );
         } else if (query.filterComparisonType === 'vectorDistance') {
           return (
             !!queryFeatures &&
-            filter.version === queryFeatures.version &&
+            queryFeatures.version === query.version &&
             isNumberArray(queryFeatures.value) &&
             filters.vectorDistance(queryFeatures.value, query.value)
           );

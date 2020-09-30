@@ -62,14 +62,23 @@ export interface AudienceDefinition {
   id: string;
   version: number;
   name: string;
-  definition: {
-    ttl: number;
-    lookBack: number;
-    occurrences: number;
-    queryProperty: string;
-    queryValue: StringArrayQueryValue | VectorQueryValue;
-    queryFilterComparisonType: 'arrayIntersects' | 'vectorDistance';
-  };
+  definition:
+    | {
+        ttl: number;
+        lookBack: number;
+        occurrences: number;
+        queryProperty: string;
+        queryValue: VectorQueryValue;
+        queryFilterComparisonType: 'vectorDistance';
+      }
+    | {
+        ttl: number;
+        lookBack: number;
+        occurrences: number;
+        queryProperty: string;
+        queryValue: StringArrayQueryValue;
+        queryFilterComparisonType: 'arrayIntersects';
+      };
 }
 
 export interface CachedAudienceMetaData {
@@ -86,11 +95,13 @@ export interface AudienceMetaData {
 
 export type EngineConditionQuery =
   | {
+      version: number;
       property: string;
       filterComparisonType: 'arrayIntersects';
       value: StringArrayQueryValue;
     }
   | {
+      version: number;
       property: string;
       filterComparisonType: 'vectorDistance';
       value: VectorQueryValue;
@@ -109,7 +120,6 @@ export interface EngineConditionRule {
 export interface EngineCondition {
   filter: {
     any?: boolean;
-    version: number;
     queries: EngineConditionQuery[];
   };
   rules: EngineConditionRule[];
