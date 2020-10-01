@@ -1,10 +1,14 @@
+import { PageFeatureResult } from '../types';
 import { edkt, sportInterestAudience } from '../src';
 const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
 
 const sportPageFeatureGetter = {
   name: 'keywords',
-  func: (): Promise<string[]> => {
-    return Promise.resolve(sportKeywords);
+  func: (): Promise<PageFeatureResult> => {
+    return Promise.resolve({
+      version: 1,
+      value: sportKeywords,
+    });
   },
 };
 

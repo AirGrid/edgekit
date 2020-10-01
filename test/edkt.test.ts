@@ -1,4 +1,5 @@
 import fetchMock from 'jest-fetch-mock';
+import { PageFeatureResult } from '../types';
 import { edkt, allAudienceDefinitions } from '../src';
 
 const sportKeywordsString = 'golf,liverpool,football,stadium';
@@ -12,23 +13,29 @@ const sportsKeywordsHtml = `<meta charset="UTF-8">
 
 const getHtmlKeywords = {
   name: 'keywords',
-  func: (): Promise<string[]> => {
+  func: (): Promise<PageFeatureResult> => {
     const tag = <HTMLElement>(
       document.head.querySelector('meta[name="keywords"]')
     );
     const keywordString = tag.getAttribute('content') || '';
     const keywords = keywordString.toLowerCase().split(',');
-    return Promise.resolve(keywords);
+    return Promise.resolve({
+      version: 1,
+      value: keywords,
+    });
   },
 };
 
 const getHttpKeywords = {
   name: 'keywords',
-  func: async (): Promise<string[]> => {
+  func: async (): Promise<PageFeatureResult> => {
     const response = await fetch('https://thisisnevercalled.com/fetchismocked');
     const json = await response.json();
     const keywords = json.split(',');
-    return keywords;
+    return {
+      version: 1,
+      value: keywords,
+    };
   },
 };
 

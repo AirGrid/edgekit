@@ -1,22 +1,17 @@
-import { PageFeatureGetter, PageFeature, PageFeatureValue } from '../../types';
+import { PageFeatureGetter, PageFeature } from '../../types';
 
 const wrapPageFeatureGetters = (
   pageFeatureGetters: PageFeatureGetter[]
 ): Promise<PageFeature>[] => {
   return pageFeatureGetters.map((getter) => {
-    return (async () => {
-      let error: boolean;
-      let value: PageFeatureValue;
+    return (async (): Promise<PageFeature> => {
       const { name } = getter;
       try {
-        value = await getter.func();
-        error = false;
+        const { version, value } = await getter.func();
+        return { name, error: false, version, value };
       } catch (err) {
-        value = [];
-        error = true;
+        return { name, error: true };
       }
-
-      return { name, error, value };
     })();
   });
 };

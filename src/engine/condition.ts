@@ -15,13 +15,17 @@ const createCondition = (condition: EngineCondition) => (
 
         if (query.filterComparisonType === 'arrayIntersects') {
           return (
-            isStringArray(queryFeatures) &&
-            filters.arrayIntersects(queryFeatures, query.value)
+            !!queryFeatures &&
+            queryFeatures.version === query.version &&
+            isStringArray(queryFeatures.value) &&
+            filters.arrayIntersects(queryFeatures.value, query.value)
           );
         } else if (query.filterComparisonType === 'vectorDistance') {
           return (
-            isNumberArray(queryFeatures) &&
-            filters.vectorDistance(queryFeatures, query.value)
+            !!queryFeatures &&
+            queryFeatures.version === query.version &&
+            isNumberArray(queryFeatures.value) &&
+            filters.vectorDistance(queryFeatures.value, query.value)
           );
         } else {
           return true;

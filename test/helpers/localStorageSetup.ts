@@ -9,7 +9,12 @@ export const pageViewCreator = (
   for (let index = 0; index < numberOfPageViews; index++) {
     pageViews.push({
       ts: timestamp,
-      features: { keywords },
+      features: {
+        keywords: {
+          version: 1,
+          value: keywords,
+        },
+      },
     });
   }
   return pageViews;

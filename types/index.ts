@@ -16,20 +16,31 @@ export enum StorageKeys {
 
 export type PageFeatureValue = string[] | number[];
 
-export interface PageFeatureGetter {
-  name: string;
-  func: () => Promise<PageFeatureValue>;
-}
-
-export type PageFeature = {
-  name: string;
-  error: boolean;
+export type PageFeatureResult = {
+  version: number;
   value: PageFeatureValue;
 };
 
+export interface PageFeatureGetter {
+  name: string;
+  func: () => Promise<PageFeatureResult>;
+}
+
+export type PageFeature =
+  | {
+      name: string;
+      error: true;
+    }
+  | {
+      name: string;
+      error: false;
+      version: number;
+      value: PageFeatureValue;
+    };
+
 export interface PageView {
   ts: number;
-  features: Record<string, PageFeatureValue>;
+  features: Record<string, PageFeatureResult>;
 }
 
 // Audiences
@@ -49,14 +60,25 @@ export type VectorQueryValue = {
 
 export interface AudienceDefinition {
   id: string;
-  name: string;
-  ttl: number;
-  lookBack: number;
-  occurrences: number;
   version: number;
-  queryProperty: string;
-  queryValue: StringArrayQueryValue | VectorQueryValue;
-  queryFilterComparisonType: 'arrayIntersects' | 'vectorDistance';
+  name: string;
+  definition:
+    | {
+        ttl: number;
+        lookBack: number;
+        occurrences: number;
+        queryProperty: string;
+        queryValue: VectorQueryValue;
+        queryFilterComparisonType: 'vectorDistance';
+      }
+    | {
+        ttl: number;
+        lookBack: number;
+        occurrences: number;
+        queryProperty: string;
+        queryValue: StringArrayQueryValue;
+        queryFilterComparisonType: 'arrayIntersects';
+      };
 }
 
 export interface CachedAudienceMetaData {
@@ -73,11 +95,13 @@ export interface AudienceMetaData {
 
 export type EngineConditionQuery =
   | {
+      version: number;
       property: string;
       filterComparisonType: 'arrayIntersects';
       value: StringArrayQueryValue;
     }
   | {
+      version: number;
       property: string;
       filterComparisonType: 'vectorDistance';
       value: VectorQueryValue;
