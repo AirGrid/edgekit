@@ -3,7 +3,7 @@ import {
   PageView,
   StorageKeys,
   PageFeature,
-  PageFeatureValue,
+  PageFeatureResult,
 } from '../../types';
 
 class ViewStore {
@@ -27,11 +27,12 @@ class ViewStore {
 
     const features = pageFeatures.reduce((acc, item) => {
       if (!item.error) {
-        acc[item.name] = item.value;
+        const { name, version, value } = item;
+        acc[name] = { version, value };
         return acc;
       }
       return acc;
-    }, {} as Record<string, PageFeatureValue>);
+    }, {} as Record<string, PageFeatureResult>);
 
     if (Object.keys(features).length < 1) return undefined;
 

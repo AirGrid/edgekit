@@ -7,6 +7,7 @@ const sports1xConditionGt: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -31,6 +32,7 @@ const sports1xConditionLt: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -55,6 +57,7 @@ const sports1xConditionEq: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -79,6 +82,7 @@ const sports1xConditionGe: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -103,6 +107,7 @@ const sports1xConditionLe: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
         property: 'keywords',
         filterComparisonType: 'arrayIntersects',
         value: ['sport'],
@@ -127,6 +132,36 @@ const vectorCondition: EngineCondition = {
     any: false,
     queries: [
       {
+        version: 1,
+        property: 'topicDist',
+        filterComparisonType: 'vectorDistance',
+        value: {
+          vector: [0.4, 0.8, 0.3],
+          threshold: 0.5,
+        },
+      },
+    ],
+  },
+  rules: [
+    {
+      reducer: {
+        name: 'count',
+      },
+      matcher: {
+        name: 'ge',
+        args: 1,
+      },
+    },
+  ],
+};
+
+// Vector condition with a bumped version
+const vectorConditionV2: EngineCondition = {
+  filter: {
+    any: false,
+    queries: [
+      {
+        version: 2,
         property: 'topicDist',
         filterComparisonType: 'vectorDistance',
         value: {
@@ -158,13 +193,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
       ];
@@ -181,13 +222,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -204,13 +251,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -227,13 +280,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -246,13 +305,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
       ];
@@ -269,13 +334,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -288,13 +359,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -311,13 +388,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -330,13 +413,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            keywords: ['sport', 'football'],
+            keywords: {
+              version: 1,
+              value: ['sport', 'football'],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            keywords: ['test', 'test2'],
+            keywords: {
+              version: 1,
+              value: ['test', 'test2'],
+            },
           },
         },
       ];
@@ -355,7 +444,10 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicDist: [0.2, 0.5, 0.1],
+            topicDist: {
+              version: 1,
+              value: [0.2, 0.5, 0.1],
+            },
           },
         },
       ];
@@ -372,13 +464,19 @@ describe('Engine test', () => {
         {
           ts: 100,
           features: {
-            topicDist: [0.3, 0.2, 0.1],
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.1],
+            },
           },
         },
         {
           ts: 101,
           features: {
-            topicDist: [0.3, 0.2, 0.2],
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.2],
+            },
           },
         },
       ];
@@ -386,6 +484,48 @@ describe('Engine test', () => {
       const result = check(conditions, pageViews);
 
       expect(result).toEqual(false);
+    });
+  });
+
+  describe('Vector condition with a bumped version', () => {
+    it('matches the page view if similar enough and has the same version', async () => {
+      const conditions = [vectorConditionV2];
+
+      const pageViews = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 2,
+              value: [0.2, 0.5, 0.1],
+            },
+          },
+        },
+      ];
+
+      const result = check(conditions, pageViews);
+
+      expect(result).toBe(true);
+    });
+
+    it('does not match the page view if similar enough but does not have the same version', async () => {
+      const conditions = [vectorConditionV2];
+
+      const pageViews = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 1,
+              value: [0.2, 0.5, 0.1],
+            },
+          },
+        },
+      ];
+
+      const result = check(conditions, pageViews);
+
+      expect(result).toBe(false);
     });
   });
 });

@@ -5,7 +5,19 @@ like a list of keywords on a page, or something more abstract like a vector.
 
 EdgeKit requires `pageFeatureGetters` to be passed into the run method that will allow EdgeKit to
 evaluate the page. A page feature getter is an object that has a name and and an async function that
-resolves to a value.
+resolves to a `result`. The `result` is an object in the form of:
+
+```typescript
+type PageFeatureResult = {
+  version: number;
+  value: PageFeatureValue;
+};
+```
+
+The `version` of the page feature is there to provide a mechanism for versioning page features and
+audience definitions that should match on them. See the [audiences](./audiences.md) section and
+Edgekit's exported [types](https://github.com/AirGrid/edgekit/blob/develop/types/index.ts) for more
+details.
 
 
 ## Example
@@ -16,13 +28,16 @@ the head of the HTML:
 ```typescript
 const getHtmlKeywords = {
   name: 'keywords',
-  func: (): Promise<string[]> => {
+  func: (): Promise<PageFeatureResult> => {
     const tag = <HTMLElement>(
       document.head.querySelector('meta[name="keywords"]')
     );
     const keywordString = tag.getAttribute('content') || '';
     const keywords = keywordString.toLowerCase().split(',');
-    return Promise.resolve(keywords);
+    return Promise.resolve({
+      version: 1, // Provide a version for your features
+      value: keywords
+    });
   },
 };
 ```
@@ -42,7 +57,7 @@ If this `getHtmlKeywords` feature getter is passed to Edgekit with a page that l
 ```
 
 Then Edgekit will store this feature, and any other features that were provided, in local storage as
-a _page view_:
+a _page view_ along with the version it received:
 
 ```js
 > JSON.parse(localStorage.getItem('edkt_page_views'))
@@ -50,12 +65,15 @@ a _page view_:
   {
     "ts": 1600858202179,
     "features": {
-      "keywords": [
-        "goal",
-        "liverpool",
-        "football",
-        "stadium"
-      ]
+      "keywords": {
+        "version": 1,
+        "value": [
+          "goal",
+          "liverpool",
+          "football",
+          "stadium"
+        ]
+      }
     }
   }
 ]
