@@ -2,7 +2,6 @@ import * as reducers from './reducers';
 import * as matchers from './matchers';
 import * as filters from './filters';
 import { PageView, EngineCondition } from '../../types';
-import { isNumberArray, isStringArray } from '../utils';
 
 const createCondition = (condition: EngineCondition) => (
   pageViews: PageView[]
@@ -12,19 +11,19 @@ const createCondition = (condition: EngineCondition) => (
     .map((query) => {
       return pageViews.filter((pageView) => {
         const queryFeatures = pageView.features[query.property];
+        const isValidQuery =
+          !!queryFeatures && queryFeatures.version === query.version;
 
+        // TODO: maybe switch from string literal type to actual function
+        // so that we can just go ```query.filter(...)```
         if (query.filterComparisonType === 'arrayIntersects') {
           return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isStringArray(queryFeatures.value) &&
+            isValidQuery &&
             filters.arrayIntersects(queryFeatures.value, query.value)
           );
         } else if (query.filterComparisonType === 'vectorDistance') {
           return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isNumberArray(queryFeatures.value) &&
+            isValidQuery &&
             filters.vectorDistance(queryFeatures.value, query.value)
           );
         } else {
@@ -45,7 +44,7 @@ const createCondition = (condition: EngineCondition) => (
     return result;
   });
 
-  return !ruleResults.includes(false);
+  return ruleResults.every(Boolean);
 };
 
 export default createCondition;
