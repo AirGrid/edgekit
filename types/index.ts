@@ -64,6 +64,7 @@ export interface AudienceDefinition {
   name: string;
   definition:
     | {
+        featureVersion: number;
         ttl: number;
         lookBack: number;
         occurrences: number;
@@ -72,6 +73,7 @@ export interface AudienceDefinition {
         queryFilterComparisonType: 'vectorDistance';
       }
     | {
+        featureVersion: number;
         ttl: number;
         lookBack: number;
         occurrences: number;

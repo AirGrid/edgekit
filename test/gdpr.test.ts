@@ -24,6 +24,7 @@ const sportAudience: AudienceDefinition = {
   name: 'Sport Audience',
   version: 1,
   definition: {
+    featureVersion: 1,
     ttl: TTL,
     lookBack: 10,
     occurrences: 0,

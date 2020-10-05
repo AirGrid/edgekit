@@ -41,6 +41,7 @@ const sportAudience: AudienceDefinition = {
   name: 'Sport Audience',
   version: 1,
   definition: {
+    featureVersion: 1,
     ttl: TTL,
     lookBack: 10,
     occurrences: 2,
@@ -55,6 +56,7 @@ const lookBackInfinityAudience: AudienceDefinition = {
   name: 'Look Back Audience',
   version: 1,
   definition: {
+    featureVersion: 1,
     ttl: TTL,
     lookBack: 0,
     occurrences: 2,
@@ -69,6 +71,7 @@ const lookBackAudience: AudienceDefinition = {
   name: 'Look Back Audience',
   version: 1,
   definition: {
+    featureVersion: 1,
     ttl: TTL,
     lookBack: 2,
     occurrences: 2,
@@ -83,6 +86,7 @@ const topicModelAudience: AudienceDefinition = {
   name: 'Look Back Audience',
   version: 1,
   definition: {
+    featureVersion: 1,
     ttl: 100,
     lookBack: 2,
     occurrences: 1,
@@ -317,6 +321,7 @@ describe('Topic model run with additional audience', () => {
     name: 'Interest | Sport',
     version: 1,
     definition: {
+      featureVersion: 1,
       occurrences: 1,
       ttl: 1000,
       lookBack: 1000,
@@ -334,6 +339,7 @@ describe('Topic model run with additional audience', () => {
     name: 'Interest | Sport',
     version: 1,
     definition: {
+      featureVersion: 1,
       occurrences: 1,
       ttl: 1000,
       lookBack: 1000,
@@ -427,8 +433,9 @@ describe('Topic model run version mismatch', () => {
   const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
     name: 'Interest | Sport',
-    version: 2,
+    version: 1,
     definition: {
+      featureVersion: 2,
       occurrences: 1,
       ttl: 1000,
       lookBack: 1000,
@@ -444,8 +451,9 @@ describe('Topic model run version mismatch', () => {
   const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
     name: 'Interest | Sport',
-    version: 2,
+    version: 1,
     definition: {
+      featureVersion: 2,
       occurrences: 1,
       ttl: 1000,
       lookBack: 1000,
