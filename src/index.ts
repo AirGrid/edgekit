@@ -26,7 +26,6 @@ const run = async (config: Config): Promise<void> => {
 
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
-  console.log('OS EDGEKIT', { pageFeatures });
   viewStore.insert(pageFeatures);
 
   const matchedAudiences = audienceDefinitions
