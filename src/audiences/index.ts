@@ -13,6 +13,7 @@ export const sportInterestAudience: AudienceDefinition = {
   name: 'Interest | Sport',
   version: VERSION,
   definition: {
+    featureVersion: 1,
     ttl: TTL_IN_SECS,
     lookBack: LOOK_BACK_IN_SECS,
     occurrences: OCCURRENCES,
@@ -27,6 +28,7 @@ export const travelInterestAudience: AudienceDefinition = {
   name: 'Interest | Travel',
   version: VERSION,
   definition: {
+    featureVersion: 1,
     ttl: TTL_IN_SECS,
     lookBack: LOOK_BACK_IN_SECS,
     occurrences: OCCURRENCES,
@@ -41,6 +43,7 @@ export const automotiveInterestAudience: AudienceDefinition = {
   name: 'Interest | Automotive',
   version: VERSION,
   definition: {
+    featureVersion: 1,
     ttl: TTL_IN_SECS,
     lookBack: LOOK_BACK_IN_SECS,
     occurrences: OCCURRENCES,

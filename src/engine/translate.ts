@@ -12,7 +12,7 @@ export const translate = (
         isStringArray(audienceDefinition.definition.queryValue)
           ? [
               {
-                version: audienceDefinition.version,
+                version: audienceDefinition.definition.featureVersion,
                 property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
                   audienceDefinition.definition.queryFilterComparisonType,
@@ -24,7 +24,7 @@ export const translate = (
             isVectorQueryValue(audienceDefinition.definition.queryValue)
           ? [
               {
-                version: audienceDefinition.version,
+                version: audienceDefinition.definition.featureVersion,
                 property: audienceDefinition.definition.queryProperty,
                 filterComparisonType:
                   audienceDefinition.definition.queryFilterComparisonType,
