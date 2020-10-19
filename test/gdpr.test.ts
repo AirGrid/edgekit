@@ -1,6 +1,6 @@
 import { edkt } from '../src';
-import { hasGdprConsent } from '../src/gdpr';
-import { TCData, AudienceDefinition, PageFeatureResult } from '../types';
+import { checkForConsent } from '../src/gdpr';
+import { /*TCData,*/ AudienceDefinition, PageFeatureResult } from '../types';
 
 const TTL = 10;
 const airgridVendorId = 782;
@@ -11,10 +11,19 @@ const injectTcfApi = () => {
   window.__tcfapi = (
     command: string,
     _: number,
-    cb: (tcData: TCData, success: boolean) => void
+    // TODO: fix function overloading
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cb: any // (tcData: TCData, success: boolean) => void
   ) => {
-    if (command === 'getTCData') {
-      cb({ gdprApplies, vendor: { consents: consents } }, true);
+    if (command === 'addEventListener') {
+      cb(
+        {
+          gdprApplies,
+          eventStatus: 'tcloaded',
+          vendor: { consents: consents },
+        },
+        true
+      );
     }
   };
 };
@@ -45,10 +54,10 @@ const sportPageFeatureGetter = {
 };
 
 describe.only('EdgeKit GDPR tests', () => {
-  describe('hasGdprConsent', () => {
+  describe('checkForConsent', () => {
     it('should fail to consent if the Transparency and Consent Framework API is missing', async () => {
       expect(window.__tcfapi).toBeUndefined();
-      const hasConsent = await hasGdprConsent([airgridVendorId]);
+      const hasConsent = await checkForConsent([airgridVendorId]);
       expect(hasConsent).toBe(false);
     });
 
@@ -56,22 +65,22 @@ describe.only('EdgeKit GDPR tests', () => {
       injectTcfApi();
 
       expect(window.__tcfapi).not.toBeUndefined();
-      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+      expect(await checkForConsent([airgridVendorId])).toBe(false);
 
       gdprApplies = false;
-      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+      expect(await checkForConsent([airgridVendorId])).toBe(false);
     });
 
     it(`should not consent if GDPR applies but the vendor does't consent`, async () => {
       gdprApplies = true;
       expect(consents[airgridVendorId]).toBe(false);
-      expect(await hasGdprConsent([airgridVendorId])).toBe(false);
+      expect(await checkForConsent([airgridVendorId])).toBe(false);
     });
 
     it('should consent if GDPR applies and the vender consents', async () => {
       consents = { [airgridVendorId]: true };
       expect(window.__tcfapi).not.toBeUndefined();
-      expect(await hasGdprConsent([airgridVendorId])).toBe(true);
+      expect(await checkForConsent([airgridVendorId])).toBe(true);
     });
   });
 

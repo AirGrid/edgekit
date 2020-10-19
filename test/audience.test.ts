@@ -20,6 +20,7 @@ describe('Test edkt audience matching', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
   });
 
@@ -28,6 +29,7 @@ describe('Test edkt audience matching', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -47,6 +49,7 @@ describe('Test edkt audience matching', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -66,6 +69,7 @@ describe('Test edkt audience matching', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(

@@ -133,6 +133,17 @@ export interface PingResponse {
 
 export interface TCData {
   gdprApplies?: boolean;
+
+  eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
+
+  /**
+   * If this TCData is sent to the callback of addEventListener: number,
+   * the unique ID assigned by the CMP to the listener function registered
+   * via addEventListener.
+   * Others: undefined.
+   */
+  listenerId?: number | undefined;
+
   vendor: {
     consents: { [vendorId: number]: boolean | undefined };
   };
@@ -140,6 +151,7 @@ export interface TCData {
 
 declare global {
   interface Window {
+    /*
     __tcfapi(
       command: 'ping',
       version: number,
@@ -150,6 +162,20 @@ declare global {
       command: 'getTCData',
       version: number,
       cb: (tcData: TCData, success: boolean) => void
+    ): void;
+    */
+
+    __tcfapi(
+      command: 'addEventListener',
+      version: number,
+      cb: (tcData: TCData, success: boolean) => void
+    ): void;
+
+    __tcfapi(
+      command: 'removeEventListener',
+      version: number,
+      cb: (success: boolean) => void,
+      listenerId: number
     ): void;
   }
 }

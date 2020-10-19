@@ -2,27 +2,33 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { hasGdprConsent } from './gdpr';
+import { waitOnConsent } from './gdpr';
 import {
   PageFeatureGetter,
   MatchedAudience,
   AudienceDefinition,
 } from '../types';
 
+export { runOnConsent, waitOnConsent } from './gdpr';
+
 interface Config {
   pageFeatureGetters: PageFeatureGetter[];
   audienceDefinitions: AudienceDefinition[];
   vendorIds?: number[];
   omitGdprConsent?: boolean;
+  allowMultipleRuns?: boolean; // For testing purposes only
 }
 
+let hasRun = false;
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
 const run = async (config: Config): Promise<void> => {
-  if (config.omitGdprConsent !== true) {
-    const hasConsent = await hasGdprConsent(config.vendorIds);
-    if (!hasConsent) return;
+  if (hasRun && config.allowMultipleRuns !== true) {
+    return Promise.resolve();
   }
+  hasRun = true;
+
+  await waitOnConsent(config.vendorIds, config.omitGdprConsent);
 
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);

@@ -139,6 +139,7 @@ describe('Test basic edkt run', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -163,6 +164,7 @@ describe('Test basic edkt run', () => {
       pageFeatureGetters: [sportPageFeatureGetter],
       audienceDefinitions: [sportAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -193,6 +195,7 @@ describe('Test look back edkt run', () => {
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackInfinityAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
@@ -207,6 +210,7 @@ describe('Test look back edkt run', () => {
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
@@ -221,6 +225,7 @@ describe('Test look back edkt run', () => {
       pageFeatureGetters: [lookBackPageFeatureGetter],
       audienceDefinitions: [lookBackAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
@@ -238,6 +243,7 @@ describe('Topic model run', () => {
       pageFeatureGetters: [topicModelPageFeatureGetter],
       audienceDefinitions: [topicModelAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -268,6 +274,7 @@ describe('Topic model run', () => {
       pageFeatureGetters: [topicModelPageFeatureGetter],
       audienceDefinitions: [topicModelAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -365,6 +372,7 @@ describe('Topic model run with additional audience', () => {
       ],
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
   };
 
@@ -479,6 +487,7 @@ describe('Topic model run version mismatch', () => {
       ],
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
   };
 

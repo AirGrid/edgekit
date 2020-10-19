@@ -47,6 +47,7 @@ describe('EdgeKit edkt() API tests', () => {
       pageFeatureGetters: [getHtmlKeywords],
       audienceDefinitions: allAudienceDefinitions,
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -63,6 +64,7 @@ describe('EdgeKit edkt() API tests', () => {
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: allAudienceDefinitions,
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktPageViews = JSON.parse(
@@ -79,6 +81,7 @@ describe('EdgeKit edkt() API tests', () => {
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: [],
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktMatchedAudiences = JSON.parse(
@@ -95,6 +98,7 @@ describe('EdgeKit edkt() API tests', () => {
       pageFeatureGetters: [getHttpKeywords],
       audienceDefinitions: allAudienceDefinitions,
       omitGdprConsent: true,
+      allowMultipleRuns: true,
     });
 
     const edktMatchedAudiences = JSON.parse(
