@@ -9,25 +9,18 @@ import {
   AudienceDefinition,
 } from '../types';
 
-export { runOnConsent, waitOnConsent } from './gdpr';
+export { waitOnConsent } from './gdpr';
 
 interface Config {
   pageFeatureGetters: PageFeatureGetter[];
   audienceDefinitions: AudienceDefinition[];
   vendorIds?: number[];
   omitGdprConsent?: boolean;
-  allowMultipleRuns?: boolean; // For testing purposes only
 }
 
-let hasRun = false;
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
 const run = async (config: Config): Promise<void> => {
-  if (hasRun && config.allowMultipleRuns !== true) {
-    return Promise.resolve();
-  }
-  hasRun = true;
-
   await waitOnConsent(config.vendorIds, config.omitGdprConsent);
 
   const { pageFeatureGetters, audienceDefinitions } = config;

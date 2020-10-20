@@ -90,7 +90,6 @@ describe.only('EdgeKit GDPR tests', () => {
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
         vendorIds: [airgridVendorId],
-        allowMultipleRuns: true,
       });
 
       const edktPageViews = JSON.parse(
@@ -112,7 +111,6 @@ describe.only('EdgeKit GDPR tests', () => {
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
         vendorIds: [airgridVendorId],
-        allowMultipleRuns: true,
       });
 
       const edktPageViews = JSON.parse(

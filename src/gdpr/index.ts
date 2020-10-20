@@ -24,9 +24,8 @@ const removeListener = (tcData: TCData): Promise<boolean> => {
 };
 
 // This promise will only resolve once there is gdpr consent at that point in time
-export const checkForConsent = (
+export const waitOnConsent = (
   vendorIds: number[] = [],
-  waitForConsent = false,
   omitGdprConsent = false
 ): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -44,24 +43,14 @@ export const checkForConsent = (
       ) {
         resolve(true);
         removeListener(tcData);
-      } else if (!waitForConsent) {
-        resolve(false);
-        removeListener(tcData);
       }
     };
 
     if (window.__tcfapi) {
       window.__tcfapi('addEventListener', 2, callback);
-    } else if (!waitForConsent) {
-      resolve(false);
     }
   });
 };
-
-export const waitOnConsent = (
-  vendorIds: number[] = [],
-  omitGdprConsent = false
-): Promise<boolean> => checkForConsent(vendorIds, true, omitGdprConsent);
 
 export const runOnConsent = async <T>(
   vendorIds: number[],
@@ -69,5 +58,6 @@ export const runOnConsent = async <T>(
   omitGdprConsent = false
 ): Promise<T> => {
   await waitOnConsent(vendorIds, omitGdprConsent);
-  return await callback();
+  const result = await callback();
+  return result;
 };
