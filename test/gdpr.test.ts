@@ -61,13 +61,10 @@ describe.only('EdgeKit GDPR tests', () => {
       expect(hasConsent).toBe(false);
     });
 
-    it('should fail to consent if the api is there but gdprApplies is undefined or false', async () => {
+    it('should fail to consent if the api is there but gdprApplies is undefined', async () => {
       injectTcfApi();
 
       expect(window.__tcfapi).not.toBeUndefined();
-      expect(await checkForConsent([airgridVendorId])).toBe(false);
-
-      gdprApplies = false;
       expect(await checkForConsent([airgridVendorId])).toBe(false);
     });
 
@@ -85,12 +82,15 @@ describe.only('EdgeKit GDPR tests', () => {
   });
 
   describe('run', () => {
-    it('should not run edgekit if there is no GDPR consent', async () => {
+    // TODO
+    it.skip('should not run edgekit if there is no GDPR consent', async () => {
       consents = { [airgridVendorId]: false };
+
       await edkt.run({
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
         vendorIds: [airgridVendorId],
+        allowMultipleRuns: true,
       });
 
       const edktPageViews = JSON.parse(
@@ -112,6 +112,7 @@ describe.only('EdgeKit GDPR tests', () => {
         pageFeatureGetters: [sportPageFeatureGetter],
         audienceDefinitions: [sportAudience],
         vendorIds: [airgridVendorId],
+        allowMultipleRuns: true,
       });
 
       const edktPageViews = JSON.parse(
