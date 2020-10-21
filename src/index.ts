@@ -2,14 +2,12 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { waitOnConsent } from './gdpr';
+import { waitOnConsent, checkConsentStatus } from './gdpr';
 import {
   PageFeatureGetter,
   MatchedAudience,
   AudienceDefinition,
 } from '../types';
-
-export { waitOnConsent } from './gdpr';
 
 interface Config {
   pageFeatureGetters: PageFeatureGetter[];
@@ -21,7 +19,20 @@ interface Config {
 // TODO: we need to give a way to consumers to ensure this does not
 // run multiple times on a single page load.
 const run = async (config: Config): Promise<void> => {
-  await waitOnConsent(config.vendorIds, config.omitGdprConsent);
+  if (!config.omitGdprConsent) {
+    const { eventStatus, hasConsent } = await checkConsentStatus(
+      config.vendorIds
+    );
+
+    if (
+      (eventStatus === 'tcloaded' || eventStatus === 'useractioncomplete') &&
+      !hasConsent
+    ) {
+      return;
+    } else if (eventStatus === 'cmpuishown') {
+      await waitOnConsent(config.vendorIds, config.omitGdprConsent);
+    }
+  }
 
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);

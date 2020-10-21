@@ -1,8 +1,7 @@
-import { TCData } from '../../types';
+import { TCData, ConsentStatus } from '../../types';
 
 const hasGdprConsent = (vendorIds: number[], tcData: TCData): boolean => {
   const { gdprApplies, vendor } = tcData;
-  console.log('HAS GDPR CONSENT', { gdprApplies, vendor });
   return (
     gdprApplies === false ||
     (vendorIds.length > 0 &&
@@ -23,14 +22,36 @@ const removeListener = (tcData: TCData): Promise<boolean> => {
   });
 };
 
+export const checkConsentStatus = (
+  vendorIds: number[] = []
+): Promise<ConsentStatus> => {
+  return new Promise((resolve, reject) => {
+    const callback = (tcData: TCData, success: boolean): void => {
+      const { cmpStatus } = tcData;
+      if (success && cmpStatus === 'loaded') {
+        const hasConsent = success && hasGdprConsent(vendorIds, tcData);
+        const { eventStatus } = tcData;
+        resolve({ eventStatus, hasConsent });
+        removeListener(tcData);
+      }
+    };
+
+    if (window.__tcfapi) {
+      window.__tcfapi('addEventListener', 2, callback);
+    } else {
+      reject(new Error('TCF API is missing'));
+    }
+  });
+};
+
 // This promise will only resolve once there is gdpr consent at that point in time
 export const waitOnConsent = (
   vendorIds: number[] = [],
   omitGdprConsent = false
-): Promise<boolean> => {
-  return new Promise((resolve) => {
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
     if (omitGdprConsent) {
-      resolve(true);
+      resolve();
       return;
     }
 
@@ -41,13 +62,15 @@ export const waitOnConsent = (
           tcData.eventStatus === 'useractioncomplete') &&
         hasGdprConsent(vendorIds, tcData)
       ) {
-        resolve(true);
+        resolve();
         removeListener(tcData);
       }
     };
 
     if (window.__tcfapi) {
       window.__tcfapi('addEventListener', 2, callback);
+    } else {
+      reject(new Error('TCF API is missing'));
     }
   });
 };
