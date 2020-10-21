@@ -44,7 +44,6 @@ export const checkConsentStatus = (
   });
 };
 
-// This promise will only resolve once there is gdpr consent at that point in time
 export const waitForConsent = (vendorIds: number[] = []): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     const callback = (tcData: TCData, success: boolean): void => {
