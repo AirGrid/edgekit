@@ -2,7 +2,7 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { waitForConsent, checkConsentStatus } from './gdpr';
+import { waitForConsent } from './gdpr';
 import {
   PageFeatureGetter,
   MatchedAudience,
@@ -18,19 +18,8 @@ interface Config {
 
 const run = async (config: Config): Promise<void> => {
   if (!config.omitGdprConsent) {
-    const { eventStatus, hasConsent } = await checkConsentStatus(
-      config.vendorIds
-    );
-
-    if (
-      (eventStatus === 'tcloaded' || eventStatus === 'useractioncomplete') &&
-      !hasConsent
-    ) {
-      return;
-    } else if (eventStatus === 'cmpuishown') {
-      const hasConsent = await waitForConsent(config.vendorIds);
-      if (!hasConsent) return;
-    }
+    const hasConsent = await waitForConsent(config.vendorIds);
+    if (!hasConsent) return;
   }
 
   const { pageFeatureGetters, audienceDefinitions } = config;

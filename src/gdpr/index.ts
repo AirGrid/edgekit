@@ -48,8 +48,10 @@ export const checkConsentStatus = (
 export const waitForConsent = (vendorIds: number[] = []): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     const callback = (tcData: TCData, success: boolean): void => {
+      const { cmpStatus } = tcData;
       if (
         success &&
+        cmpStatus === 'loaded' &&
         (tcData.eventStatus === 'tcloaded' ||
           tcData.eventStatus === 'useractioncomplete')
       ) {
