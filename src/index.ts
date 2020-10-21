@@ -2,7 +2,7 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { waitOnConsent, checkConsentStatus } from './gdpr';
+import { waitForConsent, checkConsentStatus } from './gdpr';
 import {
   PageFeatureGetter,
   MatchedAudience,
@@ -16,8 +16,6 @@ interface Config {
   omitGdprConsent?: boolean;
 }
 
-// TODO: we need to give a way to consumers to ensure this does not
-// run multiple times on a single page load.
 const run = async (config: Config): Promise<void> => {
   if (!config.omitGdprConsent) {
     const { eventStatus, hasConsent } = await checkConsentStatus(
@@ -30,7 +28,8 @@ const run = async (config: Config): Promise<void> => {
     ) {
       return;
     } else if (eventStatus === 'cmpuishown') {
-      await waitOnConsent(config.vendorIds, config.omitGdprConsent);
+      const hasConsent = await waitForConsent(config.vendorIds);
+      if (!hasConsent) return;
     }
   }
 

@@ -29,7 +29,7 @@ export const checkConsentStatus = (
     const callback = (tcData: TCData, success: boolean): void => {
       const { cmpStatus } = tcData;
       if (success && cmpStatus === 'loaded') {
-        const hasConsent = success && hasGdprConsent(vendorIds, tcData);
+        const hasConsent = hasGdprConsent(vendorIds, tcData);
         const { eventStatus } = tcData;
         resolve({ eventStatus, hasConsent });
         removeListener(tcData);
@@ -45,24 +45,15 @@ export const checkConsentStatus = (
 };
 
 // This promise will only resolve once there is gdpr consent at that point in time
-export const waitOnConsent = (
-  vendorIds: number[] = [],
-  omitGdprConsent = false
-): Promise<void> => {
+export const waitForConsent = (vendorIds: number[] = []): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    if (omitGdprConsent) {
-      resolve();
-      return;
-    }
-
     const callback = (tcData: TCData, success: boolean): void => {
       if (
         success &&
         (tcData.eventStatus === 'tcloaded' ||
-          tcData.eventStatus === 'useractioncomplete') &&
-        hasGdprConsent(vendorIds, tcData)
+          tcData.eventStatus === 'useractioncomplete')
       ) {
-        resolve();
+        resolve(hasGdprConsent(vendorIds, tcData));
         removeListener(tcData);
       }
     };
@@ -80,7 +71,9 @@ export const runOnConsent = async <T>(
   callback: () => Promise<T>,
   omitGdprConsent = false
 ): Promise<T> => {
-  await waitOnConsent(vendorIds, omitGdprConsent);
+  if (!omitGdprConsent) {
+    await waitForConsent(vendorIds);
+  }
   const result = await callback();
   return result;
 };
