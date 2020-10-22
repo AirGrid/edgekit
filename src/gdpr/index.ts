@@ -28,11 +28,11 @@ const removeListener = (tcData: TCData): Promise<boolean> => {
 const waitForTcfApi = () => {
   return Promise.race([
     new Promise((resolve) => {
-      let intervalId: NodeJS.Timeout | null = null;
-      intervalId = setInterval(() => {
+      let intervalId: number | null = null;
+      intervalId = window.setInterval(() => {
         if (!!window.__tcfapi) {
           if (!!intervalId) {
-            clearInterval(intervalId);
+            window.clearInterval(intervalId);
           }
           resolve();
         }
