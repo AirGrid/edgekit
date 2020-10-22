@@ -1,11 +1,14 @@
 import { TCData, ConsentStatus } from '../../types';
+import { timeout } from '../utils';
+
+export const waitForTcfApiTimeout = 10 * 1000;
 
 const hasGdprConsent = (vendorIds: number[], tcData: TCData): boolean => {
-  const { gdprApplies, vendor } = tcData;
+  const { vendor } = tcData;
   return (
-    gdprApplies === false ||
-    (vendorIds.length > 0 &&
-      vendorIds.every((vendorId) => !!vendor.consents[vendorId]))
+    !!vendor &&
+    vendorIds.length > 0 &&
+    vendorIds.every((vendorId) => !!vendor.consents[vendorId])
   );
 };
 
@@ -22,9 +25,27 @@ const removeListener = (tcData: TCData): Promise<boolean> => {
   });
 };
 
-export const checkConsentStatus = (
+const waitForTcfApi = () => {
+  return Promise.race([
+    new Promise((resolve) => {
+      let intervalId: NodeJS.Timeout | null = null;
+      intervalId = setInterval(() => {
+        if (!!window.__tcfapi) {
+          if (!!intervalId) {
+            clearInterval(intervalId);
+          }
+          resolve();
+        }
+      }, 100);
+    }),
+    timeout(waitForTcfApiTimeout, 'TCF API is missing'),
+  ]);
+};
+
+export const checkConsentStatus = async (
   vendorIds: number[] = []
 ): Promise<ConsentStatus> => {
+  await waitForTcfApi();
   return new Promise((resolve, reject) => {
     const callback = (tcData: TCData, success: boolean): void => {
       const { cmpStatus } = tcData;
@@ -44,7 +65,10 @@ export const checkConsentStatus = (
   });
 };
 
-export const waitForConsent = (vendorIds: number[] = []): Promise<boolean> => {
+export const waitForConsent = async (
+  vendorIds: number[] = []
+): Promise<boolean> => {
+  await waitForTcfApi();
   return new Promise((resolve, reject) => {
     const callback = (tcData: TCData, success: boolean): void => {
       const { cmpStatus } = tcData;
