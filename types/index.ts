@@ -133,23 +133,42 @@ export interface PingResponse {
 
 export interface TCData {
   gdprApplies?: boolean;
+
+  eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
+
+  cmpStatus: 'stub' | 'loading' | 'loaded' | 'error';
+
+  /**
+   * If this TCData is sent to the callback of addEventListener: number,
+   * the unique ID assigned by the CMP to the listener function registered
+   * via addEventListener.
+   * Others: undefined.
+   */
+  listenerId?: number | undefined;
+
   vendor: {
     consents: { [vendorId: number]: boolean | undefined };
   };
 }
 
+export interface ConsentStatus {
+  eventStatus: 'tcloaded' | 'useractioncomplete' | 'cmpuishown';
+  hasConsent: boolean;
+}
+
 declare global {
   interface Window {
     __tcfapi(
-      command: 'ping',
+      command: 'addEventListener',
       version: number,
-      cb: (response: PingResponse) => void
+      cb: (tcData: TCData, success: boolean) => void
     ): void;
 
     __tcfapi(
-      command: 'getTCData',
+      command: 'removeEventListener',
       version: number,
-      cb: (tcData: TCData, success: boolean) => void
+      cb: (success: boolean) => void,
+      listenerId: number
     ): void;
   }
 }
