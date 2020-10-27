@@ -7,6 +7,7 @@ import {
   PageFeatureGetter,
   MatchedAudience,
   AudienceDefinition,
+  PageView,
 } from '../types';
 
 interface Config {
@@ -60,9 +61,14 @@ const getMatchedAudiences = (): MatchedAudience[] => {
   return matchedAudienceStore.matchedAudiences;
 };
 
+const getCopyOfPageViews = (): PageView[] => {
+  return [...viewStore.pageViews];
+};
+
 export const edkt = {
   run,
   getMatchedAudiences,
+  getCopyOfPageViews,
 };
 
 // This will expose the exported audiences & allow tree shaking
