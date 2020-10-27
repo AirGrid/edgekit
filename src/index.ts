@@ -61,14 +61,14 @@ const getMatchedAudiences = (): MatchedAudience[] => {
   return matchedAudienceStore.matchedAudiences;
 };
 
-const getAllPageViews = (): PageView[] => {
-  return viewStore.pageViews;
+const getCopyOfPageViews = (): PageView[] => {
+  return [...viewStore.pageViews];
 };
 
 export const edkt = {
   run,
   getMatchedAudiences,
-  getAllPageViews,
+  getCopyOfPageViews,
 };
 
 // This will expose the exported audiences & allow tree shaking
