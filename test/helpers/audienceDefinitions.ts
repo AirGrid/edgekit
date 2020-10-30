@@ -1,12 +1,35 @@
-import sportKeywords from './interest/sport/keywords';
-import travelKeywords from './interest/travel/keywords';
-import automotiveKeywords from './interest/automotive/keywords';
 import { AudienceDefinition } from '../../types';
 
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
 const OCCURRENCES = 2;
 const VERSION = 1;
+
+export const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
+
+export const travelKeywords = [
+  'british airways',
+  'cruise ship',
+  'ship',
+  'airline',
+  'hotel',
+  'travel',
+  'holland america line',
+  'royal navy',
+  'tourism',
+  'cruise line',
+];
+
+export const automotiveKeywords = [
+  'international space station',
+  'vehicle',
+  'road',
+  'driving',
+  'elon musk',
+  'walking',
+  'traffic',
+  'transport',
+];
 
 export const sportInterestAudience: AudienceDefinition = {
   id: 'iab-607',
@@ -53,7 +76,7 @@ export const automotiveInterestAudience: AudienceDefinition = {
   },
 };
 
-export const allAudienceDefinitions: AudienceDefinition[] = [
+export const allAudienceDefinitions = [
   sportInterestAudience,
   travelInterestAudience,
   automotiveInterestAudience,
