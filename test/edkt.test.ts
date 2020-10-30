@@ -1,6 +1,7 @@
 import fetchMock from 'jest-fetch-mock';
 import { PageFeatureResult } from '../types';
-import { edkt, allAudienceDefinitions } from '../src';
+import { allAudienceDefinitions } from './helpers/audienceDefinitions';
+import { edkt } from '../src';
 
 const sportKeywordsString = 'golf,liverpool,football,stadium';
 // const travelKeywordsString = 'beach,holiday,cruise,mojito'

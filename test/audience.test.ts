@@ -1,6 +1,9 @@
 import { PageFeatureResult } from '../types';
-import { edkt, sportInterestAudience } from '../src';
-const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
+import {
+  sportInterestAudience,
+  sportKeywords,
+} from './helpers/audienceDefinitions';
+import { edkt } from '../src';
 
 const sportPageFeatureGetter = {
   name: 'keywords',

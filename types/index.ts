@@ -58,10 +58,14 @@ export type VectorQueryValue = {
   threshold: number;
 };
 
+export type AudienceState = 'live' | 'paused' | 'deleted';
+
 export interface AudienceDefinition {
+  accountId?: Record<string, AudienceState>;
   id: string;
   version: number;
   name: string;
+  cacheFor?: number;
   definition:
     | {
         featureVersion: number;

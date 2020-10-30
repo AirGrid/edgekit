@@ -1,10 +1,10 @@
+import { cachedAudienceStore } from '../src/store';
+import { CachedAudienceMetaData } from '../types';
 import {
   sportInterestAudience,
   travelInterestAudience,
   automotiveInterestAudience,
-} from '../src';
-import { cachedAudienceStore } from '../src/store';
-import { CachedAudienceMetaData } from '../types';
+} from './helpers/audienceDefinitions';
 import { timeStampInSecs } from 'src/utils';
 
 describe('Test audience cache', () => {
