@@ -14,13 +14,6 @@ const LOOK_BACK_IN_SECS = 60 * 24 * 7;  // 1 week in seconds
 const OCCURRENCES = 2;
 
 export const exampleAudience: AudienceDefinition = {
-  // A map of account ids that the audience definition can run for
-  // If this is not defined then the audience definition will run for all accounts
-  accountId?: {
-    // Set the state for each account to 'live', 'paused' or 'deleted'
-    someAccount: 'live',
-    someOtherAccount: 'paused',
-  },
   // Unique Identifier
   id: '1234',
   // Amount of time to cache the audience definition (in seconds)
