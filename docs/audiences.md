@@ -14,8 +14,17 @@ const LOOK_BACK_IN_SECS = 60 * 24 * 7;  // 1 week in seconds
 const OCCURRENCES = 2;
 
 export const exampleAudience: AudienceDefinition = {
+  // A map of account ids that the audience definition can run for
+  // If this is not defined then the audience definition will run for all accounts
+  accountId?: {
+    // Set the state for each account to 'live', 'paused' or 'deleted'
+    someAccount: 'live',
+    someOtherAccount: 'paused',
+  },
   // Unique Identifier
   id: '1234',
+  // Amount of time to cache the audience definition (in seconds)
+  cacheFor: 3600,
   // Name of the Audience
   name: 'Interest | typeOfIntrest',
   // The version number of the audience for caching
@@ -122,40 +131,3 @@ The `ttl` provided for this defintion says the the match is only good for _1 day
 
 The matched audience definitions are stored in local storage under `edkt_matched_audiences`. These
 definitions can be sent to a bidder such as Prebid.
-
-
-## Built in Audiences
-
-EdgeKit comes with a range of audiences that you can use as examples or to get started straight away in your application.
-
-To use the the built in audiences you can import them from EdgeKit along with 'edkt'
-the following audiences are built into edkt and can be used in your projects.
-
-```typescript
-import { sportInterestAudience,
-         travelInterestAudience,
-         automotiveInterestAudience } from '@airgrid/edgekit';
-```
-
-For example:
-
-```typescript
-// use all built in audiences
-import { edkt, allAudienceDefinitions } from '@airgrid/edgekit';
-
-edkt.run({
-  pageFeatureGetters: [...],
-  audienceDefinitions: allAudienceDefinitions,
-});
-
-// use only the built in sport audience
-import { edkt, sportInterestAudience } from '@airgrid/edgekit';
-
-edkt.run({
-  pageFeatureGetters: [...],
-  audienceDefinitions: [sportInterestAudience],
-});
-
-```
-
-For a full list of keywords see [```src/audiences/interest/.../keywords.ts```](https://github.com/AirGrid/edgekit/blob/develop/src/audiences/interest/sport/keywords.ts) for each built-in definition.
