@@ -4,6 +4,7 @@ import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent, runOnConsent } from './gdpr';
 import {
+  PageFeature,
   PageFeatureGetter,
   PageFeatureResult,
   MatchedAudience,
@@ -17,6 +18,8 @@ interface Config {
   vendorIds?: number[];
   omitGdprConsent?: boolean;
 }
+
+let savedPageFeatures: PageFeature[] = [];
 
 const setPageFeatures = async (
   vendorIds: number[],
@@ -36,7 +39,7 @@ const setPageFeatures = async (
       error: false,
     })
   );
-  viewStore.insert(pageFeatures);
+  savedPageFeatures = savedPageFeatures.concat(pageFeatures);
 };
 
 const run = async (config: Config): Promise<void> => {
@@ -47,7 +50,7 @@ const run = async (config: Config): Promise<void> => {
 
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
-  viewStore.insert(pageFeatures);
+  viewStore.insert(savedPageFeatures.concat(pageFeatures));
 
   const matchedAudiences = audienceDefinitions
     .filter((audience) => {

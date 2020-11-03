@@ -1,6 +1,6 @@
 import { PageFeatureResult } from '../types';
 import { getPageFeatures } from '../src/features';
-import { viewStore } from 'src/store';
+import { viewStore } from '../src/store';
 import { edkt } from '../src';
 
 describe('EdgeKit | Features Module', () => {
@@ -37,6 +37,7 @@ describe('EdgeKit | Features Module', () => {
   });
 
   describe('setPageFeature', () => {
+    const vendorIds = [873];
     const omitGdprConsent = true;
 
     const features = {
@@ -66,7 +67,14 @@ describe('EdgeKit | Features Module', () => {
     });
 
     it('should set the page features in the store', async () => {
-      await edkt.setPageFeatures([873], features, omitGdprConsent);
+      await edkt.setPageFeatures(vendorIds, features, omitGdprConsent);
+      await edkt.setPageFeatures(vendorIds, moreFeatures, omitGdprConsent);
+
+      await edkt.run({
+        pageFeatureGetters: [],
+        audienceDefinitions: [],
+        omitGdprConsent,
+      });
 
       const edktPageViews = JSON.parse(
         localStorage.getItem('edkt_page_views') || '[]'
@@ -74,27 +82,11 @@ describe('EdgeKit | Features Module', () => {
 
       expect(edktPageViews).toEqual([
         {
-          features,
+          features: {
+            ...features,
+            ...moreFeatures,
+          },
           ts: edktPageViews[0].ts,
-        },
-      ]);
-    });
-
-    it('should set additional page features in the store', async () => {
-      await edkt.setPageFeatures([873], moreFeatures, omitGdprConsent);
-
-      const edktPageViews = JSON.parse(
-        localStorage.getItem('edkt_page_views') || '[]'
-      );
-
-      expect(edktPageViews).toEqual([
-        {
-          features,
-          ts: edktPageViews[0].ts,
-        },
-        {
-          features: moreFeatures,
-          ts: edktPageViews[1].ts,
         },
       ]);
     });
