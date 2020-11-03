@@ -2,9 +2,10 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { waitForConsent } from './gdpr';
+import { waitForConsent, runOnConsent } from './gdpr';
 import {
   PageFeatureGetter,
+  PageFeatureResult,
   MatchedAudience,
   AudienceDefinition,
   PageView,
@@ -16,6 +17,27 @@ interface Config {
   vendorIds?: number[];
   omitGdprConsent?: boolean;
 }
+
+const setPageFeatures = async (
+  vendorIds: number[],
+  features: Record<string, PageFeatureResult>,
+  omitGdprConsent = false
+): Promise<void> => {
+  const featuresResponse = await runOnConsent(
+    vendorIds,
+    async () => features,
+    omitGdprConsent
+  );
+  const pageFeatures = Object.entries(featuresResponse).map(
+    ([name, { version, value }]) => ({
+      name,
+      value,
+      version,
+      error: false,
+    })
+  );
+  viewStore.insert(pageFeatures);
+};
 
 const run = async (config: Config): Promise<void> => {
   if (!config.omitGdprConsent) {
@@ -69,6 +91,7 @@ export const edkt = {
   run,
   getMatchedAudiences,
   getCopyOfPageViews,
+  setPageFeatures,
 };
 
 // This will expose the exported audiences & allow tree shaking
