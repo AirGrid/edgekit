@@ -2,7 +2,7 @@ import * as engine from './engine';
 import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
-import { waitForConsent, runOnConsent } from './gdpr';
+import { waitForConsent } from './gdpr';
 import {
   PageFeature,
   PageFeatureGetter,
@@ -21,17 +21,8 @@ interface Config {
 
 let savedPageFeatures: PageFeature[] = [];
 
-const setPageFeatures = async (
-  vendorIds: number[],
-  features: Record<string, PageFeatureResult>,
-  omitGdprConsent = false
-): Promise<void> => {
-  const featuresResponse = await runOnConsent(
-    vendorIds,
-    async () => features,
-    omitGdprConsent
-  );
-  const pageFeatures = Object.entries(featuresResponse).map(
+const setPageFeatures = (features: Record<string, PageFeatureResult>): void => {
+  const pageFeatures = Object.entries(features).map(
     ([name, { version, value }]) => ({
       name,
       value,

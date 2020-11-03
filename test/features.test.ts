@@ -67,13 +67,14 @@ describe('EdgeKit | Features Module', () => {
     });
 
     it('should set the page features in the store', async () => {
-      await edkt.setPageFeatures(vendorIds, features, omitGdprConsent);
-      await edkt.setPageFeatures(vendorIds, moreFeatures, omitGdprConsent);
+      edkt.setPageFeatures(features);
+      edkt.setPageFeatures(moreFeatures);
 
       await edkt.run({
         pageFeatureGetters: [],
         audienceDefinitions: [],
         omitGdprConsent,
+        vendorIds,
       });
 
       const edktPageViews = JSON.parse(
