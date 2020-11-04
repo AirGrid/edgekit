@@ -4,7 +4,9 @@ import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
 import {
+  PageFeature,
   PageFeatureGetter,
+  PageFeatureResult,
   MatchedAudience,
   AudienceDefinition,
   PageView,
@@ -17,6 +19,20 @@ interface Config {
   omitGdprConsent?: boolean;
 }
 
+let savedPageFeatures: PageFeature[] = [];
+
+const setPageFeatures = (features: Record<string, PageFeatureResult>): void => {
+  const pageFeatures = Object.entries(features).map(
+    ([name, { version, value }]) => ({
+      name,
+      value,
+      version,
+      error: false,
+    })
+  );
+  savedPageFeatures = savedPageFeatures.concat(pageFeatures);
+};
+
 const run = async (config: Config): Promise<void> => {
   if (!config.omitGdprConsent) {
     const hasConsent = await waitForConsent(config.vendorIds);
@@ -25,7 +41,7 @@ const run = async (config: Config): Promise<void> => {
 
   const { pageFeatureGetters, audienceDefinitions } = config;
   const pageFeatures = await getPageFeatures(pageFeatureGetters);
-  viewStore.insert(pageFeatures);
+  viewStore.insert(savedPageFeatures.concat(pageFeatures));
 
   const matchedAudiences = audienceDefinitions
     .filter((audience) => {
@@ -69,6 +85,7 @@ export const edkt = {
   run,
   getMatchedAudiences,
   getCopyOfPageViews,
+  setPageFeatures,
 };
 
 // This will expose the exported audiences & allow tree shaking
