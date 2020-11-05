@@ -27,6 +27,13 @@ const createCondition = (condition: EngineCondition) => (
             isNumberArray(queryFeatures.value) &&
             filters.vectorDistance(queryFeatures.value, query.value)
           );
+        } else if (query.filterComparisonType === 'cosineSimilarity') {
+          return (
+            !!queryFeatures &&
+            queryFeatures.version === query.version &&
+            isNumberArray(queryFeatures.value) &&
+            filters.cosineSimilarity(queryFeatures.value, query.value)
+          );
         } else {
           return true;
         }

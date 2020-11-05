@@ -1,4 +1,4 @@
-import { dotProduct } from '../utils';
+import { dotProduct, cosineSimilarity as cosSimilarity } from '../utils';
 
 export const arrayIntersects = (
   queryFeatures: string[],
@@ -12,4 +12,12 @@ export const vectorDistance = (
 ): boolean =>
   queryFeatures.length === queryValue.vector.length
     ? dotProduct(queryFeatures, queryValue.vector) > queryValue.threshold
+    : false;
+
+export const cosineSimilarity = (
+  queryFeatures: number[],
+  queryValue: { vector: number[]; threshold: number }
+): boolean =>
+  queryFeatures.length === queryValue.vector.length
+    ? cosSimilarity(queryFeatures, queryValue.vector) > queryValue.threshold
     : false;

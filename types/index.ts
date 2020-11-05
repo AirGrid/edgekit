@@ -82,6 +82,15 @@ export interface AudienceDefinition {
         lookBack: number;
         occurrences: number;
         queryProperty: string;
+        queryValue: VectorQueryValue;
+        queryFilterComparisonType: 'cosineSimilarity';
+      }
+    | {
+        featureVersion: number;
+        ttl: number;
+        lookBack: number;
+        occurrences: number;
+        queryProperty: string;
         queryValue: StringArrayQueryValue;
         queryFilterComparisonType: 'arrayIntersects';
       };
@@ -110,6 +119,12 @@ export type EngineConditionQuery =
       version: number;
       property: string;
       filterComparisonType: 'vectorDistance';
+      value: VectorQueryValue;
+    }
+  | {
+      version: number;
+      property: string;
+      filterComparisonType: 'cosineSimilarity';
       value: VectorQueryValue;
     };
 
