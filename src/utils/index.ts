@@ -36,6 +36,20 @@ export const dotProduct = (vectorA: number[], vectorB: number[]): number => {
   return vectorA.reduce((acc, cur, idx) => acc + cur * vectorB[idx], 0);
 };
 
+export const euclideanLength = (vector: number[]): number => {
+  return Math.sqrt(vector.reduce((acc, cur) => acc + Math.pow(cur, 2), 0));
+};
+
+export const cosineSimilarity = (
+  vectorA: number[],
+  vectorB: number[]
+): number => {
+  return (
+    dotProduct(vectorA, vectorB) /
+    (euclideanLength(vectorA) * euclideanLength(vectorB))
+  );
+};
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export const isStringArray = (value: any): value is string[] =>
   value instanceof Array && value.every((item) => typeof item === 'string');
