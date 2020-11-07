@@ -31,6 +31,18 @@ export const translate = (
                 value: audienceDefinition.definition.queryValue,
               },
             ]
+          : audienceDefinition.definition.queryFilterComparisonType ===
+            'cosineSimilarity' &&
+          isVectorQueryValue(audienceDefinition.definition.queryValue)
+          ? [
+              {
+                version: audienceDefinition.definition.featureVersion,
+                property: audienceDefinition.definition.queryProperty,
+                filterComparisonType:
+                  audienceDefinition.definition.queryFilterComparisonType,
+                value: audienceDefinition.definition.queryValue,
+              },
+            ]
           : [],
     },
     rules: [
