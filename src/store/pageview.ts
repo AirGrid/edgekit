@@ -2,7 +2,6 @@ import { storage, timeStampInSecs } from '../utils';
 import {
   PageView,
   StorageKeys,
-  PageFeature,
   PageFeatureResult,
 } from '../../types';
 
@@ -22,29 +21,14 @@ class ViewStore {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _formatIntoPageView(pageFeatures: PageFeature[]): PageView | undefined {
+  insert(features: Record<string, PageFeatureResult> | undefined, metadata?: Record<string, string | number | boolean>) {
+    if (!features || Object.keys(features).length < 1) return;
     const ts = timeStampInSecs();
-
-    const features = pageFeatures.reduce((acc, item) => {
-      if (!item.error) {
-        const { name, version, value } = item;
-        acc[name] = { version, value };
-        return acc;
-      }
-      return acc;
-    }, {} as Record<string, PageFeatureResult>);
-
-    if (Object.keys(features).length < 1) return undefined;
-
-    return {
+    const pageView = {
       ts,
       features,
-    };
-  }
-
-  insert(pageFeatures: PageFeature[]) {
-    const pageView = this._formatIntoPageView(pageFeatures);
-    if (!pageView) return;
+      ...metadata
+    }
     this.pageViews.push(pageView);
     this._save();
   }

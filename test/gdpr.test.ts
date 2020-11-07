@@ -1,6 +1,6 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData, AudienceDefinition, PageFeatureResult } from '../types';
+import { TCData, AudienceDefinition } from '../types';
 
 const airgridVendorId = 782;
 
@@ -98,13 +98,10 @@ const sportAudience: AudienceDefinition = {
   },
 };
 
-const sportPageFeatureGetter = {
-  name: 'keywords',
-  func: (): Promise<PageFeatureResult> => {
-    return Promise.resolve({
-      version: 1,
-      value: ['sport'],
-    });
+const sportPageFeature = {
+  keywords: {
+    version: 1,
+    value: ['sport'],
   },
 };
 
@@ -158,7 +155,7 @@ describe.only('EdgeKit GDPR tests', () => {
       ] = await Promise.all([
         (async () => {
           await edkt.run({
-            pageFeatureGetters: [sportPageFeatureGetter],
+            pageFeatures: sportPageFeature,
             audienceDefinitions: [sportAudience],
             vendorIds: [airgridVendorId],
           });

@@ -1,37 +1,28 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView, PageFeatureResult } from '../types';
-import { timeStampInSecs } from 'src/utils';
-import { viewStore, matchedAudienceStore } from 'src/store';
+import { AudienceDefinition, PageView } from '../types';
+import { timeStampInSecs } from '../src/utils';
+import { viewStore, matchedAudienceStore } from '../src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';
 
-const sportPageFeatureGetter = {
-  name: 'keywords',
-  func: (): Promise<PageFeatureResult> => {
-    return Promise.resolve({
-      version: 1,
-      value: ['sport'],
-    });
+const sportPageFeature = {
+  keywords: {
+    version: 1,
+    value: ['sport'],
   },
 };
 
-const lookBackPageFeatureGetter = {
-  name: 'keywords',
-  func: (): Promise<PageFeatureResult> => {
-    return Promise.resolve({
-      version: 1,
-      value: [''],
-    });
+const lookBackPageFeature = {
+  keywords: {
+    version: 1,
+    value: [''],
   },
 };
 
-const topicModelPageFeatureGetter = {
-  name: 'topicDist',
-  func: (): Promise<PageFeatureResult> => {
-    return Promise.resolve({
-      version: 1,
-      value: [0.2, 0.5, 0.1],
-    });
-  },
+const topicModelPageFeature = {
+  topicDist: {
+    version: 1,
+    value: [0.2, 0.5, 0.1],
+  }
 };
 
 const TTL = 10;
@@ -136,7 +127,7 @@ describe('Test basic edkt run', () => {
     setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportAudience],
       omitGdprConsent: true,
     });
@@ -160,7 +151,7 @@ describe('Test basic edkt run', () => {
     setUpLocalStorage(TWO_SPORTS_PAGE_VIEW);
 
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportAudience],
       omitGdprConsent: true,
     });
@@ -190,7 +181,7 @@ describe('Test look back edkt run', () => {
     setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
     await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
+      pageFeatures: lookBackPageFeature,
       audienceDefinitions: [lookBackInfinityAudience],
       omitGdprConsent: true,
     });
@@ -204,7 +195,7 @@ describe('Test look back edkt run', () => {
     setUpLocalStorage(LOOK_BACK_PAGE_VIEW);
 
     await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
+      pageFeatures: lookBackPageFeature,
       audienceDefinitions: [lookBackAudience],
       omitGdprConsent: true,
     });
@@ -218,7 +209,7 @@ describe('Test look back edkt run', () => {
     setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
     await edkt.run({
-      pageFeatureGetters: [lookBackPageFeatureGetter],
+      pageFeatures: lookBackPageFeature,
       audienceDefinitions: [lookBackAudience],
       omitGdprConsent: true,
     });
@@ -235,7 +226,7 @@ describe('Topic model run', () => {
 
   it('does not match with one page view', async () => {
     await edkt.run({
-      pageFeatureGetters: [topicModelPageFeatureGetter],
+      pageFeatures: topicModelPageFeature,
       audienceDefinitions: [topicModelAudience],
       omitGdprConsent: true,
     });
@@ -265,7 +256,7 @@ describe('Topic model run', () => {
 
   it('does match with two page views', async () => {
     await edkt.run({
-      pageFeatureGetters: [topicModelPageFeatureGetter],
+      pageFeatures: topicModelPageFeature,
       audienceDefinitions: [topicModelAudience],
       omitGdprConsent: true,
     });
@@ -351,18 +342,13 @@ describe('Topic model run with additional audience', () => {
 
   const run = async () => {
     await edkt.run({
-      pageFeatureGetters: [
-        topicModelPageFeatureGetter,
-        {
-          name: 'keywords',
-          func: (): Promise<PageFeatureResult> => {
-            return Promise.resolve({
-              version: 1,
-              value: ['dummy'],
-            });
-          },
-        },
-      ],
+      pageFeatures: {
+        ...topicModelPageFeature,
+        keywords: {
+          version: 1,
+          value: ['dummy'],
+        }
+      },
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
     });
@@ -465,18 +451,13 @@ describe('Topic model run version mismatch', () => {
 
   const run = async () => {
     await edkt.run({
-      pageFeatureGetters: [
-        topicModelPageFeatureGetter,
-        {
-          name: 'keywords',
-          func: (): Promise<PageFeatureResult> => {
-            return Promise.resolve({
-              version: 1,
-              value: ['dummy'],
-            });
-          },
-        },
-      ],
+      pageFeatures: {
+        ...topicModelPageFeature,
+        keywords: {
+          version: 1,
+          value: ['dummy'],
+        }
+      },
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
     });

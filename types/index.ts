@@ -40,6 +40,8 @@ export type PageFeature =
 
 export interface PageView {
   ts: number;
+  target?: boolean;
+  keyHash?: string;
   features: Record<string, PageFeatureResult>;
 }
 

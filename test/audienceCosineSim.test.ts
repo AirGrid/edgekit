@@ -39,10 +39,8 @@ describe('Test cosine similarity based audiences', () => {
   })
 
   it('First run -> add 1st page view and do not match audience definition', async () => {
-    edkt.setPageFeatures(pageFeatures)
-    
     await edkt.run({
-      pageFeatureGetters: [],
+      pageFeatures,
       audienceDefinitions: [cosineSimAudience],
       omitGdprConsent: true,
     });
@@ -60,10 +58,8 @@ describe('Test cosine similarity based audiences', () => {
   });
   
   it('Second run -> add 2nd page view and match audience definition', async () => {
-    edkt.setPageFeatures(pageFeatures)
-    
     await edkt.run({
-      pageFeatureGetters: [],
+      pageFeatures,
       audienceDefinitions: [cosineSimAudience],
       omitGdprConsent: true,
     });
