@@ -1,18 +1,14 @@
-import { PageFeatureResult } from '../types';
 import {
   sportInterestAudience,
   sportKeywords,
 } from './helpers/audienceDefinitions';
 import { edkt } from '../src';
 
-const sportPageFeatureGetter = {
-  name: 'keywords',
-  func: (): Promise<PageFeatureResult> => {
-    return Promise.resolve({
-      version: 1,
-      value: sportKeywords,
-    });
-  },
+const sportPageFeature = {
+  keywords: {
+    version: 1,
+    value: sportKeywords,
+  }
 };
 
 describe('Test edkt audience matching', () => {
@@ -20,7 +16,7 @@ describe('Test edkt audience matching', () => {
     localStorage.clear();
     // add one initial view
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
     });
@@ -28,7 +24,7 @@ describe('Test edkt audience matching', () => {
 
   it('First run -> add page view but do not match', async () => {
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
     });
@@ -47,7 +43,7 @@ describe('Test edkt audience matching', () => {
 
   it('Second run -> add another page view & match', async () => {
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
     });
@@ -66,7 +62,7 @@ describe('Test edkt audience matching', () => {
 
   it('Third run -> add another page view & match', async () => {
     await edkt.run({
-      pageFeatureGetters: [sportPageFeatureGetter],
+      pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
     });
