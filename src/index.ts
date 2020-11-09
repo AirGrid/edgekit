@@ -1,11 +1,8 @@
 import * as engine from './engine';
-import { getPageFeatures } from './features';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
 import {
-  PageFeature,
-  PageFeatureGetter,
   PageFeatureResult,
   MatchedAudience,
   AudienceDefinition,
@@ -13,35 +10,27 @@ import {
 } from '../types';
 
 interface Config {
-  pageFeatureGetters: PageFeatureGetter[];
   audienceDefinitions: AudienceDefinition[];
+  pageFeatures?: Record<string, PageFeatureResult>;
+  pageMetadata?: Record<string, string | number | boolean>;
   vendorIds?: number[];
   omitGdprConsent?: boolean;
 }
 
-let savedPageFeatures: PageFeature[] = [];
-
-const setPageFeatures = (features: Record<string, PageFeatureResult>): void => {
-  const pageFeatures = Object.entries(features).map(
-    ([name, { version, value }]) => ({
-      name,
-      value,
-      version,
-      error: false,
-    })
-  );
-  savedPageFeatures = savedPageFeatures.concat(pageFeatures);
-};
-
 const run = async (config: Config): Promise<void> => {
-  if (!config.omitGdprConsent) {
-    const hasConsent = await waitForConsent(config.vendorIds);
+  const {
+    vendorIds,
+    pageFeatures,
+    pageMetadata,
+    omitGdprConsent,
+    audienceDefinitions } = config;
+
+  if (!omitGdprConsent) {
+    const hasConsent = await waitForConsent(vendorIds);
     if (!hasConsent) return;
   }
 
-  const { pageFeatureGetters, audienceDefinitions } = config;
-  const pageFeatures = await getPageFeatures(pageFeatureGetters);
-  viewStore.insert(savedPageFeatures.concat(pageFeatures));
+  viewStore.insert(pageFeatures, pageMetadata);
 
   const matchedAudiences = audienceDefinitions
     .filter((audience) => {
@@ -85,10 +74,8 @@ export const edkt = {
   run,
   getMatchedAudiences,
   getCopyOfPageViews,
-  setPageFeatures,
 };
 
-// This will expose the exported audiences & allow tree shaking
 export * from './store';
 export * from './gdpr';
 export * from '../types';
