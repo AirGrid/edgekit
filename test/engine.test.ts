@@ -1,6 +1,6 @@
 import 'jest';
 import { check } from '../src/engine';
-import { EngineCondition } from '../types';
+import { EngineCondition, StringArrayComparasionTypes, VectorQueryComparasionTypes } from '../types';
 
 const sports1xConditionGt: EngineCondition = {
   filter: {
@@ -9,7 +9,7 @@ const sports1xConditionGt: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: 'arrayIntersects',
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
         value: ['sport'],
       },
     ],
@@ -34,7 +34,7 @@ const sports1xConditionLt: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: 'arrayIntersects',
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
         value: ['sport'],
       },
     ],
@@ -59,7 +59,7 @@ const sports1xConditionEq: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: 'arrayIntersects',
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
         value: ['sport'],
       },
     ],
@@ -84,7 +84,7 @@ const sports1xConditionGe: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: 'arrayIntersects',
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
         value: ['sport'],
       },
     ],
@@ -109,7 +109,7 @@ const sports1xConditionLe: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: 'arrayIntersects',
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
         value: ['sport'],
       },
     ],
@@ -134,7 +134,7 @@ const vectorCondition: EngineCondition = {
       {
         version: 1,
         property: 'topicDist',
-        filterComparisonType: 'vectorDistance',
+        filterComparisonType: VectorQueryComparasionTypes.vectorDistance,
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,
@@ -163,7 +163,7 @@ const vectorConditionV2: EngineCondition = {
       {
         version: 2,
         property: 'topicDist',
-        filterComparisonType: 'vectorDistance',
+        filterComparisonType: VectorQueryComparasionTypes.vectorDistance,
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,

@@ -21,7 +21,6 @@ export const vectorDistance = (
   return dotProduct(queryFeatures, queryValue.vector) > queryValue.threshold;
 }
   
-
 export const cosineSimilarity = (
   queryFeatures: number[],
   queryValue: { vector: number[]; threshold: number },

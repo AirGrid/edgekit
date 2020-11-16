@@ -1,4 +1,4 @@
-import { AudienceDefinition } from '../types';
+import { AudienceDefinition, VectorQueryComparasionTypes } from '../types';
 import { edkt } from '../src';
 
 const cosineSimAudience: AudienceDefinition = {
@@ -6,7 +6,7 @@ const cosineSimAudience: AudienceDefinition = {
     featureVersion: 1,
     lookBack: 2592000,
     occurrences: 1,
-    queryFilterComparisonType: 'cosineSimilarity',
+    queryFilterComparisonType: VectorQueryComparasionTypes.cosineSimilarity,
     queryProperty: 'dv',
     queryValue: {
       threshold: 0.8,
