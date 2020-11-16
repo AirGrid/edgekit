@@ -1,45 +1,28 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
-import * as filters from './filters';
-import { PageView, EngineCondition } from '../../types';
+import filters from './filters';
+import {PageView, EngineCondition, QueryFilterComparison} from '../../types';
 import { isNumberArray, isStringArray } from '../utils';
 
 const createCondition = (condition: EngineCondition) => (
-  pageViews: PageView[]
+    pageViews: PageView[]
 ): boolean => {
   const { filter, rules } = condition;
   const filteredPageViews = filter.queries
-    .map((query) => {
-      return pageViews.filter((pageView) => {
-        const queryFeatures = pageView.features[query.property];
-
-        if (query.filterComparisonType === 'arrayIntersects') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isStringArray(queryFeatures.value) &&
-            filters.arrayIntersects(queryFeatures.value, query.value)
-          );
-        } else if (query.filterComparisonType === 'vectorDistance') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isNumberArray(queryFeatures.value) &&
-            filters.vectorDistance(queryFeatures.value, query.value)
-          );
-        } else if (query.filterComparisonType === 'cosineSimilarity') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isNumberArray(queryFeatures.value) &&
-            filters.cosineSimilarity(queryFeatures.value, query.value)
-          );
-        } else {
-          return true;
-        }
-      });
-    })
-    .flat();
+      .map((query) => {
+        return pageViews.filter((pageView) => {
+          const queryFeatures = pageView.features[query.property];
+          if (QueryFilterComparison[query.filterComparisonType]) {
+            return !!queryFeatures &&
+                queryFeatures.version === query.version &&
+                (isStringArray(queryFeatures.value) && filters[query.filterComparisonType]<string>(queryFeatures.value, query.value as string[]) ||
+                    isNumberArray(queryFeatures.value) && filters[query.filterComparisonType]<number>(queryFeatures.value, query.value));
+          } else {
+            return true;
+          }
+        });
+      })
+      .flat();
 
   const ruleResults = rules.map((rule) => {
     // TODO: allow other reducers...

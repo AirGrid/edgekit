@@ -62,6 +62,14 @@ export type VectorQueryValue = {
 
 export type AudienceState = 'live' | 'paused' | 'deleted';
 
+export enum QueryFilterComparison {
+  vectorDistance = 'vectorDistance',
+  cosineSimilarity = 'cosineSimilarity',
+  arrayIntersects = 'arrayIntersects'
+};
+
+export type QueryFilterComparisonType = keyof QueryFilterComparison;
+
 export interface AudienceDefinition {
   accountId?: Record<string, AudienceState>;
   id: string;
@@ -76,7 +84,7 @@ export interface AudienceDefinition {
         occurrences: number;
         queryProperty: string;
         queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'vectorDistance';
+        queryFilterComparisonType: QueryFilterComparisonType;
       }
     | {
         featureVersion: number;
@@ -85,7 +93,7 @@ export interface AudienceDefinition {
         occurrences: number;
         queryProperty: string;
         queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'cosineSimilarity';
+        queryFilterComparisonType: QueryFilterComparisonType;
       }
     | {
         featureVersion: number;
@@ -94,7 +102,7 @@ export interface AudienceDefinition {
         occurrences: number;
         queryProperty: string;
         queryValue: StringArrayQueryValue;
-        queryFilterComparisonType: 'arrayIntersects';
+        queryFilterComparisonType: QueryFilterComparisonType;
       };
 }
 
@@ -114,19 +122,19 @@ export type EngineConditionQuery =
   | {
       version: number;
       property: string;
-      filterComparisonType: 'arrayIntersects';
+      filterComparisonType: QueryFilterComparisonType;
       value: StringArrayQueryValue;
     }
   | {
       version: number;
       property: string;
-      filterComparisonType: 'vectorDistance';
+      filterComparisonType: QueryFilterComparisonType;
       value: VectorQueryValue;
     }
   | {
       version: number;
       property: string;
-      filterComparisonType: 'cosineSimilarity';
+      filterComparisonType: QueryFilterComparisonType;
       value: VectorQueryValue;
     };
 

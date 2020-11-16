@@ -1,49 +1,32 @@
-import { AudienceDefinition, EngineCondition } from '../../types';
+import {
+  AudienceDefinition,
+  EngineCondition,
+  EngineConditionQuery,
+  QueryFilterComparison, QueryFilterComparisonType,
+} from '../../types';
 import { isStringArray, isVectorQueryValue } from '../utils';
 
 export const translate = (
-  audienceDefinition: AudienceDefinition
+    audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
+  const createEngineConditions = (): EngineConditionQuery[] => ([
+    {
+      version: audienceDefinition.definition.featureVersion,
+      property: audienceDefinition.definition.queryProperty,
+      filterComparisonType: audienceDefinition.definition.queryFilterComparisonType as QueryFilterComparisonType,
+      // TODO: change any to generic
+      value: audienceDefinition.definition.queryValue as any,
+    }
+  ]);
+
+  const createEngineConditionQueries = () => (QueryFilterComparison[audienceDefinition.definition.queryFilterComparisonType] &&
+  (isStringArray(audienceDefinition.definition.queryValue) || isVectorQueryValue(audienceDefinition.definition.queryValue))
+      ? createEngineConditions()
+      : []);
+
   const condition: EngineCondition = {
     filter: {
-      queries:
-        audienceDefinition.definition.queryFilterComparisonType ===
-          'arrayIntersects' &&
-        isStringArray(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-              'vectorDistance' &&
-            isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-            'cosineSimilarity' &&
-          isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : [],
+      queries: createEngineConditionQueries()
     },
     rules: [
       {
