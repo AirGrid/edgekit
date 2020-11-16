@@ -62,41 +62,52 @@ export type VectorQueryValue = {
 
 export type AudienceState = 'live' | 'paused' | 'deleted';
 
+// ------------ Romaniuc Dragos ----------- //
 export interface AudienceDefinition {
   accountId?: Record<string, AudienceState>;
   id: string;
   version: number;
   name: string;
   cacheFor?: number;
-  definition:
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'vectorDistance';
-      }
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'cosineSimilarity';
-      }
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: StringArrayQueryValue;
-        queryFilterComparisonType: 'arrayIntersects';
-      };
+  definition: TDefinition
 }
+
+export type TDefinition =  IDefinitionGen<VectorQueryValue> | IDefinitionGen<StringArrayQueryValue>
+export type TQueryValue = VectorQueryValue | StringArrayQueryValue;
+
+export interface IVectorComparasionTypes extends VectorQueryValue  {
+  cosineSimilarity: string
+  vectorDistance: string
+}
+
+export interface IStringArrayComparasionTypes extends StringArrayQueryValue {
+  arrayIntersects: string
+}
+
+export enum VectorQueryComparasionTypes {
+  cosineSimilarity = 'cosineSimilarity',
+  vectorDistance = 'vectorDistance'
+};
+
+export enum StringArrayComparasionTypes {
+  arrayIntersects = 'arrayIntersects'
+}
+
+export interface IDefinitionGen<T> {
+  featureVersion: number;
+  ttl: number;
+  lookBack: number;
+  occurrences: number;
+  queryProperty: string;
+  queryValue: T;
+  queryFilterComparisonType: ParameterMap<T>
+}
+
+type ParameterMap<T> = 
+  IVectorComparasionTypes extends T ?  VectorQueryComparasionTypes :
+  StringArrayComparasionTypes;
+
+// -------- END DRAGOS ------------ //
 
 export interface CachedAudienceMetaData {
   cachedAt: number;
@@ -110,25 +121,14 @@ export interface AudienceMetaData {
 
 // Engine
 
-export type EngineConditionQuery =
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'arrayIntersects';
-      value: StringArrayQueryValue;
-    }
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'vectorDistance';
-      value: VectorQueryValue;
-    }
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'cosineSimilarity';
-      value: VectorQueryValue;
-    };
+export type EngineConditionQuery = TEngineConditionQuery<VectorQueryValue> | TEngineConditionQuery<StringArrayQueryValue>;
+
+export interface TEngineConditionQuery<T> {
+  version: number
+  property: string;
+  value: TQueryValue;
+  filterComparisonType: ParameterMap<T>
+}
 
 export interface EngineConditionRule {
   reducer: {

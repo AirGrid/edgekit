@@ -1,49 +1,17 @@
 import { AudienceDefinition, EngineCondition } from '../../types';
-import { isStringArray, isVectorQueryValue } from '../utils';
+import createEngineConditionQueries from '../domain/createEngineConditionQuery'
 
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition[] => {
+  const { definition } = audienceDefinition;
+
+  const query = 
+    createEngineConditionQueries(definition)
+
   const condition: EngineCondition = {
     filter: {
-      queries:
-        audienceDefinition.definition.queryFilterComparisonType ===
-          'arrayIntersects' &&
-        isStringArray(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-              'vectorDistance' &&
-            isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-            'cosineSimilarity' &&
-          isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : [],
+      queries: query.data
     },
     rules: [
       {
@@ -52,7 +20,7 @@ export const translate = (
         },
         matcher: {
           name: 'gt',
-          args: audienceDefinition.definition.occurrences,
+          args: definition.occurrences,
         },
       },
     ],
