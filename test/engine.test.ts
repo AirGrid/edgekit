@@ -134,7 +134,7 @@ const vectorCondition: EngineCondition = {
       {
         version: 1,
         property: 'topicDist',
-        filterComparisonType: VectorQueryComparasionTypes.vectorDistance,
+        filterComparisonType: VectorQueryComparasionTypes.vectorDistance as VectorQueryComparasionTypes,
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,
@@ -163,7 +163,7 @@ const vectorConditionV2: EngineCondition = {
       {
         version: 2,
         property: 'topicDist',
-        filterComparisonType: VectorQueryComparasionTypes.vectorDistance,
+        filterComparisonType: VectorQueryComparasionTypes.vectorDistance as VectorQueryComparasionTypes,
         value: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,

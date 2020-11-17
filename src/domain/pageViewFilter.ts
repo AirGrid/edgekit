@@ -26,7 +26,7 @@ export const pageViewFilter = (
     ...Object.values(StringArrayComparasionTypes)
   ];
 
-  if (!availableComparisonTypes.includes(functionToCall)) {
+  if (availableComparisonTypes.includes(functionToCall)) {
     return (filters as Record<string, any>)[query.filterComparisonType](queryFeatures.value as any, query.value as any, true)
   };
 

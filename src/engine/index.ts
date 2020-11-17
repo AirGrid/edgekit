@@ -11,6 +11,9 @@ const check = (
     return createCondition(condition)(pageViews);
   });
 
+  console.log('------_CHECKED CONDITIONS----------', checkedConditions);
+
+
   return any
     ? checkedConditions.includes(true)
     : !checkedConditions.includes(false);

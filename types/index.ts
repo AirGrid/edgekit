@@ -85,12 +85,12 @@ export interface IStringArrayComparasionTypes extends StringArrayQueryValue {
 }
 
 export enum VectorQueryComparasionTypes {
-  cosineSimilarity,
-  vectorDistance
+  cosineSimilarity = 'cosineSimilarity',
+  vectorDistance = 'vectorDistance'
 };
 
 export enum StringArrayComparasionTypes {
-  arrayIntersects
+  arrayIntersects = 'arrayIntersects'
 }
 
 export interface IDefinitionGen<T> {
