@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView } from '../types';
+import { AudienceDefinition, PageView, StringArrayComparasionTypes, VectorQueryComparasionTypes } from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
 import { pageViewCreator } from './helpers/localStorageSetup';
@@ -37,7 +37,7 @@ const sportAudience: AudienceDefinition = {
     lookBack: 10,
     occurrences: 2,
     queryProperty: 'keywords',
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
     queryValue: ['sport'],
   },
 };
@@ -52,7 +52,7 @@ const lookBackInfinityAudience: AudienceDefinition = {
     lookBack: 0,
     occurrences: 2,
     queryProperty: 'keywords',
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
     queryValue: [''],
   },
 };
@@ -67,7 +67,7 @@ const lookBackAudience: AudienceDefinition = {
     lookBack: 2,
     occurrences: 2,
     queryProperty: 'keywords',
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
     queryValue: [''],
   },
 };
@@ -82,7 +82,7 @@ const topicModelAudience: AudienceDefinition = {
     lookBack: 2,
     occurrences: 1,
     queryProperty: 'topicDist',
-    queryFilterComparisonType: 'vectorDistance',
+    queryFilterComparisonType: VectorQueryComparasionTypes.vectorDistance as VectorQueryComparasionTypes,
     queryValue: {
       vector: [0.4, 0.8, 0.3],
       threshold: 0.5,
@@ -317,7 +317,7 @@ describe('Topic model run with additional audience', () => {
       ttl: 1000,
       lookBack: 1000,
       queryProperty: 'topicDist',
-      queryFilterComparisonType: 'vectorDistance',
+      queryFilterComparisonType: VectorQueryComparasionTypes.vectorDistance as VectorQueryComparasionTypes,
       queryValue: {
         threshold: 0.5,
         vector: [0.4, 0.8, 0.3],
@@ -335,7 +335,7 @@ describe('Topic model run with additional audience', () => {
       ttl: 1000,
       lookBack: 1000,
       queryProperty: 'keywords',
-      queryFilterComparisonType: 'arrayIntersects',
+      queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
       queryValue: ['sport', 'Leeds United A.F.C.'],
     },
   };
@@ -426,7 +426,7 @@ describe('Topic model run version mismatch', () => {
       ttl: 1000,
       lookBack: 1000,
       queryProperty: 'topicDist',
-      queryFilterComparisonType: 'vectorDistance',
+      queryFilterComparisonType: VectorQueryComparasionTypes.vectorDistance as VectorQueryComparasionTypes,
       queryValue: {
         threshold: 0.5,
         vector: [0.4, 0.8, 0.3],
@@ -444,7 +444,7 @@ describe('Topic model run version mismatch', () => {
       ttl: 1000,
       lookBack: 1000,
       queryProperty: 'keywords',
-      queryFilterComparisonType: 'arrayIntersects',
+      queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
       queryValue: ['sport', 'Leeds United A.F.C.'],
     },
   };

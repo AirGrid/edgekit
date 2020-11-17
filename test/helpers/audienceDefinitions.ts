@@ -1,4 +1,4 @@
-import { AudienceDefinition } from '../../types';
+import { AudienceDefinition, StringArrayComparasionTypes } from '../../types';
 
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
@@ -42,7 +42,7 @@ export const sportInterestAudience: AudienceDefinition = {
     occurrences: OCCURRENCES,
     queryProperty: 'keywords',
     queryValue: sportKeywords,
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
   },
 };
 
@@ -57,7 +57,7 @@ export const travelInterestAudience: AudienceDefinition = {
     occurrences: OCCURRENCES,
     queryProperty: 'keywords',
     queryValue: travelKeywords,
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
   },
 };
 
@@ -72,7 +72,7 @@ export const automotiveInterestAudience: AudienceDefinition = {
     occurrences: OCCURRENCES,
     queryProperty: 'keywords',
     queryValue: automotiveKeywords,
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
   },
 };
 

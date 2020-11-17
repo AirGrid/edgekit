@@ -17,6 +17,7 @@ export const pageViewFilter = (
 ) => {
   const queryFeatures = pageView.features[query.property];
   const matchesVersion = queryFeatures.version === query.version;
+  const functionToCall = query.filterComparisonType;
 
   if (!queryFeatures || !matchesVersion) return false;
 
@@ -25,7 +26,9 @@ export const pageViewFilter = (
     ...Object.values(StringArrayComparasionTypes)
   ];
 
-  if (!availableComparisonTypes.includes(query.filterComparisonType)) return true;
+  if (!availableComparisonTypes.includes(functionToCall)) {
+    return (filters as Record<string, any>)[query.filterComparisonType](queryFeatures.value as any, query.value as any, true)
+  };
 
-  return (<any>filters[query.filterComparisonType])(queryFeatures.value, query.value, true)
+  return true
 }

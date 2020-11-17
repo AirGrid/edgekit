@@ -93,7 +93,7 @@ const sportAudience: AudienceDefinition = {
     lookBack: 10,
     occurrences: 0,
     queryProperty: 'keywords',
-    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+    queryFilterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
     queryValue: ['sport'],
   },
 };

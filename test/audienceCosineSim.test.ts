@@ -6,7 +6,7 @@ const cosineSimAudience: AudienceDefinition = {
     featureVersion: 1,
     lookBack: 2592000,
     occurrences: 1,
-    queryFilterComparisonType: VectorQueryComparasionTypes.cosineSimilarity,
+    queryFilterComparisonType: VectorQueryComparasionTypes.cosineSimilarity as VectorQueryComparasionTypes.cosineSimilarity,
     queryProperty: 'dv',
     queryValue: {
       threshold: 0.8,

@@ -9,7 +9,7 @@ const sports1xConditionGt: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
         value: ['sport'],
       },
     ],
@@ -34,7 +34,7 @@ const sports1xConditionLt: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
         value: ['sport'],
       },
     ],
@@ -59,7 +59,7 @@ const sports1xConditionEq: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
         value: ['sport'],
       },
     ],
@@ -84,7 +84,7 @@ const sports1xConditionGe: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
         value: ['sport'],
       },
     ],
@@ -109,7 +109,7 @@ const sports1xConditionLe: EngineCondition = {
       {
         version: 1,
         property: 'keywords',
-        filterComparisonType: StringArrayComparasionTypes.arrayIntersects,
+        filterComparisonType: StringArrayComparasionTypes.arrayIntersects as StringArrayComparasionTypes,
         value: ['sport'],
       },
     ],
