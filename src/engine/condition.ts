@@ -1,45 +1,51 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 import * as filters from './filters';
-import { PageView, EngineCondition } from '../../types';
-import { isNumberArray, isStringArray } from '../utils';
+import {
+  PageView,
+  PageFeatureResult,
+  EngineCondition,
+  EngineConditionQuery,
+  ArrayIntersectsFilter,
+  VectorDistanceFilter,
+  CosineSimilarityFilter,
+  AudienceDefinitionFilter,
+  VectorQueryValue,
+} from '../../types';
+import {
+  isNumberArray,
+  isStringArray,
+  isArrayIntersectsFilter,
+  isVectorDistanceFilter,
+  isCosineSimilarityFilter,
+} from '../utils';
 
-const createCondition = (condition: EngineCondition) => (
-  pageViews: PageView[]
-): boolean => {
+const createCondition = (condition: EngineCondition<AudienceDefinitionFilter>) =>
+  (pageViews: PageView[]): boolean => {
   const { filter, rules } = condition;
   const filteredPageViews = filter.queries
-    .map((query) => {
-      return pageViews.filter((pageView) => {
-        const queryFeatures = pageView.features[query.property];
-
-        if (query.filterComparisonType === 'arrayIntersects') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isStringArray(queryFeatures.value) &&
-            filters.arrayIntersects(queryFeatures.value, query.value)
-          );
-        } else if (query.filterComparisonType === 'vectorDistance') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isNumberArray(queryFeatures.value) &&
-            filters.vectorDistance(queryFeatures.value, query.value)
-          );
-        } else if (query.filterComparisonType === 'cosineSimilarity') {
-          return (
-            !!queryFeatures &&
-            queryFeatures.version === query.version &&
-            isNumberArray(queryFeatures.value) &&
-            filters.cosineSimilarity(queryFeatures.value, query.value)
-          );
-        } else {
-          return true;
-        }
-      });
-    })
-    .flat();
+  .map((query) => {
+    return pageViews.filter((pageView) => {
+      const queryFeatures: PageFeatureResult = pageView.features[query.queryProperty];
+      return isArrayIntersectsFilter(query)
+        ? isArrayIntersects(queryFeatures, query)
+        : isVectorDistanceFilter(query)
+        ? isVectorDistanceLesserThanThreshold(queryFeatures, query)
+        : isCosineSimilarityFilter(query)
+        ? isCosineSimilarityLesserThanThreshold(queryFeatures, query)
+        : true;  /* TODO is this right?
+                  * Values should only be comparable if
+                  * they share the same type, so I would
+                  * use a type guard besides the filter guards
+                  * to check if value types matches.
+                  * However, if they don't, we end up here,
+                  * where we return true as in a matching
+                  * situation.
+                  * Not what I would naively expect.
+                  */
+    });
+  })
+  .flat();
 
   const ruleResults = rules.map((rule) => {
     // TODO: allow other reducers...
@@ -56,3 +62,63 @@ const createCondition = (condition: EngineCondition) => (
 };
 
 export default createCondition;
+
+/* Matching conditions pieces */
+
+const isArrayIntersects =
+  (features: PageFeatureResult, query: EngineConditionQuery<ArrayIntersectsFilter>): boolean =>
+  !!features &&
+  versionMatches(features, query) &&
+  stringArrayFilterMatches(filters.arrayIntersects, features, query);
+
+const isVectorDistanceLesserThanThreshold =
+  (features: PageFeatureResult, query: EngineConditionQuery<VectorDistanceFilter>): boolean =>
+  !!features &&
+  versionMatches(features, query) &&
+  numberVectorArrayFilterMatches(filters.vectorDistance, features, query);
+
+const isCosineSimilarityLesserThanThreshold =
+  (features: PageFeatureResult, query: EngineConditionQuery<CosineSimilarityFilter>): boolean =>
+  !!features &&
+  versionMatches(features, query) &&
+  numberVectorArrayFilterMatches(filters.cosineSimilarity, features, query);
+
+/* Matching conditions pieces */
+
+const versionMatches = (
+  features: PageFeatureResult,
+  query: EngineConditionQuery<AudienceDefinitionFilter>
+): boolean => features.version === query.featureVersion
+
+/* In the current implementation
+ * this should actually take a filter of type
+ * (arg0: PageFeatureValue, arg1: string[]) => boolean
+ * so to match the possibility of features
+ * of a mismatching type returning a truthy
+ * value.
+ * Relates to the above comment on createCondition.
+ * */
+const stringArrayFilterMatches = (
+  filter: (arg0: string[], arg1: string[]) => boolean,
+  features: PageFeatureResult,
+  query: EngineConditionQuery<ArrayIntersectsFilter>
+): boolean =>
+  isStringArray(features.value) &&
+  filter(features.value, query.queryValue);
+
+/* In the current implementation
+ * this should actually take a filter of type
+ * (arg0: PageFeatureValue, arg1: VectorQueryValue) => boolean
+ * so to match the possibility of features
+ * of a mismatching type returning a truthy
+ * value.
+ * Relates to the above comment on createCondition.
+ * */
+const numberVectorArrayFilterMatches = (
+  filter: (arg0: number[], arg1: VectorQueryValue) => boolean,
+  features: PageFeatureResult,
+  query: EngineConditionQuery<VectorDistanceFilter | CosineSimilarityFilter>
+): boolean =>
+  query.queryValue.some(value =>
+                   isNumberArray(features.value) &&
+                   filter(features.value, value));

@@ -1,9 +1,9 @@
 import createCondition from './condition';
 import { translate } from './translate';
-import { PageView, EngineCondition } from '../../types';
+import { PageView, EngineCondition, AudienceDefinitionFilter } from '../../types';
 
 const check = (
-  conditions: EngineCondition[],
+  conditions: EngineCondition<AudienceDefinitionFilter>[],
   pageViews: PageView[],
   any = false
 ): boolean => {

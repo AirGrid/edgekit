@@ -54,49 +54,7 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-export type StringArrayQueryValue = string[];
-export type VectorQueryValue = {
-  vector: number[];
-  threshold: number;
-};
-
 export type AudienceState = 'live' | 'paused' | 'deleted';
-
-export interface AudienceDefinition {
-  accountId?: Record<string, AudienceState>;
-  id: string;
-  version: number;
-  name: string;
-  cacheFor?: number;
-  definition:
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'vectorDistance';
-      }
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: VectorQueryValue;
-        queryFilterComparisonType: 'cosineSimilarity';
-      }
-    | {
-        featureVersion: number;
-        ttl: number;
-        lookBack: number;
-        occurrences: number;
-        queryProperty: string;
-        queryValue: StringArrayQueryValue;
-        queryFilterComparisonType: 'arrayIntersects';
-      };
-}
 
 export interface CachedAudienceMetaData {
   cachedAt: number;
@@ -108,27 +66,58 @@ export interface AudienceMetaData {
   version: number;
 }
 
-// Engine
+export type StringArrayQueryValue = string[];
 
-export type EngineConditionQuery =
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'arrayIntersects';
-      value: StringArrayQueryValue;
-    }
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'vectorDistance';
-      value: VectorQueryValue;
-    }
-  | {
-      version: number;
-      property: string;
-      filterComparisonType: 'cosineSimilarity';
-      value: VectorQueryValue;
-    };
+export type VectorQueryValue = {
+  vector: number[];
+  threshold: number;
+};
+
+export enum QueryFilterComparisonType {
+  VECTOR_DISTANCE = 'vectorDistance',
+  COSINE_SIMILARITY = 'cosineSimilarity',
+  ARRAY_INTERSECTS = 'arrayIntersects',
+}
+
+export interface ArrayIntersectsFilter {
+  queryValue: StringArrayQueryValue;
+  queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS;
+}
+
+export interface VectorDistanceFilter {
+  queryValue: VectorQueryValue[];
+  queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
+}
+
+export interface CosineSimilarityFilter {
+  queryValue: VectorQueryValue[];
+  queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
+}
+
+export type AudienceDefinitionFilter =
+  | VectorDistanceFilter
+  | CosineSimilarityFilter
+  | ArrayIntersectsFilter
+
+// Not a good name...
+export type AudienceDefinitionDefinition = {
+  featureVersion: number;
+  ttl: number;
+  lookBack: number;
+  occurrences: number;
+  queryProperty: string;
+} & AudienceDefinitionFilter;
+
+export interface AudienceDefinition {
+  accountId?: Record<string, AudienceState>;
+  id: string;
+  version: number;
+  name: string;
+  cacheFor?: number;
+  definition: AudienceDefinitionDefinition
+}
+
+// Engine
 
 export interface EngineConditionRule {
   reducer: {
@@ -140,10 +129,13 @@ export interface EngineConditionRule {
   };
 }
 
-export interface EngineCondition {
+export type EngineConditionQuery<T extends AudienceDefinitionFilter> =
+  Pick<AudienceDefinitionDefinition, "featureVersion" | "queryProperty"> & T
+
+export interface EngineCondition<T extends AudienceDefinitionFilter> {
   filter: {
     any?: boolean;
-    queries: EngineConditionQuery[];
+    queries: EngineConditionQuery<T>[];
   };
   rules: EngineConditionRule[];
 }

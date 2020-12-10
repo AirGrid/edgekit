@@ -1,6 +1,6 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData, AudienceDefinition } from '../types';
+import { TCData, AudienceDefinition, QueryFilterComparisonType } from '../types';
 
 const airgridVendorId = 782;
 
@@ -93,7 +93,7 @@ const sportAudience: AudienceDefinition = {
     lookBack: 10,
     occurrences: 0,
     queryProperty: 'keywords',
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     queryValue: ['sport'],
   },
 };

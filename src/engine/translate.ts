@@ -1,49 +1,37 @@
-import { AudienceDefinition, EngineCondition } from '../../types';
-import { isStringArray, isVectorQueryValue } from '../utils';
+import {
+  AudienceDefinition,
+  EngineCondition,
+  EngineConditionQuery,
+  AudienceDefinitionFilter,
+} from '../../types';
 
+/*
+ * I'm maintaining the union over the translation layer
+ * so the compiler can discriminate it further bellow in the computation
+ * TODO Better audienceDefinition validation
+ */
 export const translate = (
-  audienceDefinition: AudienceDefinition
-): EngineCondition[] => {
-  const condition: EngineCondition = {
+  audienceDefinition: Readonly<Pick<AudienceDefinition, "definition">>
+): EngineCondition<AudienceDefinitionFilter>[] => {
+
+  const {
+    featureVersion,
+    queryProperty,
+    queryFilterComparisonType,
+    queryValue,
+    occurrences,
+  } = audienceDefinition.definition;
+
+  return [{
     filter: {
-      queries:
-        audienceDefinition.definition.queryFilterComparisonType ===
-          'arrayIntersects' &&
-        isStringArray(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-              'vectorDistance' &&
-            isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-            'cosineSimilarity' &&
-          isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : [],
+      queries: [
+        {
+          featureVersion,
+          queryProperty,
+          queryFilterComparisonType,
+          queryValue,
+        } as EngineConditionQuery<AudienceDefinitionFilter>,
+      ]
     },
     rules: [
       {
@@ -52,11 +40,9 @@ export const translate = (
         },
         matcher: {
           name: 'gt',
-          args: audienceDefinition.definition.occurrences,
+          args: occurrences,
         },
       },
     ],
-  };
-
-  return [condition];
+  }];
 };
