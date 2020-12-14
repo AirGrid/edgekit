@@ -42,6 +42,24 @@ const sportAudience: Audience = {
   },
 };
 
+const misconfiguredSportAudience: Audience = {
+  id: 'sport_id',
+  name: 'Sport Audience',
+  version: 1,
+  definition: {
+    featureVersion: 1,
+    ttl: TTL,
+    lookBack: 10,
+    occurrences: 2,
+    queryProperty: 'keywords',
+    queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+    queryValue: [{
+      threshold: 0.8,
+      vector: [1,1,1],
+    }]
+  },
+};
+
 const lookBackInfinityAudience: Audience = {
   id: 'look_back_infinity_id',
   name: 'Look Back Audience',
@@ -173,6 +191,34 @@ describe('Test basic edkt run', () => {
       edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
     expect(edktMatchedAudiences.length).toEqual(1);
+  });
+
+
+  it('does not match with mismatched audience filter / page feature', async () => {
+    setUpLocalStorage(TWO_SPORTS_PAGE_VIEW);
+
+    await edkt.run({
+      pageFeatures: sportPageFeature,
+      audienceDefinitions: [misconfiguredSportAudience],
+      omitGdprConsent: true,
+    });
+
+    const edktPageViews = JSON.parse(
+      localStorage.getItem('edkt_page_views') || '[]'
+    );
+
+    const edktMatchedAudiences = JSON.parse(
+      localStorage.getItem('edkt_matched_audiences') || '[]'
+    );
+
+    expect(edktPageViews.length).toEqual(TWO_SPORTS_PAGE_VIEW.length + 1);
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
+    expect(latestKeywords).toEqual({
+      version: 1,
+      value: ['sport']
+    });
+    expect(edktMatchedAudiences.length).toEqual(0);
   });
 });
 
