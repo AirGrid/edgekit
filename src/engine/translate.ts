@@ -6,9 +6,11 @@ import {
 } from '../../types';
 
 /*
- * I'm maintaining the union over the translation layer
- * so the compiler can discriminate it further bellow in the computation
- * TODO Better audienceDefinition validation
+ * Audience to Engine adapter
+ *
+ * Maintais the union over the translation layer
+ * so the type can discriminated further bellow
+ * the computation
  */
 export const translate = (
   audienceDefinition: Readonly<Pick<AudienceDefinition, "definition">>
