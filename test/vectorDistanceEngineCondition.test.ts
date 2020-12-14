@@ -68,7 +68,7 @@ const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
 
 describe('VectorDistance condition test', () => {
   describe('Vector condition', () => {
-    it('matches the page view if similar enough', async () => {
+    it('matches the page view if vector similarity is above threshold', async () => {
       const conditions = [vectorCondition];
 
       const pageViews: PageView[] = [
@@ -88,7 +88,7 @@ describe('VectorDistance condition test', () => {
       expect(result).toEqual(true);
     });
 
-    it('does not match the page view if not similar enough', async () => {
+    it('does not match the page view if similarity is not above threshold', async () => {
       const conditions = [vectorCondition];
 
       const pageViews: PageView[] = [
@@ -119,7 +119,7 @@ describe('VectorDistance condition test', () => {
   });
 
   describe('Vector condition with a bumped featureVersion', () => {
-    it('matches the page view if similar enough and has the same featureVersion', async () => {
+    it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
       const conditions = [vectorConditionV2];
 
       const pageViews: PageView[] = [
