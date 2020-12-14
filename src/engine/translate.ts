@@ -1,5 +1,5 @@
 import {
-  AudienceDefinition,
+  Audience,
   EngineCondition,
   EngineConditionQuery,
   AudienceDefinitionFilter,
@@ -13,7 +13,7 @@ import {
  * the computation
  */
 export const translate = (
-  audienceDefinition: Readonly<Pick<AudienceDefinition, "definition">>
+  audienceDefinition: Readonly<Pick<Audience, "definition">>
 ): EngineCondition<AudienceDefinitionFilter>[] => {
 
   const {

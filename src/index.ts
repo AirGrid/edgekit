@@ -5,12 +5,12 @@ import { waitForConsent } from './gdpr';
 import {
   PageFeatureResult,
   MatchedAudience,
-  AudienceDefinition,
+  Audience,
   PageView,
 } from '../types';
 
 interface Config {
-  audienceDefinitions: AudienceDefinition[];
+  audienceDefinitions: Audience[];
   pageFeatures?: Record<string, PageFeatureResult>;
   pageMetadata?: Record<string, string | number | boolean>;
   vendorIds?: number[];

@@ -1,10 +1,10 @@
-import { AudienceDefinition, QueryFilterComparisonType } from '../types';
+import { Audience, QueryFilterComparisonType } from '../types';
 import { edkt } from '../src';
 
 /* TODO Mock localStorage and merge single and
  * multiple vectors AudienceDefiniciton tests
  */
-const cosineSimAudience: AudienceDefinition = {
+const cosineSimAudience: Audience = {
   definition: {
     featureVersion: 1,
     lookBack: 2592000,

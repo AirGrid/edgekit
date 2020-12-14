@@ -1,12 +1,12 @@
 import {
   StorageKeys,
-  AudienceDefinition,
+  Audience,
   CachedAudienceMetaData,
 } from '../../types';
 import { storage, timeStampInSecs } from '../utils';
 
 class CachedAudienceStore {
-  cachedAudiences: AudienceDefinition[];
+  cachedAudiences: Audience[];
   cachedAudiencesMetaData: CachedAudienceMetaData;
 
   constructor() {
@@ -19,7 +19,7 @@ class CachedAudienceStore {
   }
 
   _load() {
-    const audiences: AudienceDefinition[] =
+    const audiences: Audience[] =
       storage.get(StorageKeys.CACHED_AUDIENCES) || [];
     const audiencesMetaData: CachedAudienceMetaData = storage.get(
       StorageKeys.CACHED_AUDIENCE_META_DATA
@@ -53,7 +53,7 @@ class CachedAudienceStore {
     this._save();
   }
 
-  updateAudienceCache(audiencesToCache: AudienceDefinition[]) {
+  updateAudienceCache(audiencesToCache: Audience[]) {
     audiencesToCache.forEach((audience) => {
       const foundAudienceIndex = this.cachedAudiences.findIndex(
         (cachedAudience) => cachedAudience.id === audience.id
