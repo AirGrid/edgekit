@@ -24,21 +24,21 @@ export const isVectorQueryValue = (
 ): value is VectorQueryValue =>
   isNumberArray(value.vector) && typeof value.threshold === 'number';
 
-export const matchArrayIntersectsFilterType = (
+export const isArrayIntersectsFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<ArrayIntersectsFilter> => {
   return query.queryFilterComparisonType === QueryFilterComparisonType.ARRAY_INTERSECTS
   && isStringArray(query.queryValue)
 };
 
-export const matchVectorDistanceFilterType = (
+export const isVectorDistanceFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<VectorDistanceFilter> => {
   return query.queryFilterComparisonType === QueryFilterComparisonType.VECTOR_DISTANCE
   && query.queryValue.every(queryValue => isVectorQueryValue(queryValue))
 };
 
-export const matchCosineSimilarityFilterType = (
+export const isCosineSimilarityFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<CosineSimilarityFilter> => {
   return query.queryFilterComparisonType === QueryFilterComparisonType.COSINE_SIMILARITY

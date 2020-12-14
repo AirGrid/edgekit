@@ -5,9 +5,9 @@ import {
 import {
   isStringArray,
   isNumberArray,
-  matchArrayIntersectsFilterType,
-  matchVectorDistanceFilterType,
-  matchCosineSimilarityFilterType,
+  isArrayIntersectsFilterType,
+  isVectorDistanceFilterType,
+  isCosineSimilarityFilterType,
 } from './guards';
 import {
   AudienceDefinitionFilter,
@@ -28,7 +28,7 @@ export const versionMatches = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean => features.version === query.featureVersion;
 
-const arrayIntersects = (
+const stringArrayIntersects = (
   queryFeatures: string[],
   queryValue: string[]
 ): boolean =>
@@ -68,9 +68,9 @@ export const arrayIntersectsCondition = (
   features: PageFeatureResult,
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean =>
-  matchArrayIntersectsFilterType(query) &&
+  isArrayIntersectsFilterType(query) &&
   isStringArray(features.value) &&
-  arrayIntersects(features.value, query.queryValue);
+  stringArrayIntersects(features.value, query.queryValue);
 
 /* =======================================
  * vector array conditions
@@ -81,12 +81,12 @@ export const vectorDistanceCondition = (
   features: PageFeatureResult,
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean =>
-  matchVectorDistanceFilterType(query) &&
+  isVectorDistanceFilterType(query) &&
   numberVectorArrayFilterMatches(isVectorDistanceGreatherThanThreshold, features, query);
 
 export const cosineSimilarityCondition = (
   features: PageFeatureResult,
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean =>
-  matchCosineSimilarityFilterType(query) &&
+  isCosineSimilarityFilterType(query) &&
   numberVectorArrayFilterMatches(isCosineSimilarityGreatherThanThreshold, features, query);
