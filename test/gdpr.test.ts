@@ -186,10 +186,10 @@ describe.only('EdgeKit GDPR tests', () => {
 
       expect(edktMatchedAudiences).toEqual([
         {
+          ...edktMatchedAudiences[0],
           id: 'sport_id',
           matched: true,
           matchedOnCurrentPageView: true,
-          ...edktMatchedAudiences[0],
         },
       ]);
     });
