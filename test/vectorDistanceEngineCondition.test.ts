@@ -1,4 +1,3 @@
-import 'jest';
 import { check } from '../src/engine';
 import {
   EngineCondition,
