@@ -1,6 +1,6 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
-import { matchesQuery } from './filters';
+import { queryMatches } from './filters';
 import {
   PageView,
   EngineCondition,
@@ -15,8 +15,8 @@ export const evaluateCondition = (
 
   const filteredPageViews = filter.queries.flatMap((query) =>
     pageViews.filter((pageView) => {
-      const queryFeatures = pageView.features[query.queryProperty];
-      return matchesQuery(query, queryFeatures);
+      const pageFeatures = pageView.features[query.queryProperty];
+      return queryMatches(query, pageFeatures);
     })
   );
 

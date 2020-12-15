@@ -10,11 +10,11 @@ import {
   cosineSimilarityCondition,
 } from './conditions';
 
-export const matchesQuery = (
+export const queryMatches = (
   query: EngineConditionQuery<AudienceDefinitionFilter>,
-  queryFeatures?: PageFeatureResult
+  pageFeatures?: PageFeatureResult
 ): boolean => {
-  if (!queryFeatures || !versionMatches(queryFeatures, query)) {
+  if (!pageFeatures || !versionMatches(query, pageFeatures)) {
     return false;
   }
 
@@ -23,5 +23,5 @@ export const matchesQuery = (
     arrayIntersectsCondition,
     vectorDistanceCondition,
     cosineSimilarityCondition,
-  ].some((match) => match(queryFeatures, query));
+  ].some((match) => match(query, pageFeatures));
 };

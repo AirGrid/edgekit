@@ -21,39 +21,39 @@ import {
  */
 
 export const versionMatches = (
-  features: PageFeatureResult,
-  query: EngineConditionQuery<AudienceDefinitionFilter>
-): boolean => features.version === query.featureVersion;
+  query: EngineConditionQuery<AudienceDefinitionFilter>,
+  pageFeatures: PageFeatureResult
+): boolean => pageFeatures.version === query.featureVersion;
 
 const stringArrayIntersects = (
-  queryFeatures: string[],
-  queryValue: string[]
+  queryValue: string[],
+  pageFeatures: string[]
 ): boolean =>
-  queryFeatures.some((feature) => queryValue.indexOf(feature) !== -1);
+  pageFeatures.some((feature) => queryValue.indexOf(feature) !== -1);
 
 const isVectorDistanceGreatherThanThreshold = (
-  queryFeatures: number[],
-  queryValue: { vector: number[]; threshold: number }
+  queryValue: { vector: number[]; threshold: number },
+  pageFeatures: number[]
 ): boolean =>
-  queryFeatures.length === queryValue.vector.length
-    ? dotProduct(queryFeatures, queryValue.vector) > queryValue.threshold
+  pageFeatures.length === queryValue.vector.length
+    ? dotProduct(pageFeatures, queryValue.vector) > queryValue.threshold
     : false;
 
 const isCosineSimilarityGreatherThanThreshold = (
-  queryFeatures: number[],
-  queryValue: { vector: number[]; threshold: number }
+  queryValue: { vector: number[]; threshold: number },
+  pageFeatures: number[]
 ): boolean =>
-  queryFeatures.length === queryValue.vector.length
-    ? cosineSimilarity(queryFeatures, queryValue.vector) > queryValue.threshold
+  pageFeatures.length === queryValue.vector.length
+    ? cosineSimilarity(pageFeatures, queryValue.vector) > queryValue.threshold
     : false;
 
 const numberVectorArrayFilterMatches = (
-  filter: (arg0: number[], arg1: VectorQueryValue) => boolean,
-  features: PageFeatureResult,
-  query: EngineConditionQuery<VectorDistanceFilter | CosineSimilarityFilter>
+  filter: (arg0: VectorQueryValue, arg1: number[]) => boolean,
+  query: EngineConditionQuery<VectorDistanceFilter | CosineSimilarityFilter>,
+  pageFeatures: PageFeatureResult
 ): boolean =>
   query.queryValue.some(
-    (value) => isNumberArray(features.value) && filter(features.value, value)
+    (value) => isNumberArray(pageFeatures.value) && filter(value, pageFeatures.value)
   );
 
 /* =======================================
@@ -62,12 +62,12 @@ const numberVectorArrayFilterMatches = (
  */
 
 export const arrayIntersectsCondition = (
-  features: PageFeatureResult,
-  query: EngineConditionQuery<AudienceDefinitionFilter>
+  query: EngineConditionQuery<AudienceDefinitionFilter>,
+  pageFeatures: PageFeatureResult
 ): boolean =>
   isArrayIntersectsFilterType(query) &&
-  isStringArray(features.value) &&
-  stringArrayIntersects(features.value, query.queryValue);
+  isStringArray(pageFeatures.value) &&
+  stringArrayIntersects(query.queryValue, pageFeatures.value);
 
 /* =======================================
  * vector array conditions
@@ -75,23 +75,23 @@ export const arrayIntersectsCondition = (
  */
 
 export const vectorDistanceCondition = (
-  features: PageFeatureResult,
-  query: EngineConditionQuery<AudienceDefinitionFilter>
+  query: EngineConditionQuery<AudienceDefinitionFilter>,
+  pageFeatures: PageFeatureResult
 ): boolean =>
   isVectorDistanceFilterType(query) &&
   numberVectorArrayFilterMatches(
     isVectorDistanceGreatherThanThreshold,
-    features,
-    query
+    query,
+    pageFeatures,
   );
 
 export const cosineSimilarityCondition = (
-  features: PageFeatureResult,
-  query: EngineConditionQuery<AudienceDefinitionFilter>
+  query: EngineConditionQuery<AudienceDefinitionFilter>,
+  pageFeatures: PageFeatureResult
 ): boolean =>
   isCosineSimilarityFilterType(query) &&
   numberVectorArrayFilterMatches(
     isCosineSimilarityGreatherThanThreshold,
-    features,
-    query
+    query,
+    pageFeatures,
   );
