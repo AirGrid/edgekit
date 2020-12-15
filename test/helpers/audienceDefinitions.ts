@@ -1,4 +1,4 @@
-import { Audience, QueryFilterComparisonType } from '../../types';
+import { AudienceDefinition, QueryFilterComparisonType } from '../../types';
 
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
@@ -31,7 +31,7 @@ export const automotiveKeywords = [
   'transport',
 ];
 
-export const sportInterestAudience: Audience = {
+export const sportInterestAudience: AudienceDefinition = {
   id: 'iab-607',
   name: 'Interest | Sport',
   version: VERSION,
@@ -46,7 +46,7 @@ export const sportInterestAudience: Audience = {
   },
 };
 
-export const travelInterestAudience: Audience = {
+export const travelInterestAudience: AudienceDefinition = {
   id: 'iab-719',
   name: 'Interest | Travel',
   version: VERSION,
@@ -61,7 +61,7 @@ export const travelInterestAudience: Audience = {
   },
 };
 
-export const automotiveInterestAudience: Audience = {
+export const automotiveInterestAudience: AudienceDefinition = {
   id: 'iab-243',
   name: 'Interest | Automotive',
   version: VERSION,
