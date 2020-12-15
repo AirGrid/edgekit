@@ -6,11 +6,10 @@ import {
 } from '../../types';
 
 /*
- * Audience to Engine adapter
+ * Audience to Engine translation
  *
- * Maintains the union over the translation layer
- * so the type can discriminated further bellow
- * the computation
+ * Maintains union type over the translation layer
+ * so it can be discriminated further below the computation
  */
 export const translate = (
   audienceDefinition: Readonly<Pick<AudienceDefinition, 'definition'>>
