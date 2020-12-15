@@ -1,4 +1,9 @@
-import { PageView, AudienceDefinition, CachedAudienceMetaData, MatchedAudience } from '../../types';
+import {
+  PageView,
+  AudienceDefinition,
+  CachedAudienceMetaData,
+  MatchedAudience,
+} from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
 export const pageViewCreator = (

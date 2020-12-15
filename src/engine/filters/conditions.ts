@@ -53,7 +53,8 @@ const numberVectorArrayFilterMatches = (
   pageFeatures: PageFeatureResult
 ): boolean =>
   query.queryValue.some(
-    (value) => isNumberArray(pageFeatures.value) && filter(value, pageFeatures.value)
+    (value) =>
+      isNumberArray(pageFeatures.value) && filter(value, pageFeatures.value)
   );
 
 /* =======================================
@@ -82,7 +83,7 @@ export const vectorDistanceCondition = (
   numberVectorArrayFilterMatches(
     isVectorDistanceGreatherThanThreshold,
     query,
-    pageFeatures,
+    pageFeatures
   );
 
 export const cosineSimilarityCondition = (
@@ -93,5 +94,5 @@ export const cosineSimilarityCondition = (
   numberVectorArrayFilterMatches(
     isCosineSimilarityGreatherThanThreshold,
     query,
-    pageFeatures,
+    pageFeatures
   );

@@ -10,7 +10,9 @@ import {
   getPageViews,
 } from './helpers/localStorageSetup';
 
-const makeCosineSimAudience = (value: VectorQueryValue[]): AudienceDefinition => ({
+const makeCosineSimAudience = (
+  value: VectorQueryValue[]
+): AudienceDefinition => ({
   definition: {
     featureVersion: 1,
     lookBack: 2592000,

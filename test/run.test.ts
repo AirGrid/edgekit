@@ -1,5 +1,9 @@
 import { edkt } from '../src';
-import { AudienceDefinition, PageView, QueryFilterComparisonType } from '../types';
+import {
+  AudienceDefinition,
+  PageView,
+  QueryFilterComparisonType,
+} from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
 import {
