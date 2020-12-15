@@ -3,6 +3,7 @@ import {
   sportKeywords,
 } from './helpers/audienceDefinitions';
 import { edkt } from '../src';
+import { clearStore, getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const sportPageFeature = {
   keywords: {
@@ -13,7 +14,7 @@ const sportPageFeature = {
 
 describe('Test edkt audience matching', () => {
   beforeAll(async () => {
-    localStorage.clear();
+    clearStore()
     // add one initial view
     await edkt.run({
       pageFeatures: sportPageFeature,
@@ -29,16 +30,8 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
-
-    expect(edktPageViews.length).toEqual(2);
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(getPageViews().length).toEqual(2);
+    expect(getMatchedAudiences().length).toEqual(0);
   });
 
   it('Second run -> add another page view & match', async () => {
@@ -48,16 +41,8 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
-
-    expect(edktPageViews.length).toEqual(3);
-    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(getPageViews().length).toEqual(3);
+    expect(getMatchedAudiences().length).toEqual(1);
   });
 
   it('Third run -> add another page view & match', async () => {
@@ -67,15 +52,7 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
-
-    expect(edktPageViews.length).toEqual(4);
-    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(getPageViews().length).toEqual(4);
+    expect(getMatchedAudiences().length).toEqual(1);
   });
 });

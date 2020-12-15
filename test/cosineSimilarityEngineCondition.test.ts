@@ -5,9 +5,8 @@ import {
   CosineSimilarityFilter,
   PageView
 } from '../types';
+import { clearStore } from './helpers/localStorageSetup';
 
-/* TODO Property based tests for engine behaviors
-*/
 const cosineSimilarityCondition: EngineCondition<CosineSimilarityFilter> = {
   filter: {
     any: false,
@@ -100,7 +99,7 @@ const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
 
 describe('Cosine Similarity condition test', () => {
   beforeAll(() => {
-    localStorage.clear();
+    clearStore()
   });
 
   describe('Cosine Similarity condition', () => {

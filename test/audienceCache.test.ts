@@ -6,10 +6,15 @@ import {
   automotiveInterestAudience,
 } from './helpers/audienceDefinitions';
 import { timeStampInSecs } from 'src/utils';
+import {
+  clearStore,
+  getCachedAudiences,
+  getCachedAudiencesMetaData
+} from './helpers/localStorageSetup';
 
 describe('Test audience cache', () => {
   beforeAll(async () => {
-    localStorage.clear();
+    clearStore()
   });
 
   it('Successfully adds audiences to the audience cache with local storage', async () => {
@@ -19,15 +24,7 @@ describe('Test audience cache', () => {
       automotiveInterestAudience,
     ]);
 
-    const edktCachedAudiences = JSON.parse(
-      localStorage.getItem('edkt_cached_audiences') || '[]'
-    );
-
-    const edktCachedAudienceMetaData = JSON.parse(
-      localStorage.getItem('edkt_cached_audience_meta_data') || '[]'
-    );
-
-    expect(edktCachedAudiences.length).toEqual(3);
+    const edktCachedAudienceMetaData = getCachedAudiencesMetaData()
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
       cachedAt: timeStampInSecs(),
@@ -46,6 +43,9 @@ describe('Test audience cache', () => {
         },
       ],
     };
+
+    expect(getCachedAudiences().length).toEqual(3);
+
     // - 2 seconds incase slow test run
     expect(edktCachedAudienceMetaData.cachedAt).toBeGreaterThanOrEqual(
       timeStampInSecs() - 1

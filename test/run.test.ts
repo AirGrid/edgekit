@@ -2,7 +2,7 @@ import { edkt } from '../src';
 import { Audience, PageView, QueryFilterComparisonType } from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
-import { pageViewCreator } from './helpers/localStorageSetup';
+import { pageViewCreator, getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const sportPageFeature = {
   keywords: {
@@ -150,19 +150,12 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
 
     expect(edktPageViews.length).toEqual(ONE_SPORTS_PAGE_VIEW.length + 1);
-    const latestKeywords =
-      edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(getMatchedAudiences().length).toEqual(0);
   });
 
   it('does match with two sport page view', async () => {
@@ -174,23 +167,15 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(
       sportAudience.definition.occurrences
     );
-
-    const latestKeywords =
-      edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
-    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(getMatchedAudiences().length).toEqual(1);
   });
 
 
@@ -203,22 +188,15 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
 
     expect(edktPageViews.length).toEqual(TWO_SPORTS_PAGE_VIEW.length + 1);
-    const latestKeywords =
-      edktPageViews[edktPageViews.length - 1].features.keywords;
     expect(latestKeywords).toEqual({
       version: 1,
       value: ['sport']
     });
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(getMatchedAudiences().length).toEqual(0);
   });
 });
 
@@ -277,13 +255,7 @@ describe('Topic model run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
 
     expect(edktPageViews).toEqual([
       {
@@ -296,8 +268,7 @@ describe('Topic model run', () => {
         },
       },
     ]);
-
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(getMatchedAudiences().length).toEqual(0);
   });
 
   it('does match with two page views', async () => {
@@ -307,13 +278,8 @@ describe('Topic model run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const edktMatchedAudiences = getMatchedAudiences()
 
     expect(edktPageViews).toEqual([
       {
@@ -408,13 +374,8 @@ describe('Topic model run with additional audience', () => {
     await run();
     await run();
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const edktMatchedAudiences = getMatchedAudiences()
 
     expect(edktPageViews).toEqual([
       {
@@ -517,13 +478,8 @@ describe('Topic model run version mismatch', () => {
     await run();
     await run();
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
-
-    const edktMatchedAudiences = JSON.parse(
-      localStorage.getItem('edkt_matched_audiences') || '[]'
-    );
+    const edktPageViews = getPageViews()
+    const edktMatchedAudiences = getMatchedAudiences()
 
     expect(edktPageViews).toEqual([
       {

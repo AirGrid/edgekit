@@ -6,6 +6,8 @@ import {
   ArrayIntersectsFilter,
   PageView
 } from '../types';
+import { clearStore } from './helpers/localStorageSetup';
+
 
 const sports1xConditionGt: EngineCondition<ArrayIntersectsFilter> = {
   filter: {
@@ -132,255 +134,257 @@ const sports1xConditionLe: EngineCondition<ArrayIntersectsFilter> = {
   ],
 };
 
-describe('Engine test', () => {
-  describe('Sports condition', () => {
-    it('evaluates first model with gt matcher', async () => {
-      const conditions = [sports1xConditionGt];
+describe('Engine test with sports condition', () => {
+  beforeAll(() => {
+    clearStore()
+  });
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+  it('evaluates first model with gt matcher', async () => {
+    const conditions = [sports1xConditionGt];
+
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(true);
-    });
+    expect(result).toEqual(true);
+  });
 
-    it('evaluates first model with lt matcher', async () => {
-      const conditions = [sports1xConditionLt];
+  it('evaluates first model with lt matcher', async () => {
+    const conditions = [sports1xConditionLt];
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(true);
-    });
+    expect(result).toEqual(true);
+  });
 
-    it('evaluates first model with eq matcher', async () => {
-      const conditions = [sports1xConditionEq];
+  it('evaluates first model with eq matcher', async () => {
+    const conditions = [sports1xConditionEq];
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(true);
-    });
+    expect(result).toEqual(true);
+  });
 
-    it('evaluates first model with ge matcher', async () => {
-      const conditions = [sports1xConditionGe];
+  it('evaluates first model with ge matcher', async () => {
+    const conditions = [sports1xConditionGe];
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(true);
+    expect(result).toEqual(true);
 
-      const pageViews2: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+    const pageViews2: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-      ];
+      },
+    ];
 
-      const result2 = check(conditions, pageViews2);
+    const result2 = check(conditions, pageViews2);
 
-      expect(result2).toEqual(true);
-    });
+    expect(result2).toEqual(true);
+  });
 
-    it('evaluates first model with le matcher', async () => {
-      const conditions = [sports1xConditionLe];
+  it('evaluates first model with le matcher', async () => {
+    const conditions = [sports1xConditionLe];
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(true);
+    expect(result).toEqual(true);
 
-      const pageViews2: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+    const pageViews2: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result2 = check(conditions, pageViews2);
+    const result2 = check(conditions, pageViews2);
 
-      expect(result2).toEqual(true);
-    });
+    expect(result2).toEqual(true);
+  });
 
-    it('evaluates first model with a false match', async () => {
-      const conditions = [sports1xConditionGt];
+  it('evaluates first model with a false match', async () => {
+    const conditions = [sports1xConditionGt];
 
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+    const pageViews: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result = check(conditions, pageViews);
+    const result = check(conditions, pageViews);
 
-      expect(result).toEqual(false);
+    expect(result).toEqual(false);
 
-      const pageViews2: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport', 'football'],
-            },
+    const pageViews2: PageView[] = [
+      {
+        ts: 100,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['sport', 'football'],
           },
         },
-        {
-          ts: 101,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['test', 'test2'],
-            },
+      },
+      {
+        ts: 101,
+        features: {
+          keywords: {
+            version: 1,
+            value: ['test', 'test2'],
           },
         },
-      ];
+      },
+    ];
 
-      const result2 = check(conditions, pageViews2);
+    const result2 = check(conditions, pageViews2);
 
-      expect(result2).toEqual(false);
-    });
+    expect(result2).toEqual(false);
   });
 });
