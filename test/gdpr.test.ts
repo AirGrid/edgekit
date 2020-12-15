@@ -1,6 +1,6 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData, Audience, QueryFilterComparisonType } from '../types';
+import { TCData, AudienceDefinition, QueryFilterComparisonType } from '../types';
 import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const airgridVendorId = 782;
@@ -84,7 +84,7 @@ const updateTCDataAfterDelay = (): Promise<[number, number]> => {
   });
 };
 
-const sportAudience: Audience = {
+const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,

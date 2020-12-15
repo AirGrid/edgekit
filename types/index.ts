@@ -99,7 +99,7 @@ export type AudienceDefinitionFilter =
   | CosineSimilarityFilter
   | ArrayIntersectsFilter
 
-export type AudienceDefinition = {
+export type AudienceQueryDefinition = {
   featureVersion: number;
   ttl: number;
   lookBack: number;
@@ -107,13 +107,12 @@ export type AudienceDefinition = {
   queryProperty: string;
 } & AudienceDefinitionFilter;
 
-export interface Audience {
-  accountId?: Record<string, AudienceState>;
+export interface AudienceDefinition {
   id: string;
   version: number;
-  name: string;
+  name?: string;
   cacheFor?: number;
-  definition: AudienceDefinition
+  definition: AudienceQueryDefinition
 }
 
 // Engine
@@ -129,7 +128,7 @@ export interface EngineConditionRule {
 }
 
 export type EngineConditionQuery<T extends AudienceDefinitionFilter> =
-  Pick<AudienceDefinition, "featureVersion" | "queryProperty"> & T
+  Pick<AudienceQueryDefinition, "featureVersion" | "queryProperty"> & T
 
 export interface EngineCondition<T extends AudienceDefinitionFilter> {
   filter: {

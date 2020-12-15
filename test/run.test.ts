@@ -1,5 +1,5 @@
 import { edkt } from '../src';
-import { Audience, PageView, QueryFilterComparisonType } from '../types';
+import { AudienceDefinition, PageView, QueryFilterComparisonType } from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
 import {
@@ -31,7 +31,7 @@ const topicModelPageFeature = {
 
 const TTL = 10;
 
-const sportAudience: Audience = {
+const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
@@ -46,7 +46,7 @@ const sportAudience: Audience = {
   },
 };
 
-const misconfiguredSportAudience: Audience = {
+const misconfiguredSportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
@@ -66,7 +66,7 @@ const misconfiguredSportAudience: Audience = {
   },
 };
 
-const lookBackInfinityAudience: Audience = {
+const lookBackInfinityAudience: AudienceDefinition = {
   id: 'look_back_infinity_id',
   name: 'Look Back Audience',
   version: 1,
@@ -81,7 +81,7 @@ const lookBackInfinityAudience: Audience = {
   },
 };
 
-const lookBackAudience: Audience = {
+const lookBackAudience: AudienceDefinition = {
   id: 'look_back_id',
   name: 'Look Back Audience',
   version: 1,
@@ -96,7 +96,7 @@ const lookBackAudience: Audience = {
   },
 };
 
-const topicModelAudience: Audience = {
+const topicModelAudience: AudienceDefinition = {
   id: 'topic_model_id',
   name: 'Look Back Audience',
   version: 1,
@@ -329,7 +329,7 @@ describe('Topic model run', () => {
 });
 
 describe('Topic model run with additional audience', () => {
-  const topicModelAudience: Audience = {
+  const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
     name: 'Interest | Sport',
     version: 1,
@@ -349,7 +349,7 @@ describe('Topic model run with additional audience', () => {
     },
   };
 
-  const keywordsAudience: Audience = {
+  const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
     name: 'Interest | Sport',
     version: 1,
@@ -435,7 +435,7 @@ describe('Topic model run with additional audience', () => {
 });
 
 describe('Topic model run version mismatch', () => {
-  const topicModelAudience: Audience = {
+  const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
     name: 'Interest | Sport',
     version: 1,
@@ -455,7 +455,7 @@ describe('Topic model run version mismatch', () => {
     },
   };
 
-  const keywordsAudience: Audience = {
+  const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
     name: 'Interest | Sport',
     version: 1,

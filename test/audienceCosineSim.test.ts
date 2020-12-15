@@ -1,5 +1,5 @@
 import {
-  Audience,
+  AudienceDefinition,
   QueryFilterComparisonType,
   VectorQueryValue,
 } from '../types';
@@ -10,7 +10,7 @@ import {
   getPageViews,
 } from './helpers/localStorageSetup';
 
-const makeCosineSimAudience = (value: VectorQueryValue[]): Audience => ({
+const makeCosineSimAudience = (value: VectorQueryValue[]): AudienceDefinition => ({
   definition: {
     featureVersion: 1,
     lookBack: 2592000,
