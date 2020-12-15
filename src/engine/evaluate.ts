@@ -11,13 +11,12 @@ export const evaluateCondition = (
   condition: EngineCondition<AudienceDefinitionFilter>,
   pageViews: PageView[]
 ): boolean => {
-
   const { filter, rules } = condition;
 
-  const filteredPageViews = filter.queries.flatMap(
-    (query) => pageViews.filter((pageView) => {
+  const filteredPageViews = filter.queries.flatMap((query) =>
+    pageViews.filter((pageView) => {
       const queryFeatures = pageView.features[query.queryProperty];
-      return matchesQuery(query, queryFeatures)
+      return matchesQuery(query, queryFeatures);
     })
   );
 

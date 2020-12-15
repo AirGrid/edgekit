@@ -13,8 +13,7 @@ import {
 export const matchesQuery = (
   query: EngineConditionQuery<AudienceDefinitionFilter>,
   queryFeatures: PageFeatureResult
-) => {
-
+): boolean => {
   // Can queryFeatures be empty?
   if (!queryFeatures || !versionMatches(queryFeatures, query)) {
     return false;
@@ -24,7 +23,6 @@ export const matchesQuery = (
   return [
     arrayIntersectsCondition,
     vectorDistanceCondition,
-    cosineSimilarityCondition
-  ].some(match => match(queryFeatures, query))
-}
-
+    cosineSimilarityCondition,
+  ].some((match) => match(queryFeatures, query));
+};

@@ -1,7 +1,7 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
 import { TCData, Audience, QueryFilterComparisonType } from '../types';
-import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup'
+import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const airgridVendorId = 782;
 
@@ -165,8 +165,8 @@ describe.only('EdgeKit GDPR tests', () => {
         updateTCDataAfterDelay(),
       ]);
 
-      const edktPageViews = getPageViews()
-      const edktMatchedAudiences = getMatchedAudiences()
+      const edktPageViews = getPageViews();
+      const edktMatchedAudiences = getMatchedAudiences();
 
       expect(runMsecs).toBeGreaterThanOrEqual(updateMsecs);
       expect(runNsecs).toBeGreaterThanOrEqual(updateNsecs);

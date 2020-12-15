@@ -1,7 +1,4 @@
-import {
-  dotProduct,
-  cosineSimilarity
-} from './math';
+import { dotProduct, cosineSimilarity } from './math';
 import {
   isStringArray,
   isNumberArray,
@@ -55,9 +52,9 @@ const numberVectorArrayFilterMatches = (
   features: PageFeatureResult,
   query: EngineConditionQuery<VectorDistanceFilter | CosineSimilarityFilter>
 ): boolean =>
-  query.queryValue.some(value =>
-                        isNumberArray(features.value) &&
-                        filter(features.value, value));
+  query.queryValue.some(
+    (value) => isNumberArray(features.value) && filter(features.value, value)
+  );
 
 /* =======================================
  * string array conditions
@@ -82,11 +79,19 @@ export const vectorDistanceCondition = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean =>
   isVectorDistanceFilterType(query) &&
-  numberVectorArrayFilterMatches(isVectorDistanceGreatherThanThreshold, features, query);
+  numberVectorArrayFilterMatches(
+    isVectorDistanceGreatherThanThreshold,
+    features,
+    query
+  );
 
 export const cosineSimilarityCondition = (
   features: PageFeatureResult,
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): boolean =>
   isCosineSimilarityFilterType(query) &&
-  numberVectorArrayFilterMatches(isCosineSimilarityGreatherThanThreshold, features, query);
+  numberVectorArrayFilterMatches(
+    isCosineSimilarityGreatherThanThreshold,
+    features,
+    query
+  );

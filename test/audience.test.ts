@@ -3,18 +3,22 @@ import {
   sportKeywords,
 } from './helpers/audienceDefinitions';
 import { edkt } from '../src';
-import { clearStore, getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
+import {
+  clearStore,
+  getPageViews,
+  getMatchedAudiences,
+} from './helpers/localStorageSetup';
 
 const sportPageFeature = {
   keywords: {
     version: 1,
     value: sportKeywords,
-  }
+  },
 };
 
 describe('Test edkt audience matching', () => {
   beforeAll(async () => {
-    clearStore()
+    clearStore();
     // add one initial view
     await edkt.run({
       pageFeatures: sportPageFeature,

@@ -5,6 +5,7 @@ export const timeout = (milliseconds: number, message: string): Promise<void> =>
     setTimeout(() => reject(new Error(message)), milliseconds);
   });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const get = (key: string): any => {
   const value = localStorage.getItem(key);
   if (!value) return undefined;
@@ -16,6 +17,7 @@ const get = (key: string): any => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const set = (key: string, value: any): void => {
   try {
     const serialized = JSON.stringify(value);

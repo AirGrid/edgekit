@@ -3,10 +3,9 @@ import {
   EngineCondition,
   QueryFilterComparisonType,
   ArrayIntersectsFilter,
-  PageView
+  PageView,
 } from '../types';
 import { clearStore } from './helpers/localStorageSetup';
-
 
 const sports1xConditionGt: EngineCondition<ArrayIntersectsFilter> = {
   filter: {
@@ -135,7 +134,7 @@ const sports1xConditionLe: EngineCondition<ArrayIntersectsFilter> = {
 
 describe('Engine test with sports condition', () => {
   beforeAll(() => {
-    clearStore()
+    clearStore();
   });
 
   it('evaluates first model with gt matcher', async () => {

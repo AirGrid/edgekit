@@ -15,4 +15,3 @@ export const cosineSimilarity = (
     (euclideanLength(vectorA) * euclideanLength(vectorB))
   );
 };
-

@@ -27,20 +27,29 @@ export const isVectorQueryValue = (
 export const isArrayIntersectsFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<ArrayIntersectsFilter> => {
-  return query.queryFilterComparisonType === QueryFilterComparisonType.ARRAY_INTERSECTS
-  && isStringArray(query.queryValue)
+  return (
+    query.queryFilterComparisonType ===
+      QueryFilterComparisonType.ARRAY_INTERSECTS &&
+    isStringArray(query.queryValue)
+  );
 };
 
 export const isVectorDistanceFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<VectorDistanceFilter> => {
-  return query.queryFilterComparisonType === QueryFilterComparisonType.VECTOR_DISTANCE
-  && query.queryValue.every(queryValue => isVectorQueryValue(queryValue))
+  return (
+    query.queryFilterComparisonType ===
+      QueryFilterComparisonType.VECTOR_DISTANCE &&
+    query.queryValue.every((queryValue) => isVectorQueryValue(queryValue))
+  );
 };
 
 export const isCosineSimilarityFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
 ): query is EngineConditionQuery<CosineSimilarityFilter> => {
-  return query.queryFilterComparisonType === QueryFilterComparisonType.COSINE_SIMILARITY
-  && query.queryValue.every(queryValue => isVectorQueryValue(queryValue))
+  return (
+    query.queryFilterComparisonType ===
+      QueryFilterComparisonType.COSINE_SIMILARITY &&
+    query.queryValue.every((queryValue) => isVectorQueryValue(queryValue))
+  );
 };

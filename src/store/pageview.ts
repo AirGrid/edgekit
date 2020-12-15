@@ -1,9 +1,5 @@
 import { storage, timeStampInSecs } from '../utils';
-import {
-  PageView,
-  StorageKeys,
-  PageFeatureResult,
-} from '../../types';
+import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 class ViewStore {
   pageViews: PageView[];
@@ -21,14 +17,17 @@ class ViewStore {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  insert(features: Record<string, PageFeatureResult> | undefined, metadata?: Record<string, string | number | boolean>) {
+  insert(
+    features: Record<string, PageFeatureResult> | undefined,
+    metadata?: Record<string, string | number | boolean>
+  ) {
     if (!features || Object.keys(features).length < 1) return;
     const ts = timeStampInSecs();
     const pageView = {
       ts,
       features,
-      ...metadata
-    }
+      ...metadata,
+    };
     this.pageViews.push(pageView);
     this._save();
   }

@@ -1,4 +1,4 @@
-import { PageView } from '../../types';
+import { PageView, Audience, CachedAudienceMetaData, MatchedAudience } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
 export const pageViewCreator = (
@@ -21,25 +21,21 @@ export const pageViewCreator = (
   return pageViews;
 };
 
-export const clearStore = () => {
-  localStorage.clear()
+export const clearStore = (): void => {
+  localStorage.clear();
   //We need to reload from local storage because its only done on construction
   viewStore._load();
   matchedAudienceStore._load();
-}
+};
 
-export const getPageViews = () => JSON.parse(
-  localStorage.getItem('edkt_page_views') || '[]'
-);
+export const getPageViews = (): PageView[] =>
+  JSON.parse(localStorage.getItem('edkt_page_views') || '[]');
 
-export const getMatchedAudiences = () => JSON.parse(
-  localStorage.getItem('edkt_matched_audiences') || '[]'
-);
+export const getMatchedAudiences = (): MatchedAudience[] =>
+  JSON.parse(localStorage.getItem('edkt_matched_audiences') || '[]');
 
-export const getCachedAudiences = () => JSON.parse(
-  localStorage.getItem('edkt_cached_audiences') || '[]'
-);
+export const getCachedAudiences = (): Audience[] =>
+  JSON.parse(localStorage.getItem('edkt_cached_audiences') || '[]');
 
-export const getCachedAudiencesMetaData = () => JSON.parse(
-  localStorage.getItem('edkt_cached_audience_meta_data') || '[]'
-);
+export const getCachedAudiencesMetaData = (): CachedAudienceMetaData =>
+  JSON.parse(localStorage.getItem('edkt_cached_audience_meta_data') || '{}');

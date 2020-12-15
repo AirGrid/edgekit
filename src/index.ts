@@ -23,7 +23,8 @@ const run = async (config: Config): Promise<void> => {
     pageFeatures,
     pageMetadata,
     omitGdprConsent,
-    audienceDefinitions } = config;
+    audienceDefinitions,
+  } = config;
 
   if (!omitGdprConsent) {
     const hasConsent = await waitForConsent(vendorIds);

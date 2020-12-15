@@ -9,12 +9,12 @@ import { timeStampInSecs } from 'src/utils';
 import {
   clearStore,
   getCachedAudiences,
-  getCachedAudiencesMetaData
+  getCachedAudiencesMetaData,
 } from './helpers/localStorageSetup';
 
 describe('Test audience cache', () => {
   beforeAll(async () => {
-    clearStore()
+    clearStore();
   });
 
   it('Successfully adds audiences to the audience cache with local storage', async () => {
@@ -24,7 +24,7 @@ describe('Test audience cache', () => {
       automotiveInterestAudience,
     ]);
 
-    const edktCachedAudienceMetaData = getCachedAudiencesMetaData()
+    const edktCachedAudienceMetaData = getCachedAudiencesMetaData();
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
       cachedAt: timeStampInSecs(),

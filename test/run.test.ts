@@ -2,7 +2,11 @@ import { edkt } from '../src';
 import { Audience, PageView, QueryFilterComparisonType } from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
-import { pageViewCreator, getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
+import {
+  pageViewCreator,
+  getPageViews,
+  getMatchedAudiences,
+} from './helpers/localStorageSetup';
 
 const sportPageFeature = {
   keywords: {
@@ -22,7 +26,7 @@ const topicModelPageFeature = {
   topicDist: {
     version: 1,
     value: [0.2, 0.5, 0.1],
-  }
+  },
 };
 
 const TTL = 10;
@@ -53,10 +57,12 @@ const misconfiguredSportAudience: Audience = {
     occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-    queryValue: [{
-      threshold: 0.8,
-      vector: [1,1,1],
-    }]
+    queryValue: [
+      {
+        threshold: 0.8,
+        vector: [1, 1, 1],
+      },
+    ],
   },
 };
 
@@ -101,10 +107,12 @@ const topicModelAudience: Audience = {
     occurrences: 1,
     queryProperty: 'topicDist',
     queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-    queryValue: [{
-      vector: [0.4, 0.8, 0.3],
-      threshold: 0.5,
-    }],
+    queryValue: [
+      {
+        vector: [0.4, 0.8, 0.3],
+        threshold: 0.5,
+      },
+    ],
   },
 };
 
@@ -150,8 +158,9 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = getPageViews()
-    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
+    const edktPageViews = getPageViews();
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
 
     expect(edktPageViews.length).toEqual(ONE_SPORTS_PAGE_VIEW.length + 1);
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
@@ -167,8 +176,9 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = getPageViews()
-    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
+    const edktPageViews = getPageViews();
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(
@@ -177,7 +187,6 @@ describe('Test basic edkt run', () => {
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
     expect(getMatchedAudiences().length).toEqual(1);
   });
-
 
   it('does not match with mismatched audience filter / page feature', async () => {
     setUpLocalStorage(TWO_SPORTS_PAGE_VIEW);
@@ -188,13 +197,14 @@ describe('Test basic edkt run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = getPageViews()
-    const latestKeywords = edktPageViews[edktPageViews.length - 1].features.keywords;
+    const edktPageViews = getPageViews();
+    const latestKeywords =
+      edktPageViews[edktPageViews.length - 1].features.keywords;
 
     expect(edktPageViews.length).toEqual(TWO_SPORTS_PAGE_VIEW.length + 1);
     expect(latestKeywords).toEqual({
       version: 1,
-      value: ['sport']
+      value: ['sport'],
     });
     expect(getMatchedAudiences().length).toEqual(0);
   });
@@ -255,7 +265,7 @@ describe('Topic model run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = getPageViews()
+    const edktPageViews = getPageViews();
 
     expect(edktPageViews).toEqual([
       {
@@ -278,8 +288,8 @@ describe('Topic model run', () => {
       omitGdprConsent: true,
     });
 
-    const edktPageViews = getPageViews()
-    const edktMatchedAudiences = getMatchedAudiences()
+    const edktPageViews = getPageViews();
+    const edktMatchedAudiences = getMatchedAudiences();
 
     expect(edktPageViews).toEqual([
       {
@@ -330,10 +340,12 @@ describe('Topic model run with additional audience', () => {
       lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: [{
-        threshold: 0.5,
-        vector: [0.4, 0.8, 0.3],
-      }],
+      queryValue: [
+        {
+          threshold: 0.5,
+          vector: [0.4, 0.8, 0.3],
+        },
+      ],
     },
   };
 
@@ -359,7 +371,7 @@ describe('Topic model run with additional audience', () => {
         keywords: {
           version: 1,
           value: ['dummy'],
-        }
+        },
       },
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
@@ -374,8 +386,8 @@ describe('Topic model run with additional audience', () => {
     await run();
     await run();
 
-    const edktPageViews = getPageViews()
-    const edktMatchedAudiences = getMatchedAudiences()
+    const edktPageViews = getPageViews();
+    const edktMatchedAudiences = getMatchedAudiences();
 
     expect(edktPageViews).toEqual([
       {
@@ -434,10 +446,12 @@ describe('Topic model run version mismatch', () => {
       lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: [{
-        threshold: 0.5,
-        vector: [0.4, 0.8, 0.3],
-      }],
+      queryValue: [
+        {
+          threshold: 0.5,
+          vector: [0.4, 0.8, 0.3],
+        },
+      ],
     },
   };
 
@@ -463,7 +477,7 @@ describe('Topic model run version mismatch', () => {
         keywords: {
           version: 1,
           value: ['dummy'],
-        }
+        },
       },
       audienceDefinitions: [topicModelAudience, keywordsAudience],
       omitGdprConsent: true,
@@ -478,8 +492,8 @@ describe('Topic model run version mismatch', () => {
     await run();
     await run();
 
-    const edktPageViews = getPageViews()
-    const edktMatchedAudiences = getMatchedAudiences()
+    const edktPageViews = getPageViews();
+    const edktMatchedAudiences = getMatchedAudiences();
 
     expect(edktPageViews).toEqual([
       {

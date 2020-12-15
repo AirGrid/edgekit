@@ -3,7 +3,7 @@ import {
   EngineCondition,
   QueryFilterComparisonType,
   CosineSimilarityFilter,
-  PageView
+  PageView,
 } from '../types';
 import { clearStore } from './helpers/localStorageSetup';
 
@@ -15,10 +15,12 @@ const cosineSimilarityCondition: EngineCondition<CosineSimilarityFilter> = {
         featureVersion: 1,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-        queryValue: [{
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.99,
-        }],
+        queryValue: [
+          {
+            vector: [0.4, 0.8, 0.3],
+            threshold: 0.99,
+          },
+        ],
       },
     ],
   },
@@ -43,14 +45,16 @@ const multipleCosineSimilarityCondition: EngineCondition<CosineSimilarityFilter>
         featureVersion: 1,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-        queryValue: [{
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.99,
-        },
-        {
-          vector: [0.1, 0.2, 0.1],
-          threshold: 0.99,
-        }],
+        queryValue: [
+          {
+            vector: [0.4, 0.8, 0.3],
+            threshold: 0.99,
+          },
+          {
+            vector: [0.1, 0.2, 0.1],
+            threshold: 0.99,
+          },
+        ],
       },
     ],
   },
@@ -67,7 +71,6 @@ const multipleCosineSimilarityCondition: EngineCondition<CosineSimilarityFilter>
   ],
 };
 
-
 // Vector condition with a bumped featureVersion
 const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
   filter: {
@@ -77,10 +80,12 @@ const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
         featureVersion: 2,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-        queryValue: [{
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.99,
-        }],
+        queryValue: [
+          {
+            vector: [0.4, 0.8, 0.3],
+            threshold: 0.99,
+          },
+        ],
       },
     ],
   },
@@ -99,7 +104,7 @@ const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
 
 describe('Cosine Similarity condition test', () => {
   beforeAll(() => {
-    clearStore()
+    clearStore();
   });
 
   describe('Cosine Similarity condition', () => {
@@ -226,7 +231,6 @@ describe('Cosine Similarity condition test', () => {
       ];
 
       expect(check(conditions, pageViewsV1)).toEqual(true);
-
     });
 
     it('matches the page views if similarity is above any of the vectors threshold', () => {
@@ -254,7 +258,6 @@ describe('Cosine Similarity condition test', () => {
       ];
 
       expect(check(conditions, pageViews)).toEqual(true);
-
     });
 
     it('does not match the page view if similarity is not above threshold', () => {
@@ -284,7 +287,6 @@ describe('Cosine Similarity condition test', () => {
       const result = check(conditions, pageViews);
 
       expect(result).toEqual(false);
-
     });
-  })
+  });
 });

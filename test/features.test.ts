@@ -34,7 +34,7 @@ describe('setPageFeatures', () => {
 
   it('should set the page features in the store', async () => {
     await edkt.run({
-      pageFeatures: {...features, ...moreFeatures},
+      pageFeatures: { ...features, ...moreFeatures },
       audienceDefinitions: [],
       omitGdprConsent,
       vendorIds,

@@ -3,7 +3,7 @@ import {
   EngineCondition,
   QueryFilterComparisonType,
   VectorDistanceFilter,
-  PageView
+  PageView,
 } from '../types';
 import { clearStore } from './helpers/localStorageSetup';
 
@@ -15,10 +15,12 @@ const vectorCondition: EngineCondition<VectorDistanceFilter> = {
         featureVersion: 1,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: [{
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.5,
-        }],
+        queryValue: [
+          {
+            vector: [0.4, 0.8, 0.3],
+            threshold: 0.5,
+          },
+        ],
       },
     ],
   },
@@ -44,10 +46,12 @@ const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
         featureVersion: 2,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: [{
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.5,
-        }],
+        queryValue: [
+          {
+            vector: [0.4, 0.8, 0.3],
+            threshold: 0.5,
+          },
+        ],
       },
     ],
   },
@@ -66,7 +70,7 @@ const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
 
 describe('Vector condition', () => {
   beforeAll(() => {
-    clearStore()
+    clearStore();
   });
 
   it('matches the page view if vector similarity is above threshold', async () => {
@@ -121,7 +125,7 @@ describe('Vector condition', () => {
 
 describe('Vector condition with a bumped featureVersion', () => {
   beforeAll(() => {
-    clearStore()
+    clearStore();
   });
 
   it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
