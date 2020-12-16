@@ -157,7 +157,7 @@ describe('Cosine similarity based audiences', () => {
     });
   });
 
-  describe('Cosine similarity multi query audiences matches any', () => {
+  describe('Cosine similarity multi query audiences does not matches below threshold', () => {
 
     beforeAll(() => {
       clearStore();
