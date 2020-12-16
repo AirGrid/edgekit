@@ -92,15 +92,15 @@ const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
-  definition: {
+  ttl: 100,
+  lookBack: 10,
+  occurrences: 0,
+  definition: [{
     featureVersion: 1,
-    ttl: 100,
-    lookBack: 10,
-    occurrences: 0,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     queryValue: ['sport'],
-  },
+  }],
 };
 
 const sportPageFeature = {

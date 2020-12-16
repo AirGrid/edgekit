@@ -13,15 +13,15 @@ import {
 const makeCosineSimAudience = (
   value: VectorQueryValue
 ): AudienceDefinition => ({
-  definition: {
+  lookBack: 2592000,
+  occurrences: 1,
+  ttl: 2592000,
+  definition: [{
     featureVersion: 1,
-    lookBack: 2592000,
-    occurrences: 1,
     queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
     queryProperty: 'dv',
     queryValue: value,
-    ttl: 2592000,
-  },
+  }],
   id: 'testid',
   name: 'cosineSimAudience',
   version: 1,

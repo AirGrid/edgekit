@@ -101,9 +101,6 @@ export type AudienceDefinitionFilter =
 
 export type AudienceQueryDefinition = {
   featureVersion: number;
-  ttl: number;
-  lookBack: number;
-  occurrences: number;
   queryProperty: string;
 } & AudienceDefinitionFilter;
 
@@ -112,7 +109,10 @@ export interface AudienceDefinition {
   version: number;
   name?: string;
   cacheFor?: number;
-  definition: AudienceQueryDefinition
+  ttl: number;
+  lookBack: number;
+  occurrences: number;
+  definition: AudienceQueryDefinition[]
 }
 
 // Engine

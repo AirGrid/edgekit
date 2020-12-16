@@ -1,7 +1,6 @@
 import {
   AudienceDefinition,
   EngineCondition,
-  EngineConditionQuery,
   AudienceDefinitionFilter,
 } from '../../types';
 
@@ -12,27 +11,14 @@ import {
  * so it can be discriminated further below the computation
  */
 export const translate = (
-  audienceDefinition: Readonly<Pick<AudienceDefinition, 'definition'>>
+  audienceDefinition: AudienceDefinition
 ): EngineCondition<AudienceDefinitionFilter>[] => {
-  const {
-    featureVersion,
-    queryProperty,
-    queryFilterComparisonType,
-    queryValue,
-    occurrences,
-  } = audienceDefinition.definition;
 
   return [
     {
       filter: {
-        queries: [
-          {
-            featureVersion,
-            queryProperty,
-            queryFilterComparisonType,
-            queryValue,
-          } as EngineConditionQuery<AudienceDefinitionFilter>,
-        ],
+        any: false,
+        queries: audienceDefinition.definition
       },
       rules: [
         {
@@ -41,7 +27,7 @@ export const translate = (
           },
           matcher: {
             name: 'gt',
-            args: occurrences,
+            args: audienceDefinition.occurrences,
           },
         },
       ],

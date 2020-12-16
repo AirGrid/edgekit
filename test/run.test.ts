@@ -39,81 +39,81 @@ const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
-  definition: {
+  ttl: TTL,
+  lookBack: 10,
+  occurrences: 2,
+  definition: [{
     featureVersion: 1,
-    ttl: TTL,
-    lookBack: 10,
-    occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     queryValue: ['sport'],
-  },
+  }],
 };
 
 const misconfiguredSportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
-  definition: {
+  ttl: TTL,
+  lookBack: 10,
+  occurrences: 2,
+  definition: [{
     featureVersion: 1,
-    ttl: TTL,
-    lookBack: 10,
-    occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
     queryValue: {
       threshold: 0.8,
       vector: [1, 1, 1],
     },
-  },
+  }],
 };
 
 const lookBackInfinityAudience: AudienceDefinition = {
   id: 'look_back_infinity_id',
   name: 'Look Back Audience',
   version: 1,
-  definition: {
+  ttl: TTL,
+  lookBack: 0,
+  occurrences: 2,
+  definition: [{
     featureVersion: 1,
-    ttl: TTL,
-    lookBack: 0,
-    occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     queryValue: [''],
-  },
+  }],
 };
 
 const lookBackAudience: AudienceDefinition = {
   id: 'look_back_id',
   name: 'Look Back Audience',
   version: 1,
-  definition: {
+  ttl: TTL,
+  lookBack: 2,
+  occurrences: 2,
+  definition: [{
     featureVersion: 1,
-    ttl: TTL,
-    lookBack: 2,
-    occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     queryValue: [''],
-  },
+  }],
 };
 
 const topicModelAudience: AudienceDefinition = {
   id: 'topic_model_id',
   name: 'Look Back Audience',
   version: 1,
-  definition: {
+  ttl: 100,
+  lookBack: 2,
+  occurrences: 1,
+  definition: [{
     featureVersion: 1,
-    ttl: 100,
-    lookBack: 2,
-    occurrences: 1,
     queryProperty: 'topicDist',
     queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
     queryValue: {
       vector: [0.4, 0.8, 0.3],
       threshold: 0.5,
     },
-  },
+  }],
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -131,13 +131,13 @@ const TWO_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
 const LOOK_BACK_INFINITY_PAGE_VIEW: Array<PageView> = pageViewCreator(
   0,
   [''],
-  lookBackInfinityAudience.definition.occurrences
+  lookBackInfinityAudience.occurrences
 );
 
 const LOOK_BACK_PAGE_VIEW: Array<PageView> = pageViewCreator(
   timeStampInSecs(),
   [''],
-  lookBackAudience.definition.occurrences
+  lookBackAudience.occurrences
 );
 
 const setUpLocalStorage = (pageViews: Array<PageView>) => {
@@ -182,7 +182,7 @@ describe('Test basic edkt run', () => {
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(
-      sportAudience.definition.occurrences
+      sportAudience.occurrences
     );
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
     expect(getMatchedAudiences().length).toEqual(1);
@@ -314,7 +314,7 @@ describe('Topic model run', () => {
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(
-      topicModelAudience.definition.occurrences
+      topicModelAudience.occurrences
     );
     expect(edktMatchedAudiences).toEqual([
       {
@@ -333,33 +333,33 @@ describe('Topic model run with additional audience', () => {
     id: 'iab-608',
     name: 'Interest | Sport',
     version: 1,
-    definition: {
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    definition: [{
       featureVersion: 1,
-      occurrences: 1,
-      ttl: 1000,
-      lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
       queryValue: {
         threshold: 0.5,
         vector: [0.4, 0.8, 0.3],
       },
-    },
+    }],
   };
 
   const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
     name: 'Interest | Sport',
     version: 1,
-    definition: {
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    definition: [{
       featureVersion: 1,
-      occurrences: 1,
-      ttl: 1000,
-      lookBack: 1000,
       queryProperty: 'keywords',
       queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
       queryValue: ['sport', 'Leeds United A.F.C.'],
-    },
+    }],
   };
 
   const run = async () => {
@@ -418,7 +418,7 @@ describe('Topic model run with additional audience', () => {
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(
-      topicModelAudience.definition.occurrences
+      topicModelAudience.occurrences
     );
     expect(edktMatchedAudiences).toEqual([
       {
@@ -437,33 +437,33 @@ describe('Topic model run version mismatch', () => {
     id: 'iab-608',
     name: 'Interest | Sport',
     version: 1,
-    definition: {
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    definition: [{
       featureVersion: 2,
-      occurrences: 1,
-      ttl: 1000,
-      lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
       queryValue: {
         threshold: 0.5,
         vector: [0.4, 0.8, 0.3],
       },
-    },
+    }],
   };
 
   const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
     name: 'Interest | Sport',
     version: 1,
-    definition: {
+    occurrences: 1,
+    ttl: 1000,
+    lookBack: 1000,
+    definition: [{
       featureVersion: 2,
-      occurrences: 1,
-      ttl: 1000,
-      lookBack: 1000,
       queryProperty: 'keywords',
       queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
       queryValue: ['sport', 'Leeds United A.F.C.'],
-    },
+    }],
   };
 
   const run = async () => {
