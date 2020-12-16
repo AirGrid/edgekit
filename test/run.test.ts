@@ -61,12 +61,10 @@ const misconfiguredSportAudience: AudienceDefinition = {
     occurrences: 2,
     queryProperty: 'keywords',
     queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-    queryValue: [
-      {
-        threshold: 0.8,
-        vector: [1, 1, 1],
-      },
-    ],
+    queryValue: {
+      threshold: 0.8,
+      vector: [1, 1, 1],
+    },
   },
 };
 
@@ -111,12 +109,10 @@ const topicModelAudience: AudienceDefinition = {
     occurrences: 1,
     queryProperty: 'topicDist',
     queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-    queryValue: [
-      {
-        vector: [0.4, 0.8, 0.3],
-        threshold: 0.5,
-      },
-    ],
+    queryValue: {
+      vector: [0.4, 0.8, 0.3],
+      threshold: 0.5,
+    },
   },
 };
 
@@ -344,12 +340,10 @@ describe('Topic model run with additional audience', () => {
       lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: [
-        {
-          threshold: 0.5,
-          vector: [0.4, 0.8, 0.3],
-        },
-      ],
+      queryValue: {
+        threshold: 0.5,
+        vector: [0.4, 0.8, 0.3],
+      },
     },
   };
 
@@ -450,12 +444,10 @@ describe('Topic model run version mismatch', () => {
       lookBack: 1000,
       queryProperty: 'topicDist',
       queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: [
-        {
-          threshold: 0.5,
-          vector: [0.4, 0.8, 0.3],
-        },
-      ],
+      queryValue: {
+        threshold: 0.5,
+        vector: [0.4, 0.8, 0.3],
+      },
     },
   };
 

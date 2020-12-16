@@ -15,12 +15,10 @@ const vectorCondition: EngineCondition<VectorDistanceFilter> = {
         featureVersion: 1,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: [
-          {
-            vector: [0.4, 0.8, 0.3],
-            threshold: 0.5,
-          },
-        ],
+        queryValue: {
+          vector: [0.4, 0.8, 0.3],
+          threshold: 0.5,
+        },
       },
     ],
   },
@@ -46,12 +44,10 @@ const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
         featureVersion: 2,
         queryProperty: 'topicDist',
         queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: [
-          {
-            vector: [0.4, 0.8, 0.3],
-            threshold: 0.5,
-          },
-        ],
+        queryValue: {
+          vector: [0.4, 0.8, 0.3],
+          threshold: 0.5,
+        },
       },
     ],
   },
@@ -68,103 +64,105 @@ const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
   ],
 };
 
-describe('Vector condition', () => {
-  beforeAll(() => {
-    clearStore();
-  });
+describe('Vector Distance Engine condition', () => {
+  describe('Vector condition', () => {
+    beforeAll(() => {
+      clearStore();
+    });
 
-  it('matches the page view if vector similarity is above threshold', async () => {
-    const conditions = [vectorCondition];
+    it('matches the page view if vector similarity is above threshold', async () => {
+      const conditions = [vectorCondition];
 
-    const pageViews: PageView[] = [
-      {
-        ts: 100,
-        features: {
-          topicDist: {
-            version: 1,
-            value: [0.2, 0.5, 0.1],
+      const pageViews: PageView[] = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 1,
+              value: [0.2, 0.5, 0.1],
+            },
           },
         },
-      },
-    ];
+      ];
 
-    const result = check(conditions, pageViews);
+      const result = check(conditions, pageViews);
 
-    expect(result).toEqual(true);
-  });
+      expect(result).toEqual(true);
+    });
 
-  it('does not match the page view if similarity is not above threshold', async () => {
-    const conditions = [vectorCondition];
+    it('does not match the page view if similarity is not above threshold', async () => {
+      const conditions = [vectorCondition];
 
-    const pageViews: PageView[] = [
-      {
-        ts: 100,
-        features: {
-          topicDist: {
-            version: 1,
-            value: [0.3, 0.2, 0.1],
+      const pageViews: PageView[] = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.1],
+            },
           },
         },
-      },
-      {
-        ts: 101,
-        features: {
-          topicDist: {
-            version: 1,
-            value: [0.3, 0.2, 0.2],
+        {
+          ts: 101,
+          features: {
+            topicDist: {
+              version: 1,
+              value: [0.3, 0.2, 0.2],
+            },
           },
         },
-      },
-    ];
+      ];
 
-    const result = check(conditions, pageViews);
+      const result = check(conditions, pageViews);
 
-    expect(result).toEqual(false);
-  });
-});
-
-describe('Vector condition with a bumped featureVersion', () => {
-  beforeAll(() => {
-    clearStore();
+      expect(result).toEqual(false);
+    });
   });
 
-  it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
-    const conditions = [vectorConditionV2];
+  describe('Vector condition with a bumped featureVersion', () => {
+    beforeAll(() => {
+      clearStore();
+    });
 
-    const pageViews: PageView[] = [
-      {
-        ts: 100,
-        features: {
-          topicDist: {
-            version: 2,
-            value: [0.2, 0.5, 0.1],
+    it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
+      const conditions = [vectorConditionV2];
+
+      const pageViews: PageView[] = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 2,
+              value: [0.2, 0.5, 0.1],
+            },
           },
         },
-      },
-    ];
+      ];
 
-    const result = check(conditions, pageViews);
+      const result = check(conditions, pageViews);
 
-    expect(result).toBe(true);
-  });
+      expect(result).toBe(true);
+    });
 
-  it('does not match the page view if similar enough but does not have the same featureVersion', async () => {
-    const conditions = [vectorConditionV2];
+    it('does not match the page view if similar enough but does not have the same featureVersion', async () => {
+      const conditions = [vectorConditionV2];
 
-    const pageViews: PageView[] = [
-      {
-        ts: 100,
-        features: {
-          topicDist: {
-            version: 1,
-            value: [0.2, 0.5, 0.1],
+      const pageViews: PageView[] = [
+        {
+          ts: 100,
+          features: {
+            topicDist: {
+              version: 1,
+              value: [0.2, 0.5, 0.1],
+            },
           },
         },
-      },
-    ];
+      ];
 
-    const result = check(conditions, pageViews);
+      const result = check(conditions, pageViews);
 
-    expect(result).toBe(false);
+      expect(result).toBe(false);
+    });
   });
 });

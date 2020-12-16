@@ -40,7 +40,7 @@ export const isVectorDistanceFilterType = (
   return (
     query.queryFilterComparisonType ===
       QueryFilterComparisonType.VECTOR_DISTANCE &&
-    query.queryValue.every((queryValue) => isVectorQueryValue(queryValue))
+    isVectorQueryValue(query.queryValue)
   );
 };
 
@@ -50,6 +50,6 @@ export const isCosineSimilarityFilterType = (
   return (
     query.queryFilterComparisonType ===
       QueryFilterComparisonType.COSINE_SIMILARITY &&
-    query.queryValue.every((queryValue) => isVectorQueryValue(queryValue))
+    isVectorQueryValue(query.queryValue)
   );
 };

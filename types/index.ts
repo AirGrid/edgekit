@@ -85,12 +85,12 @@ export interface ArrayIntersectsFilter {
 }
 
 export interface VectorDistanceFilter {
-  queryValue: VectorQueryValue[];
+  queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
 }
 
 export interface CosineSimilarityFilter {
-  queryValue: VectorQueryValue[];
+  queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
 }
 

@@ -8,11 +8,8 @@ import {
 } from './guards';
 import {
   AudienceDefinitionFilter,
-  CosineSimilarityFilter,
   EngineConditionQuery,
   PageFeatureResult,
-  VectorDistanceFilter,
-  VectorQueryValue,
 } from '../../../types';
 
 /* =======================================
@@ -47,16 +44,6 @@ const isCosineSimilarityGreatherThanThreshold = (
     ? cosineSimilarity(pageFeatures, queryValue.vector) > queryValue.threshold
     : false;
 
-const numberVectorArrayFilterMatches = (
-  filter: (arg0: VectorQueryValue, arg1: number[]) => boolean,
-  query: EngineConditionQuery<VectorDistanceFilter | CosineSimilarityFilter>,
-  pageFeatures: PageFeatureResult
-): boolean =>
-  query.queryValue.some(
-    (value) =>
-      isNumberArray(pageFeatures.value) && filter(value, pageFeatures.value)
-  );
-
 /* =======================================
  * string array conditions
  * =======================================
@@ -80,19 +67,13 @@ export const vectorDistanceCondition = (
   pageFeatures: PageFeatureResult
 ): boolean =>
   isVectorDistanceFilterType(query) &&
-  numberVectorArrayFilterMatches(
-    isVectorDistanceGreatherThanThreshold,
-    query,
-    pageFeatures
-  );
+  isNumberArray(pageFeatures.value) &&
+  isVectorDistanceGreatherThanThreshold(query.queryValue, pageFeatures.value);
 
 export const cosineSimilarityCondition = (
   query: EngineConditionQuery<AudienceDefinitionFilter>,
   pageFeatures: PageFeatureResult
 ): boolean =>
   isCosineSimilarityFilterType(query) &&
-  numberVectorArrayFilterMatches(
-    isCosineSimilarityGreatherThanThreshold,
-    query,
-    pageFeatures
-  );
+  isNumberArray(pageFeatures.value) &&
+  isCosineSimilarityGreatherThanThreshold(query.queryValue, pageFeatures.value);
