@@ -1,5 +1,3 @@
-import { VectorQueryValue } from '../../types';
-
 export const timeStampInSecs = (): number => Math.round(Date.now() / 1000);
 
 export const timeout = (milliseconds: number, message: string): Promise<void> =>
@@ -7,6 +5,7 @@ export const timeout = (milliseconds: number, message: string): Promise<void> =>
     setTimeout(() => reject(new Error(message)), milliseconds);
   });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const get = (key: string): any => {
   const value = localStorage.getItem(key);
   if (!value) return undefined;
@@ -18,6 +17,7 @@ const get = (key: string): any => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const set = (key: string, value: any): void => {
   try {
     const serialized = JSON.stringify(value);
@@ -31,35 +31,3 @@ export const storage = {
   set,
   get,
 };
-
-export const dotProduct = (vectorA: number[], vectorB: number[]): number => {
-  return vectorA.reduce((acc, cur, idx) => acc + cur * vectorB[idx], 0);
-};
-
-export const euclideanLength = (vector: number[]): number => {
-  return Math.sqrt(vector.reduce((acc, cur) => acc + Math.pow(cur, 2), 0));
-};
-
-export const cosineSimilarity = (
-  vectorA: number[],
-  vectorB: number[]
-): number => {
-  return (
-    dotProduct(vectorA, vectorB) /
-    (euclideanLength(vectorA) * euclideanLength(vectorB))
-  );
-};
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export const isStringArray = (value: any): value is string[] =>
-  value instanceof Array && value.every((item) => typeof item === 'string');
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export const isNumberArray = (value: any): value is number[] =>
-  value instanceof Array && value.every((item) => typeof item === 'number');
-
-export const isVectorQueryValue = (
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  value: any
-): value is VectorQueryValue =>
-  isNumberArray(value.vector) && typeof value.threshold === 'number';

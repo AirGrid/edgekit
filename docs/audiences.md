@@ -33,7 +33,7 @@ export const exampleAudience: AudienceDefinition = {
     // The query property to look up, this is the name of the key that will be looked up in the stored page view features object
     queryProperty: 'keywords',
     // The name of the function to use for filtering the page view features
-    queryFilterComparisonType: 'arrayIntersects',
+    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
     // The value to pass into the function determined by the queryFilterComparisonType along with the page view feature (if it exists)
     queryValue: ['sport', 'football'],
   }

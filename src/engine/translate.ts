@@ -1,62 +1,35 @@
-import { AudienceDefinition, EngineCondition } from '../../types';
-import { isStringArray, isVectorQueryValue } from '../utils';
+import {
+  AudienceDefinition,
+  EngineCondition,
+  AudienceDefinitionFilter,
+} from '../../types';
 
+/*
+ * Audience to Engine translation
+ *
+ * Maintains union type over the translation layer
+ * so it can be discriminated further below the computation
+ */
 export const translate = (
   audienceDefinition: AudienceDefinition
-): EngineCondition[] => {
-  const condition: EngineCondition = {
-    filter: {
-      queries:
-        audienceDefinition.definition.queryFilterComparisonType ===
-          'arrayIntersects' &&
-        isStringArray(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-              'vectorDistance' &&
-            isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : audienceDefinition.definition.queryFilterComparisonType ===
-            'cosineSimilarity' &&
-          isVectorQueryValue(audienceDefinition.definition.queryValue)
-          ? [
-              {
-                version: audienceDefinition.definition.featureVersion,
-                property: audienceDefinition.definition.queryProperty,
-                filterComparisonType:
-                  audienceDefinition.definition.queryFilterComparisonType,
-                value: audienceDefinition.definition.queryValue,
-              },
-            ]
-          : [],
-    },
-    rules: [
-      {
-        reducer: {
-          name: 'count',
-        },
-        matcher: {
-          name: 'gt',
-          args: audienceDefinition.definition.occurrences,
-        },
+): EngineCondition<AudienceDefinitionFilter>[] => {
+  return [
+    {
+      filter: {
+        any: false,
+        queries: audienceDefinition.definition,
       },
-    ],
-  };
-
-  return [condition];
+      rules: [
+        {
+          reducer: {
+            name: 'count',
+          },
+          matcher: {
+            name: 'gt',
+            args: audienceDefinition.occurrences,
+          },
+        },
+      ],
+    },
+  ];
 };
