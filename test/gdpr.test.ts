@@ -1,6 +1,11 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData, AudienceDefinition } from '../types';
+import {
+  TCData,
+  AudienceDefinition,
+  QueryFilterComparisonType,
+} from '../types';
+import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const airgridVendorId = 782;
 
@@ -87,15 +92,17 @@ const sportAudience: AudienceDefinition = {
   id: 'sport_id',
   name: 'Sport Audience',
   version: 1,
-  definition: {
-    featureVersion: 1,
-    ttl: 100,
-    lookBack: 10,
-    occurrences: 0,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: 'arrayIntersects',
-    queryValue: ['sport'],
-  },
+  ttl: 100,
+  lookBack: 10,
+  occurrences: 0,
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+      queryValue: ['sport'],
+    },
+  ],
 };
 
 const sportPageFeature = {
@@ -164,16 +171,11 @@ describe.only('EdgeKit GDPR tests', () => {
         updateTCDataAfterDelay(),
       ]);
 
+      const edktPageViews = getPageViews();
+      const edktMatchedAudiences = getMatchedAudiences();
+
       expect(runMsecs).toBeGreaterThanOrEqual(updateMsecs);
       expect(runNsecs).toBeGreaterThanOrEqual(updateNsecs);
-
-      const edktPageViews = JSON.parse(
-        localStorage.getItem('edkt_page_views') || '[]'
-      );
-
-      const edktMatchedAudiences = JSON.parse(
-        localStorage.getItem('edkt_matched_audiences') || '[]'
-      );
 
       expect(edktPageViews).toHaveLength(1);
       expect(edktPageViews).toEqual([
@@ -190,10 +192,10 @@ describe.only('EdgeKit GDPR tests', () => {
 
       expect(edktMatchedAudiences).toEqual([
         {
+          ...edktMatchedAudiences[0],
           id: 'sport_id',
           matched: true,
           matchedOnCurrentPageView: true,
-          ...edktMatchedAudiences[0],
         },
       ]);
     });

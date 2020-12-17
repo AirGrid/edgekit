@@ -1,5 +1,6 @@
 import { viewStore } from '../src/store';
 import { edkt } from '../src';
+import { getPageViews } from './helpers/localStorageSetup';
 
 describe('setPageFeatures', () => {
   const vendorIds = [873];
@@ -33,15 +34,13 @@ describe('setPageFeatures', () => {
 
   it('should set the page features in the store', async () => {
     await edkt.run({
-      pageFeatures: {...features, ...moreFeatures},
+      pageFeatures: { ...features, ...moreFeatures },
       audienceDefinitions: [],
       omitGdprConsent,
       vendorIds,
     });
 
-    const edktPageViews = JSON.parse(
-      localStorage.getItem('edkt_page_views') || '[]'
-    );
+    const edktPageViews = getPageViews();
 
     expect(edktPageViews).toEqual([
       {

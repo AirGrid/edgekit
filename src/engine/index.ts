@@ -1,15 +1,19 @@
-import createCondition from './condition';
+import { evaluateCondition } from './evaluate';
 import { translate } from './translate';
-import { PageView, EngineCondition } from '../../types';
+import {
+  PageView,
+  EngineCondition,
+  AudienceDefinitionFilter,
+} from '../../types';
 
 const check = (
-  conditions: EngineCondition[],
+  conditions: EngineCondition<AudienceDefinitionFilter>[],
   pageViews: PageView[],
   any = false
 ): boolean => {
-  const checkedConditions = conditions.map((condition) => {
-    return createCondition(condition)(pageViews);
-  });
+  const checkedConditions = conditions.map((condition) =>
+    evaluateCondition(condition, pageViews)
+  );
 
   return any
     ? checkedConditions.includes(true)
