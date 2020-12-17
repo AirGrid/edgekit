@@ -2,7 +2,7 @@ import {
   AudienceDefinition,
   QueryFilterComparisonType,
   AudienceQueryDefinition,
-  VectorQueryValue
+  VectorQueryValue,
 } from '../types';
 import { edkt } from '../src';
 import {
@@ -23,17 +23,21 @@ const makeCosineSimAudience = (
   version: 1,
 });
 
-const makeCosineSimQuery = (queryValue: VectorQueryValue): AudienceQueryDefinition => ({
+const makeCosineSimQuery = (
+  queryValue: VectorQueryValue
+): AudienceQueryDefinition => ({
   featureVersion: 1,
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
   queryProperty: 'dv',
-  queryValue
-})
+  queryValue,
+});
 
-const cosineSimAudience = makeCosineSimAudience([makeCosineSimQuery({
-  threshold: 0.8,
-  vector: [1, 1, 1],
-})]);
+const cosineSimAudience = makeCosineSimAudience([
+  makeCosineSimQuery({
+    threshold: 0.8,
+    vector: [1, 1, 1],
+  }),
+]);
 
 const multiCosineSimAudience = makeCosineSimAudience([
   makeCosineSimQuery({
@@ -46,10 +50,9 @@ const multiCosineSimAudience = makeCosineSimAudience([
   }),
 ]);
 
- /* These tests will improve soon */
+/* These tests will improve soon */
 describe('Cosine similarity based audiences', () => {
   describe('Cosine similarity single query audiences', () => {
-
     beforeAll(() => {
       clearStore();
     });
@@ -100,7 +103,6 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences matches any', () => {
-
     beforeAll(() => {
       clearStore();
     });
@@ -158,7 +160,6 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences does not matches below threshold', () => {
-
     beforeAll(() => {
       clearStore();
     });

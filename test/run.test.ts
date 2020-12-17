@@ -42,12 +42,14 @@ const sportAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 10,
   occurrences: 2,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    queryValue: ['sport'],
-  }],
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+      queryValue: ['sport'],
+    },
+  ],
 };
 
 const misconfiguredSportAudience: AudienceDefinition = {
@@ -57,15 +59,17 @@ const misconfiguredSportAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 10,
   occurrences: 2,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-    queryValue: {
-      threshold: 0.8,
-      vector: [1, 1, 1],
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+      queryValue: {
+        threshold: 0.8,
+        vector: [1, 1, 1],
+      },
     },
-  }],
+  ],
 };
 
 const lookBackInfinityAudience: AudienceDefinition = {
@@ -75,12 +79,14 @@ const lookBackInfinityAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 0,
   occurrences: 2,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    queryValue: [''],
-  }],
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+      queryValue: [''],
+    },
+  ],
 };
 
 const lookBackAudience: AudienceDefinition = {
@@ -90,12 +96,14 @@ const lookBackAudience: AudienceDefinition = {
   ttl: TTL,
   lookBack: 2,
   occurrences: 2,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    queryValue: [''],
-  }],
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+      queryValue: [''],
+    },
+  ],
 };
 
 const topicModelAudience: AudienceDefinition = {
@@ -105,15 +113,17 @@ const topicModelAudience: AudienceDefinition = {
   ttl: 100,
   lookBack: 2,
   occurrences: 1,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'topicDist',
-    queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-    queryValue: {
-      vector: [0.4, 0.8, 0.3],
-      threshold: 0.5,
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'topicDist',
+      queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
+      queryValue: {
+        vector: [0.4, 0.8, 0.3],
+        threshold: 0.5,
+      },
     },
-  }],
+  ],
 };
 
 const ONE_SPORTS_PAGE_VIEW: Array<PageView> = pageViewCreator(
@@ -181,9 +191,7 @@ describe('Test basic edkt run', () => {
       edktPageViews[edktPageViews.length - 1].features.keywords;
 
     // The default audience condition matches on (>=) -- see engine/translate.ts
-    expect(edktPageViews.length).toBeGreaterThan(
-      sportAudience.occurrences
-    );
+    expect(edktPageViews.length).toBeGreaterThan(sportAudience.occurrences);
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
     expect(getMatchedAudiences().length).toEqual(1);
   });
@@ -336,15 +344,17 @@ describe('Topic model run with additional audience', () => {
     occurrences: 1,
     ttl: 1000,
     lookBack: 1000,
-    definition: [{
-      featureVersion: 1,
-      queryProperty: 'topicDist',
-      queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: {
-        threshold: 0.5,
-        vector: [0.4, 0.8, 0.3],
+    definition: [
+      {
+        featureVersion: 1,
+        queryProperty: 'topicDist',
+        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
+        queryValue: {
+          threshold: 0.5,
+          vector: [0.4, 0.8, 0.3],
+        },
       },
-    }],
+    ],
   };
 
   const keywordsAudience: AudienceDefinition = {
@@ -354,12 +364,14 @@ describe('Topic model run with additional audience', () => {
     occurrences: 1,
     ttl: 1000,
     lookBack: 1000,
-    definition: [{
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: ['sport', 'Leeds United A.F.C.'],
-    }],
+    definition: [
+      {
+        featureVersion: 1,
+        queryProperty: 'keywords',
+        queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+        queryValue: ['sport', 'Leeds United A.F.C.'],
+      },
+    ],
   };
 
   const run = async () => {
@@ -440,15 +452,17 @@ describe('Topic model run version mismatch', () => {
     occurrences: 1,
     ttl: 1000,
     lookBack: 1000,
-    definition: [{
-      featureVersion: 2,
-      queryProperty: 'topicDist',
-      queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-      queryValue: {
-        threshold: 0.5,
-        vector: [0.4, 0.8, 0.3],
+    definition: [
+      {
+        featureVersion: 2,
+        queryProperty: 'topicDist',
+        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
+        queryValue: {
+          threshold: 0.5,
+          vector: [0.4, 0.8, 0.3],
+        },
       },
-    }],
+    ],
   };
 
   const keywordsAudience: AudienceDefinition = {
@@ -458,12 +472,14 @@ describe('Topic model run version mismatch', () => {
     occurrences: 1,
     ttl: 1000,
     lookBack: 1000,
-    definition: [{
-      featureVersion: 2,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: ['sport', 'Leeds United A.F.C.'],
-    }],
+    definition: [
+      {
+        featureVersion: 2,
+        queryProperty: 'keywords',
+        queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+        queryValue: ['sport', 'Leeds United A.F.C.'],
+      },
+    ],
   };
 
   const run = async () => {

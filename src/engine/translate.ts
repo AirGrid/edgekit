@@ -13,12 +13,11 @@ import {
 export const translate = (
   audienceDefinition: AudienceDefinition
 ): EngineCondition<AudienceDefinitionFilter>[] => {
-
   return [
     {
       filter: {
         any: false,
-        queries: audienceDefinition.definition
+        queries: audienceDefinition.definition,
       },
       rules: [
         {

@@ -95,12 +95,14 @@ const sportAudience: AudienceDefinition = {
   ttl: 100,
   lookBack: 10,
   occurrences: 0,
-  definition: [{
-    featureVersion: 1,
-    queryProperty: 'keywords',
-    queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    queryValue: ['sport'],
-  }],
+  definition: [
+    {
+      featureVersion: 1,
+      queryProperty: 'keywords',
+      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+      queryValue: ['sport'],
+    },
+  ],
 };
 
 const sportPageFeature = {

@@ -128,7 +128,7 @@ export interface EngineConditionRule {
 }
 
 export type EngineConditionQuery<T extends AudienceDefinitionFilter> =
-  Pick<AudienceQueryDefinition, "featureVersion" | "queryProperty"> & T
+  Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'> & T
 
 export interface EngineCondition<T extends AudienceDefinitionFilter> {
   filter: {
