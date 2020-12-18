@@ -1,26 +1,32 @@
 import { check } from '../src/engine';
-import { makeEngineCondition, makeQuery, makePageView } from './helpers/engineConditions';
-import { QueryFilterComparisonType, } from '../types';
+import {
+  makeEngineCondition,
+  makeQuery,
+  makePageView,
+} from './helpers/engineConditions';
+import { QueryFilterComparisonType } from '../types';
 
-const multipleOrthogonalQueriesCondition =
-  makeEngineCondition([
-  makeQuery(
-    {
-      vector: [0, 1, 0],
-      threshold: 0.99,
-    },
-    1,
-    QueryFilterComparisonType.COSINE_SIMILARITY
-  ),
-  makeQuery(
-    {
-      vector: [1, 0, 0],
-      threshold: 0.99,
-    },
-    1,
-    QueryFilterComparisonType.COSINE_SIMILARITY
-  ),
-], 1);
+const multipleOrthogonalQueriesCondition = makeEngineCondition(
+  [
+    makeQuery(
+      {
+        vector: [0, 1, 0],
+        threshold: 0.99,
+      },
+      1,
+      QueryFilterComparisonType.COSINE_SIMILARITY
+    ),
+    makeQuery(
+      {
+        vector: [1, 0, 0],
+        threshold: 0.99,
+      },
+      1,
+      QueryFilterComparisonType.COSINE_SIMILARITY
+    ),
+  ],
+  1
+);
 
 describe('Multiple EngineConditionQuery values test', () => {
   describe('Multiple CosineSimilarity filter conditions query', () => {
@@ -72,7 +78,6 @@ describe('Multiple EngineConditionQuery values test', () => {
       const result = check(conditions, pageViews);
       expect(result).toEqual(false);
     });
-
 
     it('successfully matches for mixed versions/conditions', () => {
       const conditions = [multipleOrthogonalQueriesCondition];

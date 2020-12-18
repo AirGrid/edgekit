@@ -15,8 +15,8 @@ const filterPageViews = (
   filter: EngineCondition<AudienceDefinitionFilter>['filter'],
   pageViews: Readonly<PageView[]>
 ): PageView[] => {
-  return pageViews.filter(
-    (pageView) => filter.queries.some((query) => {
+  return pageViews.filter((pageView) =>
+    filter.queries.some((query) => {
       const pageFeatures = pageView.features[query.queryProperty];
       return queryMatches(query, pageFeatures);
     })
@@ -33,7 +33,7 @@ export const evaluateCondition = (
 ): boolean => {
   const { filter, rules } = condition;
 
-  const filteredPageViews = filterPageViews(filter, pageViews)
+  const filteredPageViews = filterPageViews(filter, pageViews);
 
   return rules.every((rule) => {
     // TODO: allow other reducers...
@@ -46,6 +46,6 @@ export const evaluateCondition = (
   });
 };
 
-export const testables ={
+export const testables = {
   filterPageViews,
-}
+};
