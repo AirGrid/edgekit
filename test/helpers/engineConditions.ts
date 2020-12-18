@@ -11,7 +11,7 @@ export const makeQuery = <T extends AudienceQueryDefinition>(
   queryValue: VectorQueryValue,
   featureVersion: number,
   queryFilterComparisonType: QueryFilterComparisonType
-) =>
+): EngineConditionQuery<T> =>
   ({
     featureVersion,
     queryProperty: 'topicDist',

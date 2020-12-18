@@ -8,7 +8,7 @@ import { QueryFilterComparisonType } from '../types';
 
 const { filterPageViews } = testables;
 
-const multipleOrthogonalQueriesCondition = makeEngineCondition(
+const multipleNonOverlappingQueriesCondition = makeEngineCondition(
   [
     makeQuery(
       {
@@ -30,7 +30,7 @@ const multipleOrthogonalQueriesCondition = makeEngineCondition(
   1
 );
 
-const multipleLinearlyDependentQueriesCondition = makeEngineCondition(
+const multipleOverlappingQueriesCondition = makeEngineCondition(
   [
     makeQuery(
       {
@@ -53,30 +53,27 @@ const multipleLinearlyDependentQueriesCondition = makeEngineCondition(
 );
 
 describe('Engine evaluate methods', () => {
-  describe('filterPageViews behaviour for Orthogonal audience definitions', () => {
-    // def
-    // [1,0,0], 0.99
-    // [0,1,0], 0.99
-    it('returns pageViews for conditions above threshold', () => {
-      const conditions = multipleOrthogonalQueriesCondition;
+  describe('filterPageViews behaviour for non overlapping queries audience definitions', () => {
+    it('returns pageViews for condition above threshold', () => {
+      const condition = multipleOverlappingQueriesCondition;
       expect(
-        filterPageViews(conditions.filter, [makePageView([1, 0, 0], 1)])
+        filterPageViews(condition.filter, [makePageView([1, 0, 0], 1)])
       ).toHaveLength(1);
       expect(
-        filterPageViews(conditions.filter, [makePageView([0, 1, 0], 1)])
+        filterPageViews(condition.filter, [makePageView([0, 1, 0], 1)])
       ).toHaveLength(1);
       expect(
-        filterPageViews(conditions.filter, [
+        filterPageViews(condition.filter, [
           makePageView([1, 0, 0], 1),
           makePageView([0, 1, 0], 1),
         ])
       ).toHaveLength(2);
     });
 
-    it('filters off pageViews for conditions below threshold', () => {
-      const conditions = multipleOrthogonalQueriesCondition;
+    it('filters off pageViews for condition below threshold', () => {
+      const condition = multipleNonOverlappingQueriesCondition;
       expect(
-        filterPageViews(conditions.filter, [
+        filterPageViews(condition.filter, [
           makePageView([0, 0, 1], 1),
           makePageView([1, 1, 1], 1),
           makePageView([1, 1, 0], 1),
@@ -84,7 +81,7 @@ describe('Engine evaluate methods', () => {
         ])
       ).toHaveLength(0);
       expect(
-        filterPageViews(conditions.filter, [
+        filterPageViews(condition.filter, [
           makePageView([1, 0, 0], 1), // this matches
           makePageView([1, 1, 1], 1),
           makePageView([1, 1, 0], 1),
@@ -92,7 +89,7 @@ describe('Engine evaluate methods', () => {
         ])
       ).toHaveLength(1);
       expect(
-        filterPageViews(conditions.filter, [
+        filterPageViews(condition.filter, [
           makePageView([1, 0, 0], 1), // this matches
           makePageView([0, 1, 0], 1), // this matches
           makePageView([1, 1, 0], 1),
@@ -102,30 +99,27 @@ describe('Engine evaluate methods', () => {
     });
   });
 
-  describe('filterPageViews behaviour for linerly dependent audience definitions', () => {
-    // def
-    // [1,1,0], 0.5
-    // [0,1,0], 0.5
+  describe('filterPageViews behaviour for overlapping queries audience definitions', () => {
     it('returns matching pageViews exactly once', () => {
-      const conditions = multipleLinearlyDependentQueriesCondition;
+      const condition = multipleOverlappingQueriesCondition;
       expect(
-        filterPageViews(conditions.filter, [makePageView([1, 1, 0], 1)])
+        filterPageViews(condition.filter, [makePageView([1, 1, 0], 1)])
       ).toHaveLength(1);
       expect(
-        filterPageViews(conditions.filter, [makePageView([0, 1, 0], 1)])
+        filterPageViews(condition.filter, [makePageView([0, 1, 0], 1)])
       ).toHaveLength(1);
       expect(
-        filterPageViews(conditions.filter, [
+        filterPageViews(condition.filter, [
           makePageView([1, 1, 0], 1),
           makePageView([0, 1, 0], 1),
         ])
       ).toHaveLength(2);
     });
 
-    it('does not returns any pageView if no conditions above threshold', () => {
-      const conditions = multipleLinearlyDependentQueriesCondition;
+    it('does not returns any pageView if no condition above threshold', () => {
+      const condition = multipleOverlappingQueriesCondition;
       expect(
-        filterPageViews(conditions.filter, [makePageView([0, 0, 1], 1)])
+        filterPageViews(condition.filter, [makePageView([0, 0, 1], 1)])
       ).toHaveLength(0);
     });
   });
