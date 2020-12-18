@@ -7,18 +7,37 @@ import {
   AudienceDefinitionFilter,
 } from '../../types';
 
-export const evaluateCondition = (
-  condition: EngineCondition<AudienceDefinitionFilter>,
-  pageViews: PageView[]
-): boolean => {
-  const { filter, rules } = condition;
-
-  const filteredPageViews = filter.queries.flatMap((query) =>
-    pageViews.filter((pageView) => {
+/* Checks each pageView once for any matching queries
+ * and returns the filtered array containing the matched
+ * pageViews
+ *
+ * TODO Here, also, we have an opportunity to implement the
+ * internal AND logic, swapping some for every
+ * according to the value of filter.any
+ */
+const filterPageViews = (
+  filter: EngineCondition<AudienceDefinitionFilter>['filter'],
+  pageViews: Readonly<PageView[]>
+): PageView[] => {
+  return pageViews.filter((pageView) =>
+    filter.queries.some((query) => {
       const pageFeatures = pageView.features[query.queryProperty];
       return queryMatches(query, pageFeatures);
     })
   );
+};
+
+/* Filter the pageView array by matching queries
+ * and evaluates if it matches the conditions
+ * based on the condition reducing rules
+ */
+export const evaluateCondition = (
+  condition: Readonly<EngineCondition<AudienceDefinitionFilter>>,
+  pageViews: Readonly<PageView[]>
+): boolean => {
+  const { filter, rules } = condition;
+
+  const filteredPageViews = filterPageViews(filter, pageViews);
 
   return rules.every((rule) => {
     // TODO: allow other reducers...
@@ -29,4 +48,8 @@ export const evaluateCondition = (
 
     return matches(value);
   });
+};
+
+export const testables = {
+  filterPageViews,
 };
