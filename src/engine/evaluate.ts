@@ -10,6 +10,10 @@ import {
 /* Checks each pageView once for any matching queries
  * and returns the filtered array containing the matched
  * pageViews
+ *
+ * TODO Here, also, we have an opportunity to implement the
+ * internal AND logic, swapping some for every
+ * according to the value of filter.any
  */
 const filterPageViews = (
   filter: EngineCondition<AudienceDefinitionFilter>['filter'],
