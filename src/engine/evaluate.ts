@@ -18,7 +18,9 @@ export const evaluateCondition = (
   const { filter, rules } = condition;
 
   // if no queries, do not match at all
-  if (filter.queries.length === 0) return false;
+  if (pageViews.length == 0 || filter.queries.length === 0) {
+    return false;
+  }
 
   /* Checks each pageView once for any matching queries
    * and returns the filtered array containing the matched
