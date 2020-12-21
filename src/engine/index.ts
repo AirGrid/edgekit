@@ -11,9 +11,13 @@ const check = (
   pageViews: PageView[],
   any = false
 ): boolean => {
-  return conditions[any ? 'some' : 'every']((condition) =>
+  const checkedConditions = conditions.map((condition) =>
     evaluateCondition(condition, pageViews)
   );
+
+  return any
+    ? checkedConditions.includes(true)
+    : !checkedConditions.includes(false);
 };
 
 export { translate, check };
