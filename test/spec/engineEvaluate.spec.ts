@@ -5,11 +5,9 @@ import {
 import {
   numberArrayGen,
   pageViewGen,
-  engineConditionGen,
-  audienceQueryDefinitionGen,
   cosineSimilarityConditionGen,
   vectorDistanceConditionGen,
-  constantVectorQueryValueGen,
+  constantVectorQueryValueEngineConditionGen,
 } from './generators';
 import {
   EngineCondition,
@@ -17,8 +15,12 @@ import {
   CosineSimilarityFilter,
   VectorDistanceFilter,
   PageView,
-  QueryFilterComparisonType,
 } from '../../types';
+
+fc.configureGlobal({
+  seed: 33,
+  numRuns: 1000,
+})
 
 describe('Engine evaluate methods over VectorQueryValue', () => {
   describe('Engine evaluateCondition method behaviour', () => {
@@ -55,23 +57,13 @@ describe('Engine evaluate methods over VectorQueryValue', () => {
           // the feature value from the current pageView
           const vectorQueryValue = {
             vector: pageView.features.topicDist.value as number[], // should this be necessary?
-            threshold: 0.98,
+            threshold: 0.99,
           }
 
           // then we can generate arbitrary engine conditions
           // matching the pageView
           return fc.record({
-            condition: engineConditionGen(
-              fc.array(audienceQueryDefinitionGen(
-                fc.record({
-                  queryValue: constantVectorQueryValueGen(vectorQueryValue),
-                  queryFilterComparisonType: fc.oneof(
-                    fc.constant(QueryFilterComparisonType.VECTOR_DISTANCE),
-                    fc.constant(QueryFilterComparisonType.COSINE_SIMILARITY),
-                  )
-                }) as fc.Arbitrary<AudienceDefinitionFilter>
-              ))
-            ) as fc.Arbitrary<EngineCondition<AudienceDefinitionFilter>>,
+            condition: constantVectorQueryValueEngineConditionGen(vectorQueryValue),
             pageViews: fc.array(fc.constant(pageView))
           })
 
@@ -106,5 +98,49 @@ describe('Engine evaluate methods over VectorQueryValue', () => {
       ))
     });
 
+    it('does not matches if input data similarity is below threshold', () => {
+      fc.assert(fc.property(
+        // Matching (audience, pageView) pair generator
+        pageViewGen(numberArrayGen).chain(pageView => {
+
+          // having the paveView vector value,
+          // here we would transform it
+          // so it will always mismatch
+          const vectorQueryValue = {
+            // TODO improve rotation operation
+            vector: (pageView.features.topicDist.value as number[]).map(v => Math.log(v)),
+            threshold: 0.99,
+          }
+
+          // then we can generate arbitrary engine conditions
+          // matching the pageView
+          return fc.record({
+            condition: constantVectorQueryValueEngineConditionGen(vectorQueryValue),
+            pageViews: fc.array(fc.constant(pageView))
+          })
+
+        }).filter(({condition, pageViews}) =>
+          // lets keep the ones containing
+          // some data and discard the rest
+          condition.filter.queries.length > 0 &&
+          condition.rules.length > 0 &&
+          pageViews.length > 0
+        ),
+
+        // assertions
+        ( {condition, pageViews} ) => {
+
+          // evaluate for generated inputs
+          const result = evaluateCondition(
+            condition as EngineCondition<CosineSimilarityFilter | VectorDistanceFilter>,
+            pageViews as PageView[],
+          )
+
+          // given mismatching vector values,
+          // it should always return false
+          expect(result).toBe(false)
+        }
+      ))
+    })
   });
 });

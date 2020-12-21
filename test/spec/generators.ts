@@ -68,21 +68,24 @@ export const arrayIntersectsFilterGen = fc.record({
     fc.constant(QueryFilterComparisonType.ARRAY_INTERSECTS),
 }) as fc.Arbitrary<AudienceDefinitionFilter>;
 
-export const vectorDistanceFilterGen = fc.record({
+export const vectorDistanceFilterGen = {
   queryValue: vectorQueryValueGen,
   queryFilterComparisonType:
     fc.constant(QueryFilterComparisonType.VECTOR_DISTANCE),
-}) as fc.Arbitrary<AudienceDefinitionFilter>;
+};
 
-export const cosineSimilarityFilterGen = fc.record({
+export const cosineSimilarityFilterGen = {
   queryValue: vectorQueryValueGen,
   queryFilterComparisonType:
     fc.constant(QueryFilterComparisonType.COSINE_SIMILARITY),
-}) as fc.Arbitrary<AudienceDefinitionFilter>;
+};
 
 // AudienceQueryDefinition
 export const audienceQueryDefinitionGen = (
-  audienceDefinitionFilter: fc.Arbitrary<AudienceDefinitionFilter>
+  audienceDefinitionFilter: {
+    queryValue: fc.Arbitrary<VectorQueryValue>,
+    queryFilterComparisonType: fc.Arbitrary<QueryFilterComparisonType>
+  }
 ) => fc.record({
   featureVersion: fc.integer(),
   queryProperty: fc.constant('topicDist'),
@@ -125,3 +128,17 @@ export const vectorDistanceConditionGen =
       vectorDistanceFilterGen
     ))
 ) as fc.Arbitrary<EngineCondition<VectorDistanceFilter>>;
+
+
+export const constantVectorQueryValueEngineConditionGen = (
+  vectorQueryValue: VectorQueryValue
+) =>
+  engineConditionGen(
+    fc.array(audienceQueryDefinitionGen({
+        queryValue: constantVectorQueryValueGen(vectorQueryValue),
+        queryFilterComparisonType: fc.oneof(
+          fc.constant(QueryFilterComparisonType.VECTOR_DISTANCE),
+          fc.constant(QueryFilterComparisonType.COSINE_SIMILARITY),
+        )}
+    ))
+) as fc.Arbitrary<EngineCondition<AudienceDefinitionFilter>>;
