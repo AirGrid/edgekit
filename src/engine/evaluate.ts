@@ -36,7 +36,7 @@ export const evaluateCondition = (
    * filtering uses `some` to check the query conditions.
    * The complete implementation here would be:
    * ```
-   * filter.queries.[filter.any ? 'some' : 'every']((query) => ...
+   * filter.queries[filter.any ? 'some' : 'every']((query) => ...
    * ```
    * Yet, there is too much (testing) code depending on
    * this defaulting to `some` and the refactor would take
