@@ -30,7 +30,7 @@ const run = async (config: Config): Promise<void> => {
     featureStorageSize,
   } = config;
 
-  // This is a no-op if equals current value or lesser than 0
+  // This is a no-op if undefined, equals current value or lesser than 0
   viewStore.setMaxAge(featureMaxAge)
   viewStore.setStoreSize(featureStorageSize)
 
