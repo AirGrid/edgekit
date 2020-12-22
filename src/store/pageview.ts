@@ -3,10 +3,13 @@ import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 class ViewStore {
   pageViews: PageView[];
+  maxAge: number;
 
-  constructor() {
+  constructor(maxAge: number) {
     this.pageViews = [];
+    this._trim();
     this._load();
+    this.maxAge = maxAge;
   }
 
   _load() {
@@ -15,6 +18,18 @@ class ViewStore {
 
   _save() {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
+  }
+
+  _trim() {
+    const pageViews = storage.get(StorageKeys.PAGE_VIEWS) || [];
+    pageViews.sort(
+      (a: PageView, b: PageView): number => a.ts - b.ts
+    )
+    const filteredPageViews = pageViews.filter(
+      (pageView: PageView) => pageView.ts > timeStampInSecs() - this.maxAge
+    )
+    storage.set(StorageKeys.PAGE_VIEWS, filteredPageViews)
+    this._load()
   }
 
   insert(
@@ -33,4 +48,4 @@ class ViewStore {
   }
 }
 
-export const viewStore = new ViewStore();
+export const viewStore = new ViewStore(1000);

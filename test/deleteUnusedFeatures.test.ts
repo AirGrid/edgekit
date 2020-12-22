@@ -28,7 +28,9 @@ describe('feature cleaning behaviour', () => {
     localStorage.clear();
   });
 
-  it('should set the page features in the store', async () => {
+  it('should delete old pageView entries', async () => {
+
+    // Stub Date object
     jest.spyOn(global.Date, 'now')
     .mockImplementationOnce(
       () => new Date('1982-09-01T09:00:00.333Z').valueOf()
@@ -42,6 +44,10 @@ describe('feature cleaning behaviour', () => {
       vendorIds,
     });
 
+    expect(getPageViews()).toHaveLength(1)
+
+    // time has passed...
+
     // run second time with current timestamp
     await edkt.run({
       pageFeatures: newFeatures,
@@ -49,6 +55,11 @@ describe('feature cleaning behaviour', () => {
       omitGdprConsent,
       vendorIds,
     });
+
+    expect(getPageViews()).toHaveLength(2)
+
+    // the module is loaded again
+    viewStore._trim()
 
     const edktPageViews = getPageViews();
 
