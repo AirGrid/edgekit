@@ -4,12 +4,25 @@ import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 class ViewStore {
   pageViews: PageView[];
   maxAge: number;
+  storageSize: number;
 
-  constructor(maxAge: number) {
+  constructor(maxAge: number, storageSize: number) {
     this.pageViews = [];
     this._trim();
-    this._load();
     this.maxAge = maxAge;
+    this.storageSize = storageSize;
+  }
+
+  setMaxAge(maxAge: number) {
+    if (maxAge < 0) return
+    this.maxAge = maxAge;
+    this._trim()
+  }
+
+  setStoreSize(storageSize: number) {
+    if (storageSize < 0) return
+    this.storageSize = storageSize;
+    this._trim()
   }
 
   _load() {
@@ -23,12 +36,16 @@ class ViewStore {
   _trim() {
     const pageViews = storage.get(StorageKeys.PAGE_VIEWS) || [];
     pageViews.sort(
-      (a: PageView, b: PageView): number => a.ts - b.ts
+      (a: PageView, b: PageView): number => b.ts - a.ts
     )
     const filteredPageViews = pageViews.filter(
-      (pageView: PageView) => pageView.ts > timeStampInSecs() - this.maxAge
+      (pageView: PageView, i: number) =>
+        pageView.ts > timeStampInSecs() - this.maxAge && i < this.storageSize
     )
-    storage.set(StorageKeys.PAGE_VIEWS, filteredPageViews)
+    storage.set(
+      StorageKeys.PAGE_VIEWS,
+      filteredPageViews
+    )
     this._load()
   }
 
@@ -48,4 +65,5 @@ class ViewStore {
   }
 }
 
-export const viewStore = new ViewStore(1000);
+// defaults to 10 days old and 10k items storageSize
+export const viewStore = new ViewStore(3600 * 24 * 30, 10000);
