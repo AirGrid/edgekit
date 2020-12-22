@@ -8,21 +8,10 @@ class ViewStore {
 
   constructor(maxAge: number, storageSize: number) {
     this.pageViews = [];
+    this.maxAge = maxAge;
+    this.storageSize = storageSize;
+    this._load();
     this._trim();
-    this.maxAge = maxAge;
-    this.storageSize = storageSize;
-  }
-
-  setMaxAge(maxAge: number) {
-    if (maxAge < 0) return
-    this.maxAge = maxAge;
-    this._trim()
-  }
-
-  setStoreSize(storageSize: number) {
-    if (storageSize < 0) return
-    this.storageSize = storageSize;
-    this._trim()
   }
 
   _load() {
@@ -34,19 +23,24 @@ class ViewStore {
   }
 
   _trim() {
-    const pageViews = storage.get(StorageKeys.PAGE_VIEWS) || [];
-    pageViews.sort(
-      (a: PageView, b: PageView): number => b.ts - a.ts
-    )
-    const filteredPageViews = pageViews.filter(
+    this.pageViews.sort((a: PageView, b: PageView): number => b.ts - a.ts);
+    this.pageViews = this.pageViews.filter(
       (pageView: PageView, i: number) =>
         pageView.ts > timeStampInSecs() - this.maxAge && i < this.storageSize
-    )
-    storage.set(
-      StorageKeys.PAGE_VIEWS,
-      filteredPageViews
-    )
-    this._load()
+    );
+    this._save();
+  }
+
+  setMaxAge(maxAge: number) {
+    if (maxAge < 0) return;
+    this.maxAge = maxAge;
+    this._trim();
+  }
+
+  setStoreSize(storageSize: number) {
+    if (storageSize < 0) return;
+    this.storageSize = storageSize;
+    this._trim();
   }
 
   insert(
