@@ -3,16 +3,13 @@ import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 class ViewStore {
   pageViews: PageView[];
-  maxAge: number;
   storageSize: number;
 
   /**
-   * @param maxAge Max pageView age to be kept in seconds
    * @param storageSize Max pageView items to be kept
    */
-  constructor(maxAge?: number, storageSize?: number) {
+  constructor(storageSize?: number) {
     this.pageViews = [];
-    this.maxAge = maxAge ?? Infinity;
     this.storageSize = storageSize ?? Infinity;
     this._load();
   }
@@ -26,28 +23,15 @@ class ViewStore {
   }
 
   _trim() {
-    const validUntil = timeStampInSecs() - this.maxAge;
     this.pageViews.sort((a: PageView, b: PageView): number => b.ts - a.ts);
-    this.pageViews = this.pageViews.filter(
-      (pageView: PageView, i: number) =>
-        pageView.ts > validUntil && i < this.storageSize
-    );
-  }
-
-  /**
-   * @param maxAge Max pageView age to be kept in seconds
-   */
-  setMaxAge(maxAge?: number) {
-    if (!maxAge || maxAge < 0 || maxAge === this.maxAge) return;
-    this.maxAge = maxAge;
+    this.pageViews = this.pageViews.slice(0, this.storageSize)
   }
 
   /**
    * @param storageSize Max pageView items to be kept
    */
-  setStoreSize(storageSize?: number) {
-    if (!storageSize || storageSize < 0 || storageSize === this.storageSize)
-      return;
+  setStorageSize(storageSize?: number) {
+    if (!storageSize || storageSize < 0) return;
     this.storageSize = storageSize;
   }
 
@@ -68,4 +52,4 @@ class ViewStore {
   }
 }
 
-export const viewStore = new ViewStore(3600 * 24 * 45, 300);
+export const viewStore = new ViewStore(300);
