@@ -15,6 +15,8 @@ interface Config {
   pageMetadata?: Record<string, string | number | boolean>;
   vendorIds?: number[];
   omitGdprConsent?: boolean;
+  featureMaxAge?: number;
+  featureStorageSize?: number;
 }
 
 const run = async (config: Config): Promise<void> => {
@@ -24,7 +26,13 @@ const run = async (config: Config): Promise<void> => {
     pageMetadata,
     omitGdprConsent,
     audienceDefinitions,
+    featureMaxAge,
+    featureStorageSize,
   } = config;
+
+  // This is a no-op if equals current value or lesser than 0
+  viewStore.setMaxAge(featureMaxAge)
+  viewStore.setStoreSize(featureStorageSize)
 
   if (!omitGdprConsent) {
     const hasConsent = await waitForConsent(vendorIds);
