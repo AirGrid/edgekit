@@ -31,7 +31,7 @@ describe('ViewStore cleaning behaviour', () => {
 
   it('should delete old pageView entries beyond maxAge on new config value', async () => {
     // Defaults to Infinity for now...
-    // viewStore.setMaxAge(1000000000000000)
+    viewStore.setMaxAge(Infinity)
 
     // Stub Date object
     jest

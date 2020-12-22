@@ -226,6 +226,7 @@ describe('Test look back edkt run', () => {
       pageFeatures: lookBackPageFeature,
       audienceDefinitions: [lookBackInfinityAudience],
       omitGdprConsent: true,
+      featureMaxAge: Infinity,
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
