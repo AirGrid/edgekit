@@ -132,6 +132,10 @@ export enum StorageKeys {
 // Network interfaces
 
 export interface TCData {
+
+  // TODO I've put this back since the tests strongly suggests this should be considered
+  gdprApplies: boolean;
+
   eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
 
   cmpStatus: 'stub' | 'loading' | 'loaded' | 'error';
