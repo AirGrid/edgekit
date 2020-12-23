@@ -11,29 +11,8 @@ export type PageFeatureResult = {
   value: PageFeatureValue;
 };
 
-// unused?
-export interface PageFeatureGetter {
-  name: string;
-  func: () => Promise<PageFeatureResult>;
-}
-
-// unused?
-export type PageFeature =
-  | {
-      name: string;
-      error: true;
-    }
-  | {
-      name: string;
-      error: false;
-      version: number;
-      value: PageFeatureValue;
-    };
-
 export interface PageView {
   ts: number;
-  target?: boolean;  // unused?
-  keyHash?: string;  // unused?
   features: Record<string, PageFeatureResult>;
 }
 
@@ -80,8 +59,6 @@ export type AudienceQueryDefinition = {
 export interface AudienceDefinition {
   id: string;
   version: number;
-  name?: string;  // unused?
-  cacheFor?: number;  // unused?
   ttl: number;
   lookBack: number;
   occurrences: number;
@@ -128,9 +105,6 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-// unused?
-export type AudienceState = 'live' | 'paused' | 'deleted';
-
 export interface CachedAudienceMetaData {
   cachedAt: number;
   audiences: AudienceMetaData[];
@@ -157,13 +131,7 @@ export enum StorageKeys {
 
 // Network interfaces
 
-export interface PingResponse {
-  gdprApplies?: boolean;
-}
-
 export interface TCData {
-  gdprApplies?: boolean;
-
   eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
 
   cmpStatus: 'stub' | 'loading' | 'loaded' | 'error';
