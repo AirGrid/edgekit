@@ -33,7 +33,7 @@ export const automotiveKeywords = [
 
 export const sportInterestAudience: AudienceDefinition = {
   id: 'iab-607',
-  name: 'Interest | Sport',
+  // name: 'Interest | Sport',
   version: VERSION,
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
@@ -50,7 +50,7 @@ export const sportInterestAudience: AudienceDefinition = {
 
 export const travelInterestAudience: AudienceDefinition = {
   id: 'iab-719',
-  name: 'Interest | Travel',
+  // name: 'Interest | Travel',
   version: VERSION,
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
@@ -67,7 +67,7 @@ export const travelInterestAudience: AudienceDefinition = {
 
 export const automotiveInterestAudience: AudienceDefinition = {
   id: 'iab-243',
-  name: 'Interest | Automotive',
+  // name: 'Interest | Automotive',
   version: VERSION,
   ttl: TTL_IN_SECS,
   lookBack: LOOK_BACK_IN_SECS,
