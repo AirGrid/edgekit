@@ -40,7 +40,7 @@
     "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage",
     "lint": "eslint src test --ext js,ts",
-    "lint:fix": "lint --fix"
+    "lint:fix": "eslint src test --ext js,ts --fix"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",

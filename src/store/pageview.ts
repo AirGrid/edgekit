@@ -7,12 +7,9 @@ class ViewStore {
   pageViews: PageView[];
   storageSize: number;
 
-  /**
-   * @param storageSize Max pageView items to be kept
-   */
-  constructor(storageSize?: number) {
+  constructor() {
     this.pageViews = [];
-    this.storageSize = storageSize ?? DEFAULT_MAX_FEATURES_SIZE;
+    this.storageSize = DEFAULT_MAX_FEATURES_SIZE;
     this._load();
   }
 
@@ -27,7 +24,7 @@ class ViewStore {
   _trim() {
     if (this.pageViews.length <= this.storageSize) return;
     this.pageViews.sort((a: PageView, b: PageView): number => b.ts - a.ts);
-    this.pageViews = this.pageViews.slice(0, this.storageSize)
+    this.pageViews = this.pageViews.slice(0, this.storageSize);
   }
 
   /**

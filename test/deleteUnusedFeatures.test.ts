@@ -30,8 +30,7 @@ describe('ViewStore cleaning behaviour', () => {
   });
 
   it('should delete old pageView entries beyond maxStorageSize', async () => {
-
-    viewStore.setStorageSize(Infinity)
+    viewStore.setStorageSize(Infinity);
 
     for (let i = 1; i < 9; i++) {
       // Stub Date object
@@ -51,10 +50,8 @@ describe('ViewStore cleaning behaviour', () => {
     expect(getPageViews()).toHaveLength(8);
 
     // runs with newer timestamp
-    const newerDate = new Date(`2010-12-01T09:00:00.333Z`).valueOf()
-    jest
-      .spyOn(global.Date, 'now')
-      .mockImplementationOnce(() => newerDate);
+    const newerDate = new Date(`2010-12-01T09:00:00.333Z`).valueOf();
+    jest.spyOn(global.Date, 'now').mockImplementationOnce(() => newerDate);
     await edkt.run({
       pageFeatures: newFeatures,
       audienceDefinitions: [],
@@ -113,7 +110,7 @@ describe('ViewStore cleaning behaviour', () => {
       featureStorageSize: 6,
     });
 
-    const pageViews = getPageViews()
+    const pageViews = getPageViews();
     expect(pageViews).toHaveLength(6);
   });
 });
