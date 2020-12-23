@@ -116,7 +116,7 @@ export interface AudienceMetaData {
 }
 
 // #############################
-// Infrastructure Interfaces
+// External Services (Infrastructure) Interfaces
 // #############################
 
 // Storage interfaces
