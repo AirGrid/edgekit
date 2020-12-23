@@ -1,18 +1,8 @@
-export interface Edkt {
-  run: () => Promise<void>;
-}
+// #############################
+// Domain Entities Interfaces
+// #############################
 
-// Storage Keys Enum
-
-export enum StorageKeys {
-  PAGE_VIEWS = 'edkt_page_views',
-  MATCHED_AUDIENCES = 'edkt_matched_audiences',
-  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
-  CACHED_AUDIENCES = 'edkt_cached_audiences',
-  CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
-}
-
-// Page Features
+// Page view interfaces
 
 export type PageFeatureValue = string[] | number[];
 
@@ -45,7 +35,7 @@ export interface PageView {
   features: Record<string, PageFeatureResult>;
 }
 
-// Audiences
+// Audience definition interfaces
 
 export interface MatchedAudience {
   id: string;
@@ -115,7 +105,7 @@ export interface AudienceDefinition {
   definition: AudienceQueryDefinition[]
 }
 
-// Engine
+// Engine internal interfaces
 
 export interface EngineConditionRule {
   reducer: {
@@ -137,6 +127,22 @@ export interface EngineCondition<T extends AudienceDefinitionFilter> {
   };
   rules: EngineConditionRule[];
 }
+
+// #############################
+// Infrastructure Interfaces
+// #############################
+
+// Storage interfaces
+
+export enum StorageKeys {
+  PAGE_VIEWS = 'edkt_page_views',
+  MATCHED_AUDIENCES = 'edkt_matched_audiences',
+  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
+  CACHED_AUDIENCES = 'edkt_cached_audiences',
+  CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
+}
+
+// Network interfaces
 
 export interface PingResponse {
   gdprApplies?: boolean;
@@ -182,4 +188,14 @@ declare global {
       listenerId: number
     ): void;
   }
+}
+
+// #############################
+// UI Interfaces
+// #############################
+
+// Top level API interfaces
+
+export interface Edkt {
+  run: () => Promise<void>;
 }
