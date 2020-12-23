@@ -11,11 +11,13 @@ export type PageFeatureResult = {
   value: PageFeatureValue;
 };
 
+// unused?
 export interface PageFeatureGetter {
   name: string;
   func: () => Promise<PageFeatureResult>;
 }
 
+// unused?
 export type PageFeature =
   | {
       name: string;
@@ -30,8 +32,8 @@ export type PageFeature =
 
 export interface PageView {
   ts: number;
-  target?: boolean;
-  keyHash?: string;
+  target?: boolean;  // unused?
+  keyHash?: string;  // unused?
   features: Record<string, PageFeatureResult>;
 }
 
@@ -44,6 +46,7 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
+// unused?
 export type AudienceState = 'live' | 'paused' | 'deleted';
 
 export interface CachedAudienceMetaData {
@@ -97,8 +100,8 @@ export type AudienceQueryDefinition = {
 export interface AudienceDefinition {
   id: string;
   version: number;
-  name?: string;
-  cacheFor?: number;
+  name?: string;  // unused?
+  cacheFor?: number;  // unused?
   ttl: number;
   lookBack: number;
   occurrences: number;
