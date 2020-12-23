@@ -94,11 +94,6 @@ describe('ViewStore cleaning behaviour', () => {
 
   it('should trim pageViews beyond limit while accepting new entries', async () => {
     for (let i = 1; i < 9; i++) {
-      jest
-        .spyOn(global.Date, 'now')
-        .mockImplementationOnce(() =>
-          new Date(`2000-12-0${i}T09:00:00.333Z`).valueOf()
-        );
       await edkt.run({
         pageFeatures: oldFeatures,
         audienceDefinitions: [],
@@ -110,10 +105,6 @@ describe('ViewStore cleaning behaviour', () => {
 
     expect(getPageViews()).toHaveLength(5);
 
-    const newerDate = new Date(`2010-12-01T09:00:00.333Z`).valueOf()
-    jest
-      .spyOn(global.Date, 'now')
-      .mockImplementationOnce(() => newerDate);
     await edkt.run({
       pageFeatures: newFeatures,
       audienceDefinitions: [],
@@ -124,6 +115,5 @@ describe('ViewStore cleaning behaviour', () => {
 
     const pageViews = getPageViews()
     expect(pageViews).toHaveLength(6);
-    expect(pageViews[0].ts).toEqual(Math.round(newerDate / 1000))
   });
 });
