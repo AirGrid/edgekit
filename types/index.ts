@@ -1,5 +1,5 @@
 // #############################
-// Domain Entities Interfaces
+// Domain Model Interfaces
 // #############################
 
 // Page view interfaces
@@ -39,27 +39,7 @@ export interface PageView {
 
 // Audience definition interfaces
 
-export interface MatchedAudience {
-  id: string;
-  matchedAt: number;
-  expiresAt: number;
-  matchedOnCurrentPageView: boolean;
-}
-
-// unused?
-export type AudienceState = 'live' | 'paused' | 'deleted';
-
-export interface CachedAudienceMetaData {
-  cachedAt: number;
-  audiences: AudienceMetaData[];
-}
-
-export interface AudienceMetaData {
-  id: string;
-  version: number;
-}
-
-export type StringArrayQueryValue = string[];
+export type StringArrayQueryValue = Extract<PageFeatureValue, string[]>;
 
 export type VectorQueryValue = {
   vector: number[];
@@ -72,17 +52,17 @@ export enum QueryFilterComparisonType {
   ARRAY_INTERSECTS = 'arrayIntersects',
 }
 
-export interface ArrayIntersectsFilter {
+export type ArrayIntersectsFilter = {
   queryValue: StringArrayQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS;
 }
 
-export interface VectorDistanceFilter {
+export type VectorDistanceFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
 }
 
-export interface CosineSimilarityFilter {
+export type CosineSimilarityFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
 }
@@ -108,6 +88,10 @@ export interface AudienceDefinition {
   definition: AudienceQueryDefinition[]
 }
 
+// #############################
+// Domain Services Interfaces
+// #############################
+
 // Engine internal interfaces
 
 export interface EngineConditionRule {
@@ -129,6 +113,32 @@ export interface EngineCondition<T extends AudienceDefinitionFilter> {
     queries: EngineConditionQuery<T>[];
   };
   rules: EngineConditionRule[];
+}
+
+// #############################
+// Application Services Interfaces
+// #############################
+
+// Audience cache interfaces
+
+export interface MatchedAudience {
+  id: string;
+  matchedAt: number;
+  expiresAt: number;
+  matchedOnCurrentPageView: boolean;
+}
+
+// unused?
+export type AudienceState = 'live' | 'paused' | 'deleted';
+
+export interface CachedAudienceMetaData {
+  cachedAt: number;
+  audiences: AudienceMetaData[];
+}
+
+export interface AudienceMetaData {
+  id: string;
+  version: number;
 }
 
 // #############################
