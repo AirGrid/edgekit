@@ -58,6 +58,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -77,10 +78,15 @@ jobs:
           release_name: Release ${{ env.EDGEKIT_VERSION }}
 
       - run: npm publish
-
-      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        with:
-          registry-url: 'https://registry.npmjs.org'
 
+      - uses: actions/setup-node@v1
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@airgrid'
+      # Publish to GitHub Packages
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
