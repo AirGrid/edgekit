@@ -1,7 +1,3 @@
-// #############################
-// Domain Model Interfaces
-// #############################
-
 // Page view interfaces
 
 export type PageFeatureValue = string[] | number[];
@@ -34,22 +30,22 @@ export enum QueryFilterComparisonType {
 export type ArrayIntersectsFilter = {
   queryValue: StringArrayQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS;
-}
+};
 
 export type VectorDistanceFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
-}
+};
 
 export type CosineSimilarityFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
-}
+};
 
 export type AudienceDefinitionFilter =
   | VectorDistanceFilter
   | CosineSimilarityFilter
-  | ArrayIntersectsFilter
+  | ArrayIntersectsFilter;
 
 export type AudienceQueryDefinition = {
   featureVersion: number;
@@ -62,12 +58,8 @@ export interface AudienceDefinition {
   ttl: number;
   lookBack: number;
   occurrences: number;
-  definition: AudienceQueryDefinition[]
+  definition: AudienceQueryDefinition[];
 }
-
-// #############################
-// Domain Services Interfaces
-// #############################
 
 // Engine internal interfaces
 
@@ -81,8 +73,11 @@ export interface EngineConditionRule {
   };
 }
 
-export type EngineConditionQuery<T extends AudienceDefinitionFilter> =
-  Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'> & T
+export type EngineConditionQuery<T extends AudienceDefinitionFilter> = Pick<
+  AudienceQueryDefinition,
+  'featureVersion' | 'queryProperty'
+> &
+  T;
 
 export interface EngineCondition<T extends AudienceDefinitionFilter> {
   filter: {
@@ -91,10 +86,6 @@ export interface EngineCondition<T extends AudienceDefinitionFilter> {
   };
   rules: EngineConditionRule[];
 }
-
-// #############################
-// Application Services Interfaces
-// #############################
 
 // Audience cache interfaces
 
@@ -115,10 +106,6 @@ export interface AudienceMetaData {
   version: number;
 }
 
-// #############################
-// External Services (Infrastructure) Interfaces
-// #############################
-
 // Storage interfaces
 
 export enum StorageKeys {
@@ -132,7 +119,6 @@ export enum StorageKeys {
 // Network interfaces
 
 export interface TCData {
-
   // TODO I've put this back since the tests strongly suggests this should be considered
   gdprApplies: boolean;
 
@@ -174,10 +160,6 @@ declare global {
     ): void;
   }
 }
-
-// #############################
-// UI Interfaces
-// #############################
 
 // Top level API interfaces
 
