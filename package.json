@@ -1,6 +1,6 @@
 {
   "name": "@airgrid/edgekit",
-  "version": "0.0.0-dev.27",
+  "version": "0.0.0-dev.28",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage",
     "lint": "eslint src test --ext js,ts",
-    "lint:fix": "lint --fix"
+    "lint:fix": "eslint src test --ext js,ts --fix"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",

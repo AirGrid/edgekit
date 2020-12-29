@@ -1,11 +1,15 @@
 import { storage, timeStampInSecs } from '../utils';
 import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
+const DEFAULT_MAX_FEATURES_SIZE = 300;
+
 class ViewStore {
   pageViews: PageView[];
+  storageSize: number;
 
   constructor() {
     this.pageViews = [];
+    this.storageSize = DEFAULT_MAX_FEATURES_SIZE;
     this._load();
   }
 
@@ -15,6 +19,20 @@ class ViewStore {
 
   _save() {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
+  }
+
+  _trim() {
+    if (this.pageViews.length <= this.storageSize) return;
+    this.pageViews.sort((a: PageView, b: PageView): number => b.ts - a.ts);
+    this.pageViews = this.pageViews.slice(0, this.storageSize);
+  }
+
+  /**
+   * @param storageSize Max pageView items to be kept
+   */
+  setStorageSize(storageSize?: number) {
+    if (!storageSize || storageSize < 0) return;
+    this.storageSize = storageSize;
   }
 
   insert(
@@ -29,6 +47,7 @@ class ViewStore {
       ...metadata,
     };
     this.pageViews.push(pageView);
+    this._trim();
     this._save();
   }
 }

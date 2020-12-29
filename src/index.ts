@@ -15,6 +15,7 @@ interface Config {
   pageMetadata?: Record<string, string | number | boolean>;
   vendorIds?: number[];
   omitGdprConsent?: boolean;
+  featureStorageSize?: number;
 }
 
 const run = async (config: Config): Promise<void> => {
@@ -24,6 +25,7 @@ const run = async (config: Config): Promise<void> => {
     pageMetadata,
     omitGdprConsent,
     audienceDefinitions,
+    featureStorageSize,
   } = config;
 
   if (!omitGdprConsent) {
@@ -31,6 +33,8 @@ const run = async (config: Config): Promise<void> => {
     if (!hasConsent) return;
   }
 
+  // This is a no-op if undefined, equals current value or lesser than 0
+  viewStore.setStorageSize(featureStorageSize);
   viewStore.insert(pageFeatures, pageMetadata);
 
   const matchedAudiences = audienceDefinitions
