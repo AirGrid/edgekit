@@ -72,16 +72,15 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-
         with:
           tag_name: ${{ env.EDGEKIT_VERSION }}
           release_name: Release ${{ env.EDGEKIT_VERSION }}
 
       - run: npm publish
 
-        with:
-          registry-url: 'https://registry.npmjs.org'
-
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
