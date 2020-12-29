@@ -17,7 +17,7 @@ export interface PageView {
 export type StringArrayQueryValue = Extract<PageFeatureValue, string[]>;
 
 export type VectorQueryValue = {
-  vector: number[];
+  vector: Extract<PageFeatureValue, number[]>;
   threshold: number;
 };
 
