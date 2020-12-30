@@ -163,6 +163,16 @@ declare global {
 
 // Top level API interfaces
 
+interface Config {
+  audienceDefinitions: AudienceDefinition[];
+  pageFeatures?: Record<string, PageFeatureResult>;
+  pageMetadata?: Record<string, string | number | boolean>;
+  vendorIds?: number[];
+  omitGdprConsent?: boolean;
+}
+
 export interface Edkt {
-  run: () => Promise<void>;
+  run: (config: Config) => Promise<void>;
+  getMatchedAudiences: () => MatchedAudience[];
+  getCopyOfPageViews: () => PageView[];
 }
