@@ -118,8 +118,8 @@ export enum StorageKeys {
 
 // Gdpr consent interfaces
 
+// https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md#tcdata
 export interface TCData {
-  // TODO I've put this back since the tests strongly suggests this should be considered
   gdprApplies: boolean;
 
   eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
