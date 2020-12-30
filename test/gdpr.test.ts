@@ -90,7 +90,6 @@ const updateTCDataAfterDelay = (): Promise<[number, number]> => {
 
 const sportAudience: AudienceDefinition = {
   id: 'sport_id',
-  // name: 'Sport Audience',
   version: 1,
   ttl: 100,
   lookBack: 10,

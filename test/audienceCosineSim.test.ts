@@ -19,7 +19,6 @@ const makeCosineSimAudience = (
   ttl: 2592000,
   definition,
   id: 'testid',
-  // name: 'cosineSimAudience',
   version: 1,
 });
 

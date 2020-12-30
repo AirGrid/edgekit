@@ -37,7 +37,6 @@ const TTL = 10;
 
 const sportAudience: AudienceDefinition = {
   id: 'sport_id',
-  // name: 'Sport Audience',
   version: 1,
   ttl: TTL,
   lookBack: 10,
@@ -54,7 +53,6 @@ const sportAudience: AudienceDefinition = {
 
 const misconfiguredSportAudience: AudienceDefinition = {
   id: 'sport_id',
-  // name: 'Sport Audience',
   version: 1,
   ttl: TTL,
   lookBack: 10,
@@ -74,7 +72,6 @@ const misconfiguredSportAudience: AudienceDefinition = {
 
 const lookBackInfinityAudience: AudienceDefinition = {
   id: 'look_back_infinity_id',
-  // name: 'Look Back Audience',
   version: 1,
   ttl: TTL,
   lookBack: 0,
@@ -91,7 +88,6 @@ const lookBackInfinityAudience: AudienceDefinition = {
 
 const lookBackAudience: AudienceDefinition = {
   id: 'look_back_id',
-  // name: 'Look Back Audience',
   version: 1,
   ttl: TTL,
   lookBack: 2,
@@ -108,7 +104,6 @@ const lookBackAudience: AudienceDefinition = {
 
 const topicModelAudience: AudienceDefinition = {
   id: 'topic_model_id',
-  // name: 'Look Back Audience',
   version: 1,
   ttl: 100,
   lookBack: 2,
@@ -339,7 +334,6 @@ describe('Topic model run', () => {
 describe('Topic model run with additional audience', () => {
   const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
-    // name: 'Interest | Sport',
     version: 1,
     occurrences: 1,
     ttl: 1000,
@@ -359,7 +353,6 @@ describe('Topic model run with additional audience', () => {
 
   const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
-    // name: 'Interest | Sport',
     version: 1,
     occurrences: 1,
     ttl: 1000,
@@ -447,7 +440,6 @@ describe('Topic model run with additional audience', () => {
 describe('Topic model run version mismatch', () => {
   const topicModelAudience: AudienceDefinition = {
     id: 'iab-608',
-    // name: 'Interest | Sport',
     version: 1,
     occurrences: 1,
     ttl: 1000,
@@ -467,7 +459,6 @@ describe('Topic model run version mismatch', () => {
 
   const keywordsAudience: AudienceDefinition = {
     id: 'iab-607',
-    // name: 'Interest | Sport',
     version: 1,
     occurrences: 1,
     ttl: 1000,
