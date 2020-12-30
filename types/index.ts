@@ -116,7 +116,7 @@ export enum StorageKeys {
   CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
 }
 
-// Network interfaces
+// Gdpr consent interfaces
 
 export interface TCData {
   // TODO I've put this back since the tests strongly suggests this should be considered
