@@ -4,7 +4,7 @@ import {
   QueryFilterComparisonType,
   ArrayIntersectsFilter,
   PageView,
-} from '../types';
+} from 'types';
 import { clearStore } from './helpers/localStorageSetup';
 
 const sports1xConditionGt: EngineCondition<ArrayIntersectsFilter> = {

@@ -3,7 +3,7 @@ import {
   AudienceDefinition,
   CachedAudienceMetaData,
   MatchedAudience,
-} from '../../types';
+} from 'types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
 export const pageViewCreator = (

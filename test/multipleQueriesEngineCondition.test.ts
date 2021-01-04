@@ -4,7 +4,7 @@ import {
   makeQuery,
   makePageView,
 } from './helpers/engineConditions';
-import { QueryFilterComparisonType } from '../types';
+import { QueryFilterComparisonType } from 'types';
 
 const multipleOrthogonalQueriesCondition = makeEngineCondition(
   [
