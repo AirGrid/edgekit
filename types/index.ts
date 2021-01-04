@@ -1,18 +1,4 @@
-export interface Edkt {
-  run: () => Promise<void>;
-}
-
-// Storage Keys Enum
-
-export enum StorageKeys {
-  PAGE_VIEWS = 'edkt_page_views',
-  MATCHED_AUDIENCES = 'edkt_matched_audiences',
-  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
-  CACHED_AUDIENCES = 'edkt_cached_audiences',
-  CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
-}
-
-// Page Features
+// Page view interfaces
 
 export type PageFeatureValue = string[] | number[];
 
@@ -21,55 +7,17 @@ export type PageFeatureResult = {
   value: PageFeatureValue;
 };
 
-export interface PageFeatureGetter {
-  name: string;
-  func: () => Promise<PageFeatureResult>;
-}
-
-export type PageFeature =
-  | {
-      name: string;
-      error: true;
-    }
-  | {
-      name: string;
-      error: false;
-      version: number;
-      value: PageFeatureValue;
-    };
-
 export interface PageView {
   ts: number;
-  target?: boolean;
-  keyHash?: string;
   features: Record<string, PageFeatureResult>;
 }
 
-// Audiences
+// Audience definition interfaces
 
-export interface MatchedAudience {
-  id: string;
-  matchedAt: number;
-  expiresAt: number;
-  matchedOnCurrentPageView: boolean;
-}
-
-export type AudienceState = 'live' | 'paused' | 'deleted';
-
-export interface CachedAudienceMetaData {
-  cachedAt: number;
-  audiences: AudienceMetaData[];
-}
-
-export interface AudienceMetaData {
-  id: string;
-  version: number;
-}
-
-export type StringArrayQueryValue = string[];
+export type StringArrayQueryValue = Extract<PageFeatureValue, string[]>;
 
 export type VectorQueryValue = {
-  vector: number[];
+  vector: Extract<PageFeatureValue, number[]>;
   threshold: number;
 };
 
@@ -79,25 +27,25 @@ export enum QueryFilterComparisonType {
   ARRAY_INTERSECTS = 'arrayIntersects',
 }
 
-export interface ArrayIntersectsFilter {
+export type ArrayIntersectsFilter = {
   queryValue: StringArrayQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS;
-}
+};
 
-export interface VectorDistanceFilter {
+export type VectorDistanceFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
-}
+};
 
-export interface CosineSimilarityFilter {
+export type CosineSimilarityFilter = {
   queryValue: VectorQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
-}
+};
 
 export type AudienceDefinitionFilter =
   | VectorDistanceFilter
   | CosineSimilarityFilter
-  | ArrayIntersectsFilter
+  | ArrayIntersectsFilter;
 
 export type AudienceQueryDefinition = {
   featureVersion: number;
@@ -107,15 +55,13 @@ export type AudienceQueryDefinition = {
 export interface AudienceDefinition {
   id: string;
   version: number;
-  name?: string;
-  cacheFor?: number;
   ttl: number;
   lookBack: number;
   occurrences: number;
-  definition: AudienceQueryDefinition[]
+  definition: AudienceQueryDefinition[];
 }
 
-// Engine
+// Engine internal interfaces
 
 export interface EngineConditionRule {
   reducer: {
@@ -127,8 +73,11 @@ export interface EngineConditionRule {
   };
 }
 
-export type EngineConditionQuery<T extends AudienceDefinitionFilter> =
-  Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'> & T
+export type EngineConditionQuery<T extends AudienceDefinitionFilter> = Pick<
+  AudienceQueryDefinition,
+  'featureVersion' | 'queryProperty'
+> &
+  T;
 
 export interface EngineCondition<T extends AudienceDefinitionFilter> {
   filter: {
@@ -138,12 +87,40 @@ export interface EngineCondition<T extends AudienceDefinitionFilter> {
   rules: EngineConditionRule[];
 }
 
-export interface PingResponse {
-  gdprApplies?: boolean;
+// Audience cache interfaces
+
+export interface MatchedAudience {
+  id: string;
+  matchedAt: number;
+  expiresAt: number;
+  matchedOnCurrentPageView: boolean;
 }
 
+export interface CachedAudienceMetaData {
+  cachedAt: number;
+  audiences: AudienceMetaData[];
+}
+
+export interface AudienceMetaData {
+  id: string;
+  version: number;
+}
+
+// Storage interfaces
+
+export enum StorageKeys {
+  PAGE_VIEWS = 'edkt_page_views',
+  MATCHED_AUDIENCES = 'edkt_matched_audiences',
+  MATCHED_AUDIENCE_IDS = 'edkt_matched_audience_ids',
+  CACHED_AUDIENCES = 'edkt_cached_audiences',
+  CACHED_AUDIENCE_META_DATA = 'edkt_cached_audience_meta_data',
+}
+
+// Gdpr consent interfaces
+
+// https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md#tcdata
 export interface TCData {
-  gdprApplies?: boolean;
+  gdprApplies: boolean;
 
   eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
 
@@ -182,4 +159,21 @@ declare global {
       listenerId: number
     ): void;
   }
+}
+
+// Top level API interfaces
+
+interface Config {
+  audienceDefinitions: AudienceDefinition[];
+  pageFeatures?: Record<string, PageFeatureResult>;
+  pageMetadata?: Record<string, string | number | boolean>;
+  vendorIds?: number[];
+  omitGdprConsent?: boolean;
+  featureStorageSize?: number;
+}
+
+export interface Edkt {
+  run: (config: Config) => Promise<void>;
+  getMatchedAudiences: () => MatchedAudience[];
+  getCopyOfPageViews: () => PageView[];
 }
