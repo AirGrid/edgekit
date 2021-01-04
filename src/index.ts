@@ -2,23 +2,9 @@ import * as engine from './engine';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
-import {
-  PageFeatureResult,
-  MatchedAudience,
-  AudienceDefinition,
-  PageView,
-} from '../types';
+import { Edkt } from '../types';
 
-interface Config {
-  audienceDefinitions: AudienceDefinition[];
-  pageFeatures?: Record<string, PageFeatureResult>;
-  pageMetadata?: Record<string, string | number | boolean>;
-  vendorIds?: number[];
-  omitGdprConsent?: boolean;
-  featureStorageSize?: number;
-}
-
-const run = async (config: Config): Promise<void> => {
+const run: Edkt['run'] = async (config) => {
   const {
     vendorIds,
     pageFeatures,
@@ -67,15 +53,15 @@ const run = async (config: Config): Promise<void> => {
   matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };
 
-const getMatchedAudiences = (): MatchedAudience[] => {
+const getMatchedAudiences: Edkt['getMatchedAudiences'] = () => {
   return matchedAudienceStore.matchedAudiences;
 };
 
-const getCopyOfPageViews = (): PageView[] => {
+const getCopyOfPageViews: Edkt['getCopyOfPageViews'] = () => {
   return [...viewStore.pageViews];
 };
 
-export const edkt = {
+export const edkt: Edkt = {
   run,
   getMatchedAudiences,
   getCopyOfPageViews,
