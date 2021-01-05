@@ -2,7 +2,7 @@ import * as engine from './engine';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
-import { Edkt } from 'types';
+import { Edkt } from '../types';
 
 const run: Edkt['run'] = async (config) => {
   const {
@@ -69,4 +69,4 @@ export const edkt: Edkt = {
 
 export * from './store';
 export * from './gdpr';
-export * from 'types';
+export * from '../types';

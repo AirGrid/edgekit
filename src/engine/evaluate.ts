@@ -1,7 +1,11 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 import { queryMatches } from './filters';
-import { PageView, EngineCondition, AudienceDefinitionFilter } from 'types';
+import {
+  PageView,
+  EngineCondition,
+  AudienceDefinitionFilter,
+} from '../../types';
 
 /* Filter the pageView array by matching queries
  * and evaluates if it matches the conditions
@@ -14,7 +18,7 @@ export const evaluateCondition = (
   const { filter, rules } = condition;
 
   // if no queries, do not match at all
-  if (pageViews.length === 0 || filter.queries.length === 0) {
+  if (pageViews.length == 0 || filter.queries.length === 0) {
     return false;
   }
 

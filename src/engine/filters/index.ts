@@ -2,7 +2,7 @@ import {
   AudienceDefinitionFilter,
   EngineConditionQuery,
   PageFeatureResult,
-} from 'types';
+} from '../../../types';
 import {
   versionMatches,
   arrayIntersectsCondition,

@@ -5,7 +5,7 @@ import {
   PageView,
   VectorQueryValue,
   AudienceQueryDefinition,
-} from 'types';
+} from '../../types';
 
 export const makeQuery = <T extends AudienceQueryDefinition>(
   queryValue: VectorQueryValue,

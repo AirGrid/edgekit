@@ -4,7 +4,7 @@ import {
   QueryFilterComparisonType,
   CosineSimilarityFilter,
   PageView,
-} from 'types';
+} from '../types';
 import { clearStore } from './helpers/localStorageSetup';
 
 const cosineSimilarityCondition: EngineCondition<CosineSimilarityFilter> = {

@@ -1,6 +1,10 @@
 import { evaluateCondition } from './evaluate';
 import { translate } from './translate';
-import { PageView, EngineCondition, AudienceDefinitionFilter } from 'types';
+import {
+  PageView,
+  EngineCondition,
+  AudienceDefinitionFilter,
+} from '../../types';
 
 const check = (
   conditions: EngineCondition<AudienceDefinitionFilter>[],
