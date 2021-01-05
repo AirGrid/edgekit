@@ -1,4 +1,4 @@
-import { TCData, ConsentStatus } from 'types';
+import { TCData, ConsentStatus } from '../../types';
 import { timeout } from '../utils';
 
 export const waitForTcfApiTimeout = 10 * 1000;

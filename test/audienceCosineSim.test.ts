@@ -3,7 +3,7 @@ import {
   QueryFilterComparisonType,
   AudienceQueryDefinition,
   VectorQueryValue,
-} from 'types';
+} from '../types';
 import { edkt } from '../src';
 import {
   clearStore,

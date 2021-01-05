@@ -1,9 +1,6 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "paths": {
-      "types": ["types"]
-    },
     "rootDir": ".",
     "outDir": "dist",
     "lib": ["dom", "esnext"],

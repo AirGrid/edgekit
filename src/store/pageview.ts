@@ -1,5 +1,5 @@
 import { storage, timeStampInSecs } from '../utils';
-import { PageView, StorageKeys, PageFeatureResult } from 'types';
+import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 const DEFAULT_MAX_FEATURES_SIZE = 300;
 

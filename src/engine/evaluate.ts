@@ -1,7 +1,11 @@
 import * as reducers from './reducers';
 import * as matchers from './matchers';
 import { queryMatches } from './filters';
-import { PageView, EngineCondition, AudienceDefinitionFilter } from 'types';
+import {
+  PageView,
+  EngineCondition,
+  AudienceDefinitionFilter,
+} from '../../types';
 
 /* Filter the pageView array by matching queries
  * and evaluates if it matches the conditions
