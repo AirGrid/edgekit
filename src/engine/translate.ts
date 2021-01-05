@@ -2,7 +2,7 @@ import {
   AudienceDefinition,
   EngineCondition,
   AudienceDefinitionFilter,
-} from '../../types';
+} from 'types';
 
 /*
  * Audience to Engine translation

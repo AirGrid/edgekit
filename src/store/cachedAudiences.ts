@@ -1,8 +1,4 @@
-import {
-  StorageKeys,
-  AudienceDefinition,
-  CachedAudienceMetaData,
-} from '../../types';
+import { StorageKeys, AudienceDefinition, CachedAudienceMetaData } from 'types';
 import { storage, timeStampInSecs } from '../utils';
 
 class CachedAudienceStore {
