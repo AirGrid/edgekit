@@ -18,7 +18,7 @@ export const evaluateCondition = (
   const { filter, rules } = condition;
 
   // if no queries, do not match at all
-  if (pageViews.length == 0 || filter.queries.length === 0) {
+  if (pageViews.length === 0 || filter.queries.length === 0) {
     return false;
   }
 
