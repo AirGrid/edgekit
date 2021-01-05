@@ -10,7 +10,7 @@ import {
   AudienceDefinitionFilter,
   EngineConditionQuery,
   PageFeatureResult,
-} from '../../../types';
+} from 'types';
 
 /* =======================================
  * matching conditions

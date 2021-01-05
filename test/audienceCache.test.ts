@@ -1,5 +1,5 @@
 import { cachedAudienceStore } from '../src/store';
-import { CachedAudienceMetaData } from '../types';
+import { CachedAudienceMetaData } from 'types';
 import {
   sportInterestAudience,
   travelInterestAudience,

@@ -6,7 +6,7 @@ import {
   VectorDistanceFilter,
   VectorQueryValue,
   QueryFilterComparisonType,
-} from '../../../types';
+} from 'types';
 
 /* Type Guards */
 
