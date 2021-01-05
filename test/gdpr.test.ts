@@ -1,6 +1,10 @@
 import { edkt } from '../src';
 import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData, AudienceDefinition, QueryFilterComparisonType } from 'types';
+import {
+  TCData,
+  AudienceDefinition,
+  QueryFilterComparisonType,
+} from '../types';
 import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
 
 const airgridVendorId = 782;

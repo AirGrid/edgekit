@@ -4,7 +4,7 @@ import {
   QueryFilterComparisonType,
   VectorDistanceFilter,
   PageView,
-} from 'types';
+} from '../types';
 import { clearStore } from './helpers/localStorageSetup';
 
 const vectorCondition: EngineCondition<VectorDistanceFilter> = {

@@ -1,4 +1,4 @@
-import { AudienceDefinition, QueryFilterComparisonType } from 'types';
+import { AudienceDefinition, QueryFilterComparisonType } from '../../types';
 
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
