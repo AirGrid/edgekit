@@ -99,8 +99,6 @@ describe('Test edkt matched audience behaviour on version bump', () => {
 
     const matchedAudiences = getMatchedAudiences();
     const pageViews = getPageViews();
-    console.log('test aud', matchedAudiences);
-    console.log('test page', pageViews);
 
     expect(pageViews.length).toEqual(4);
     expect(matchedAudiences.length).toEqual(1);
