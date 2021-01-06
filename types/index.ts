@@ -91,6 +91,7 @@ export interface EngineCondition<T extends AudienceDefinitionFilter> {
 
 export interface MatchedAudience {
   id: string;
+  version: number;
   matchedAt: number;
   expiresAt: number;
   matchedOnCurrentPageView: boolean;
