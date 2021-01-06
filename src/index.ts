@@ -36,7 +36,6 @@ const run: Edkt['run'] = async (config) => {
   const matchedAudiences = audienceDefinitions
     // first we check if audience was previously matched so we can skip reprocessing it
     .filter((audience) => {
-      console.log(matchedAudienceStore);
       return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
     })
     // translate audience definitions into engine queries
@@ -62,6 +61,7 @@ const run: Edkt['run'] = async (config) => {
         matched: engine.check(audience.conditions, pageViewsWithinLookBack),
       };
     })
+    // keep only matched audiences
     .filter((audience) => audience.matched);
 
   matchedAudienceStore.setMatchedAudiences(matchedAudiences);

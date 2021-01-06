@@ -92,6 +92,13 @@ describe('Test edkt matched audience behaviour on version bump', () => {
   });
 
   it('should update pageView version on matching audienceDefinition with version bump', async () => {
+    await clearStore();
+
+    await runEdktWithData({
+      version: 1,
+      queryValue: sportKeywords,
+    });
+
     await runEdktWithData({
       version: 2,
       queryValue: sportKeywords,
@@ -100,7 +107,7 @@ describe('Test edkt matched audience behaviour on version bump', () => {
     const matchedAudiences = getMatchedAudiences();
     const pageViews = getPageViews();
 
-    expect(pageViews.length).toEqual(4);
+    expect(pageViews.length).toEqual(2);
     expect(matchedAudiences.length).toEqual(1);
     expect(matchedAudiences[0]).toHaveProperty('version', 2);
   });
