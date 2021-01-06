@@ -23,18 +23,31 @@ const run: Edkt['run'] = async (config) => {
   viewStore.setStorageSize(featureStorageSize);
   viewStore.insert(pageFeatures, pageMetadata);
 
+  // for reuse
+  const currentTS = timeStampInSecs();
+
+  /* Should compute as follow:
+   * - if a user has matched version 1, and the most recent audience version available is 1, we should not run the checking.
+   * - if a user has matched version 1, and the most recent audience version available is 2, we should run the checking.
+   * - if they not do not match the new version (2), but had matched 1, we must remove this audience from matched.
+   * - if they matched v1 and now match on v2, they remain in the audience but with the updated version
+   */
+
   const matchedAudiences = audienceDefinitions
+    // first we check if audience was previously matched so we can skip reprocessing it
     .filter((audience) => {
+      console.log(matchedAudienceStore);
       return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
     })
+    // translate audience definitions into engine queries
     .map((audience) => {
       return {
         ...audience,
         conditions: engine.translate(audience),
       };
     })
+    // check if query matches any pageViews
     .map((audience) => {
-      const currentTS = timeStampInSecs();
       const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
         return audience.lookBack === 0
           ? true
@@ -42,6 +55,7 @@ const run: Edkt['run'] = async (config) => {
       });
       return {
         id: audience.id,
+        version: audience.version,
         matchedAt: currentTS,
         expiresAt: currentTS + audience.ttl,
         matchedOnCurrentPageView: true,
