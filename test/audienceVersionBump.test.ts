@@ -56,59 +56,65 @@ const runEdktWithData = (data: MakeAudienceData) =>
  *   - if they matched v1 and now match on v2, they remain in the audience but with the updated version
  */
 
-describe('Test edkt matched audience behaviour on version bump', () => {
-  beforeAll(async () => {
-    clearStore();
+describe('edkt behaviour on audience version bump', () => {
+  describe('edkt unmatching behaviour on audience version bump', () => {
+    beforeAll(async () => {
+      clearStore();
+    });
+
+    it('should match pageView against audienceDefinition', async () => {
+      await runEdktWithData({
+        version: 1,
+        queryValue: sportKeywords,
+      });
+
+      expect(getPageViews()).toHaveLength(1);
+      expect(getMatchedAudiences()).toHaveLength(1);
+    });
+
+    it('should skip checking on previously matched pageView/audienceDefinition', async () => {
+      await runEdktWithData({
+        version: 1,
+        queryValue: sportKeywords,
+      });
+
+      expect(getPageViews()).toHaveLength(2);
+      expect(getMatchedAudiences()).toHaveLength(1);
+    });
+
+    it('should unmatch pageView on audienceDefinition version bump', async () => {
+      await runEdktWithData({
+        version: 2,
+        queryValue: ['Ferrari', 'Lamborghini', 'Mercedes'],
+      });
+
+      expect(getPageViews()).toHaveLength(3);
+      expect(getMatchedAudiences()).toHaveLength(0);
+    });
   });
 
-  it('should match pageView against audienceDefinition', async () => {
-    await runEdktWithData({
-      version: 1,
-      queryValue: sportKeywords,
+  describe('edkt feature version bump behaviour on matching audience version bump', () => {
+    beforeAll(async () => {
+      clearStore();
     });
 
-    expect(getPageViews().length).toEqual(1);
-    expect(getMatchedAudiences().length).toEqual(1);
-  });
+    it('should update pageView version on matching audienceDefinition with version bump', async () => {
+      await runEdktWithData({
+        version: 1,
+        queryValue: sportKeywords,
+      });
 
-  it('should skip checking on previously matched pageView/audienceDefinition', async () => {
-    await runEdktWithData({
-      version: 1,
-      queryValue: sportKeywords,
+      await runEdktWithData({
+        version: 2,
+        queryValue: sportKeywords,
+      });
+
+      const matchedAudiences = getMatchedAudiences();
+      const pageViews = getPageViews();
+
+      expect(pageViews).toHaveLength(2);
+      expect(matchedAudiences).toHaveLength(1);
+      expect(matchedAudiences[0]).toHaveProperty('version', 2);
     });
-
-    expect(getPageViews().length).toEqual(2);
-    expect(getMatchedAudiences().length).toEqual(1);
-  });
-
-  it('should unmatch pageView on audienceDefinition version bump', async () => {
-    await runEdktWithData({
-      version: 2,
-      queryValue: ['Ferrari', 'Lamborghini', 'Mercedes'],
-    });
-
-    expect(getPageViews().length).toEqual(3);
-    expect(getMatchedAudiences().length).toEqual(0);
-  });
-
-  it('should update pageView version on matching audienceDefinition with version bump', async () => {
-    await clearStore();
-
-    await runEdktWithData({
-      version: 1,
-      queryValue: sportKeywords,
-    });
-
-    await runEdktWithData({
-      version: 2,
-      queryValue: sportKeywords,
-    });
-
-    const matchedAudiences = getMatchedAudiences();
-    const pageViews = getPageViews();
-
-    expect(pageViews.length).toEqual(2);
-    expect(matchedAudiences.length).toEqual(1);
-    expect(matchedAudiences[0]).toHaveProperty('version', 2);
   });
 });
