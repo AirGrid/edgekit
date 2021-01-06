@@ -19,22 +19,22 @@ const sportPageFeature = {
 };
 
 type MakeAudienceData = {
-  featureVersion: number;
+  version: number;
   queryValue: StringArrayQueryValue;
 };
 
 export const makeSportInterestAudience = ({
-  featureVersion,
+  version,
   queryValue,
 }: MakeAudienceData): AudienceDefinition => ({
   id: 'iab-607',
-  version: 1,
+  version,
   ttl: 3600,
   lookBack: 0,
   occurrences: 0,
   definition: [
     {
-      featureVersion,
+      featureVersion: 1,
       queryProperty: 'keywords',
       queryValue,
       queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
@@ -63,7 +63,7 @@ describe('Test edkt matched audience behaviour on version bump', () => {
 
   it('should match pageView against audienceDefinition', async () => {
     await runEdktWithData({
-      featureVersion: 1,
+      version: 1,
       queryValue: sportKeywords,
     });
 
@@ -73,7 +73,7 @@ describe('Test edkt matched audience behaviour on version bump', () => {
 
   it('should skip checking on previously matched pageView/audienceDefinition', async () => {
     await runEdktWithData({
-      featureVersion: 1,
+      version: 1,
       queryValue: sportKeywords,
     });
 
@@ -83,7 +83,7 @@ describe('Test edkt matched audience behaviour on version bump', () => {
 
   it('should unmatch pageView on audienceDefinition version bump', async () => {
     await runEdktWithData({
-      featureVersion: 2,
+      version: 2,
       queryValue: ['Ferrari', 'Lamborghini', 'Mercedes'],
     });
 
@@ -93,14 +93,17 @@ describe('Test edkt matched audience behaviour on version bump', () => {
 
   it('should update pageView version on matching audienceDefinition with version bump', async () => {
     await runEdktWithData({
-      featureVersion: 2,
+      version: 2,
       queryValue: sportKeywords,
     });
 
     const matchedAudiences = getMatchedAudiences();
+    const pageViews = getPageViews();
+    console.log('test aud', matchedAudiences);
+    console.log('test page', pageViews);
 
-    expect(getPageViews().length).toEqual(4);
+    expect(pageViews.length).toEqual(4);
     expect(matchedAudiences.length).toEqual(1);
-    expect(matchedAudiences[0]).toHaveProperty(['keywords', 'version'], 2);
+    expect(matchedAudiences[0]).toHaveProperty('version', 2);
   });
 });
