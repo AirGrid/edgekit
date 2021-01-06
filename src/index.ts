@@ -19,24 +19,18 @@ const run: Edkt['run'] = async (config) => {
     if (!hasConsent) return;
   }
 
-  // This is a no-op if undefined, equals current value or lesser than 0
+  // This is a no-op if undefined or lesser than 0
   viewStore.setStorageSize(featureStorageSize);
   viewStore.insert(pageFeatures, pageMetadata);
 
-  // for reuse
   const currentTS = timeStampInSecs();
 
-  /* Should compute as follow:
-   * - if a user has matched version 1, and the most recent audience version available is 1, we should not run the checking.
-   * - if a user has matched version 1, and the most recent audience version available is 2, we should run the checking.
-   * - if they not do not match the new version (2), but had matched 1, we must remove this audience from matched.
-   * - if they matched v1 and now match on v2, they remain in the audience but with the updated version
-   */
-
-  const matchedAudiences = audienceDefinitions
-    // first we check if audience was previously matched so we can skip reprocessing it
+  const newMatchedAudiences = audienceDefinitions
+    // drop prev matched audiences with same version
     .filter((audience) => {
-      return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
+      return !matchedAudienceStore.matchedAudiences.some(
+        ({ id, version }) => audience.id === id && version === audience.version
+      );
     })
     // translate audience definitions into engine queries
     .map((audience) => {
@@ -46,23 +40,33 @@ const run: Edkt['run'] = async (config) => {
       };
     })
     // check if query matches any pageViews
-    .map((audience) => {
+    .map((query) => {
       const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
-        return audience.lookBack === 0
+        return query.lookBack === 0
           ? true
-          : pageView.ts > currentTS - audience.lookBack;
+          : pageView.ts > currentTS - query.lookBack;
       });
       return {
-        id: audience.id,
-        version: audience.version,
+        id: query.id,
+        version: query.version,
         matchedAt: currentTS,
-        expiresAt: currentTS + audience.ttl,
+        expiresAt: currentTS + query.ttl,
         matchedOnCurrentPageView: true,
-        matched: engine.check(audience.conditions, pageViewsWithinLookBack),
+        matched: engine.check(query.conditions, pageViewsWithinLookBack),
       };
     })
     // keep only matched audiences
     .filter((audience) => audience.matched);
+
+  // We also want to keep prev matched audiences with matching versions
+  const prevMatchedAudiences = matchedAudienceStore.matchedAudiences.filter(
+    (matched) =>
+      audienceDefinitions.some(
+        ({ id, version }) => matched.id === id && matched.version === version
+      )
+  );
+
+  const matchedAudiences = [...prevMatchedAudiences, ...newMatchedAudiences];
 
   matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };

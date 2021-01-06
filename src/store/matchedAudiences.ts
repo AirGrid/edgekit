@@ -35,18 +35,9 @@ class MatchedAudienceStore {
     storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
-  setMatchedAudiences(newlyMatchedAudiences: MatchedAudience[]) {
-    // TODO: decide if we need to check duplicate audiences here...
-
-    if (newlyMatchedAudiences.length === 0) return;
-    const allMatchedAudiences = [
-      ...this.matchedAudiences,
-      ...newlyMatchedAudiences,
-    ];
-    this.matchedAudiences = allMatchedAudiences;
-    this.matchedAudienceIds = allMatchedAudiences.map(
-      (audience) => audience.id
-    );
+  setMatchedAudiences(matchedAudiences: MatchedAudience[]) {
+    this.matchedAudiences = matchedAudiences;
+    this.matchedAudienceIds = matchedAudiences.map((audience) => audience.id);
     this._save();
   }
 }

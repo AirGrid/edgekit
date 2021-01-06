@@ -23,7 +23,7 @@ type MakeAudienceData = {
   queryValue: StringArrayQueryValue;
 };
 
-export const makeSportInterestAudience = ({
+export const makeAudience = ({
   version,
   queryValue,
 }: MakeAudienceData): AudienceDefinition => ({
@@ -45,7 +45,7 @@ export const makeSportInterestAudience = ({
 const runEdktWithData = (data: MakeAudienceData) =>
   edkt.run({
     pageFeatures: sportPageFeature,
-    audienceDefinitions: [makeSportInterestAudience(data)],
+    audienceDefinitions: [makeAudience(data)],
     omitGdprConsent: true,
   });
 
@@ -58,7 +58,7 @@ const runEdktWithData = (data: MakeAudienceData) =>
 
 describe('edkt behaviour on audience version bump', () => {
   describe('edkt unmatching behaviour on audience version bump', () => {
-    beforeAll(async () => {
+    beforeAll(() => {
       clearStore();
     });
 
@@ -94,7 +94,7 @@ describe('edkt behaviour on audience version bump', () => {
   });
 
   describe('edkt feature version bump behaviour on matching audience version bump', () => {
-    beforeAll(async () => {
+    beforeAll(() => {
       clearStore();
     });
 
