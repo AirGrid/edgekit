@@ -294,6 +294,7 @@ describe('Topic model run', () => {
     const edktPageViews = getPageViews();
     const edktMatchedAudiences = getMatchedAudiences();
 
+    expect(edktPageViews).toHaveLength(2);
     expect(edktPageViews).toEqual([
       {
         ts: edktPageViews[0].ts,
@@ -321,6 +322,7 @@ describe('Topic model run', () => {
     );
     expect(edktMatchedAudiences).toEqual([
       {
+        version: 1,
         id: topicModelAudience.id,
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
@@ -428,6 +430,7 @@ describe('Topic model run with additional audience', () => {
     expect(edktMatchedAudiences).toEqual([
       {
         id: topicModelAudience.id,
+        version: 1,
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,
