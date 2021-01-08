@@ -2,7 +2,7 @@ import * as engine from './engine';
 import { viewStore, matchedAudienceStore } from './store';
 import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
-import { Edkt } from '../types';
+import { Edkt, AudienceDefinition, MatchedAudience } from '../types';
 
 const run: Edkt['run'] = async (config) => {
   const {
@@ -25,11 +25,18 @@ const run: Edkt['run'] = async (config) => {
 
   const currentTS = timeStampInSecs();
 
+  const versionMatchPredicate = (
+    audience: AudienceDefinition,
+    matchedAudience: MatchedAudience
+  ) =>
+    audience.id === matchedAudience.id &&
+    audience.version === matchedAudience.version;
+
   const newMatchedAudiences = audienceDefinitions
     // drop prev matched audiences with same version
     .filter((audience) => {
-      return !matchedAudienceStore.matchedAudiences.some(
-        ({ id, version }) => audience.id === id && version === audience.version
+      return !matchedAudienceStore.matchedAudiences.some((matchedAudience) =>
+        versionMatchPredicate(audience, matchedAudience)
       );
     })
     // translate audience definitions into engine queries
@@ -60,9 +67,9 @@ const run: Edkt['run'] = async (config) => {
 
   // We also want to keep prev matched audiences with matching versions
   const prevMatchedAudiences = matchedAudienceStore.matchedAudiences.filter(
-    (matched) =>
-      audienceDefinitions.some(
-        ({ id, version }) => matched.id === id && matched.version === version
+    (matchedAudience) =>
+      audienceDefinitions.some((audience) =>
+        versionMatchPredicate(audience, matchedAudience)
       )
   );
 
