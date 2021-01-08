@@ -78,7 +78,7 @@ describe('edkt behaviour on audience version bump', () => {
         queryValue: ['Ferrari', 'Lamborghini', 'Mercedes'],
       });
 
-      expect(getPageViews()).toHaveLength(3);
+      expect(getPageViews()).toHaveLength(2);
       expect(getMatchedAudiences()).toHaveLength(0);
     });
   });
