@@ -72,16 +72,6 @@ describe('edkt behaviour on audience version bump', () => {
       expect(getMatchedAudiences()).toHaveLength(1);
     });
 
-    it('should skip checking on previously matched pageView/audienceDefinition', async () => {
-      await runEdktWithData({
-        version: 1,
-        queryValue: sportKeywords,
-      });
-
-      expect(getPageViews()).toHaveLength(2);
-      expect(getMatchedAudiences()).toHaveLength(1);
-    });
-
     it('should unmatch pageView on audienceDefinition version bump', async () => {
       await runEdktWithData({
         version: 2,
