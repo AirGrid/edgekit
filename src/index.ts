@@ -25,7 +25,7 @@ const run: Edkt['run'] = async (config) => {
 
   const currentTS = timeStampInSecs();
 
-  const versionMatchPredicate = (
+  const doesAudienceVersionMatch = (
     audience: AudienceDefinition,
     matchedAudience: MatchedAudience
   ) =>
@@ -36,7 +36,7 @@ const run: Edkt['run'] = async (config) => {
     // drop prev matched audiences with same version
     .filter((audience) => {
       return !matchedAudienceStore.matchedAudiences.some((matchedAudience) =>
-        versionMatchPredicate(audience, matchedAudience)
+        doesAudienceVersionMatch(audience, matchedAudience)
       );
     })
     // translate audience definitions into engine queries
@@ -69,7 +69,7 @@ const run: Edkt['run'] = async (config) => {
   const prevMatchedAudiences = matchedAudienceStore.matchedAudiences.filter(
     (matchedAudience) =>
       audienceDefinitions.some((audience) =>
-        versionMatchPredicate(audience, matchedAudience)
+        doesAudienceVersionMatch(audience, matchedAudience)
       )
   );
 
