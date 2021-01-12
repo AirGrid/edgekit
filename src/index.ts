@@ -1,8 +1,6 @@
-import * as engine from './engine';
 import { viewStore, matchedAudienceStore } from './store';
-import { timeStampInSecs } from './utils';
 import { waitForConsent } from './gdpr';
-import { Edkt, AudienceDefinition, MatchedAudience } from '../types';
+import { Edkt } from '../types';
 
 const run: Edkt['run'] = async (config) => {
   const {
@@ -21,75 +19,20 @@ const run: Edkt['run'] = async (config) => {
 
   // This is a no-op if undefined or lesser than 0
   viewStore.setStorageSize(featureStorageSize);
-  viewStore.insert(pageFeatures, pageMetadata);
 
-  const currentTS = timeStampInSecs();
+  // TODO the problem here is that it is not immediately clear
+  // that call order for viewStore.savePageViews and
+  // matchedAudienceStore.saveMatchingAudiences matters,
+  // but it do.
+  viewStore.savePageViews(pageFeatures, pageMetadata);
 
-  const doesAudienceVersionMatch = (
-    audience: AudienceDefinition,
-    matchedAudience: MatchedAudience
-  ) =>
-    audience.id === matchedAudience.id &&
-    audience.version === matchedAudience.version;
-
-  const newMatchedAudiences = audienceDefinitions
-    // drop prev matched audiences with same version
-    .filter((audience) => {
-      return !matchedAudienceStore.matchedAudiences.some((matchedAudience) =>
-        doesAudienceVersionMatch(audience, matchedAudience)
-      );
-    })
-    // translate audience definitions into engine queries
-    .map((audience) => {
-      return {
-        ...audience,
-        conditions: engine.translate(audience),
-      };
-    })
-    // check if query matches any pageViews
-    .map((query) => {
-      const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
-        return query.lookBack === 0
-          ? true
-          : pageView.ts > currentTS - query.lookBack;
-      });
-      return {
-        id: query.id,
-        version: query.version,
-        matchedAt: currentTS,
-        expiresAt: currentTS + query.ttl,
-        matchedOnCurrentPageView: true,
-        matched: engine.check(query.conditions, pageViewsWithinLookBack),
-      };
-    })
-    // keep only matched audiences
-    .filter((audience) => audience.matched);
-
-  // We also want to keep prev matched audiences with matching versions
-  const prevMatchedAudiences = matchedAudienceStore.matchedAudiences.filter(
-    (matchedAudience) =>
-      audienceDefinitions.some((audience) =>
-        doesAudienceVersionMatch(audience, matchedAudience)
-      )
-  );
-
-  const matchedAudiences = [...prevMatchedAudiences, ...newMatchedAudiences];
-
-  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
-};
-
-const getMatchedAudiences: Edkt['getMatchedAudiences'] = () => {
-  return matchedAudienceStore.matchedAudiences;
-};
-
-const getCopyOfPageViews: Edkt['getCopyOfPageViews'] = () => {
-  return [...viewStore.pageViews];
+  matchedAudienceStore.saveMatchingAudiences(audienceDefinitions, viewStore);
 };
 
 export const edkt: Edkt = {
   run,
-  getMatchedAudiences,
-  getCopyOfPageViews,
+  getMatchedAudiences: () => matchedAudienceStore.getMatchedAudiences(),
+  getCopyOfPageViews: () => viewStore.getPageViews(),
 };
 
 export * from './store';

@@ -3,9 +3,9 @@ import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 const DEFAULT_MAX_FEATURES_SIZE = 300;
 
-class ViewStore {
-  pageViews: PageView[];
-  storageSize: number;
+export class ViewStore {
+  private pageViews: PageView[];
+  private storageSize: number;
 
   constructor() {
     this.pageViews = [];
@@ -13,15 +13,15 @@ class ViewStore {
     this._load();
   }
 
-  _load() {
+  _load(): void {
     this.pageViews = storage.get(StorageKeys.PAGE_VIEWS) || [];
   }
 
-  _save() {
+  _save(): void {
     storage.set(StorageKeys.PAGE_VIEWS, this.pageViews);
   }
 
-  _trim() {
+  _trim(): void {
     if (this.pageViews.length <= this.storageSize) return;
     this.pageViews.sort((a: PageView, b: PageView): number => b.ts - a.ts);
     this.pageViews = this.pageViews.slice(0, this.storageSize);
@@ -30,15 +30,15 @@ class ViewStore {
   /**
    * @param storageSize Max pageView items to be kept
    */
-  setStorageSize(storageSize?: number) {
+  setStorageSize(storageSize?: number): void {
     if (!storageSize || storageSize < 0) return;
     this.storageSize = storageSize;
   }
 
-  insert(
+  savePageViews(
     features: Record<string, PageFeatureResult> | undefined,
     metadata?: Record<string, string | number | boolean>
-  ) {
+  ): void {
     if (!features || Object.keys(features).length < 1) return;
     const ts = timeStampInSecs();
     const pageView = {
@@ -49,6 +49,17 @@ class ViewStore {
     this.pageViews.push(pageView);
     this._trim();
     this._save();
+  }
+
+  getPageViewsWithinLookBack(lookBack: number): PageView[] {
+    const ts = timeStampInSecs();
+    return this.pageViews.filter((pageView) => {
+      return lookBack === 0 || pageView.ts > ts - lookBack;
+    });
+  }
+
+  getPageViews(): PageView[] {
+    return [...this.pageViews];
   }
 }
 
