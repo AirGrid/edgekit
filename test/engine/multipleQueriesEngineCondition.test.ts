@@ -1,10 +1,10 @@
-import { check } from '../src/engine';
+import { check } from '../../src/engine';
 import {
   makeEngineCondition,
   makeQuery,
   makePageView,
-} from './helpers/engineConditions';
-import { QueryFilterComparisonType } from '../types';
+} from '../helpers/engineConditions';
+import { QueryFilterComparisonType } from '../../types';
 
 const multipleOrthogonalQueriesCondition = makeEngineCondition(
   [

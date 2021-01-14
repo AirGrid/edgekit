@@ -1,23 +1,23 @@
-import { check } from '../src/engine';
+import { check } from '../../src/engine';
 import {
   EngineCondition,
   QueryFilterComparisonType,
-  CosineSimilarityFilter,
+  VectorDistanceFilter,
   PageView,
-} from '../types';
-import { clearStore } from './helpers/localStorageSetup';
+} from '../../types';
+import { clearStore } from '../helpers/localStorageSetup';
 
-const cosineSimilarityCondition: EngineCondition<CosineSimilarityFilter> = {
+const vectorCondition: EngineCondition<VectorDistanceFilter> = {
   filter: {
     any: false,
     queries: [
       {
         featureVersion: 1,
         queryProperty: 'topicDist',
-        queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
         queryValue: {
           vector: [0.4, 0.8, 0.3],
-          threshold: 0.99,
+          threshold: 0.5,
         },
       },
     ],
@@ -36,17 +36,17 @@ const cosineSimilarityCondition: EngineCondition<CosineSimilarityFilter> = {
 };
 
 // Vector condition with a bumped featureVersion
-const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
+const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
   filter: {
     any: false,
     queries: [
       {
         featureVersion: 2,
         queryProperty: 'topicDist',
-        queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
         queryValue: {
           vector: [0.4, 0.8, 0.3],
-          threshold: 0.99,
+          threshold: 0.5,
         },
       },
     ],
@@ -64,14 +64,14 @@ const cosineSimilarityConditionV2: EngineCondition<CosineSimilarityFilter> = {
   ],
 };
 
-describe('Cosine Similarity condition test', () => {
-  beforeAll(() => {
-    clearStore();
-  });
+describe('Vector Distance Engine condition', () => {
+  describe('Vector condition', () => {
+    beforeAll(() => {
+      clearStore();
+    });
 
-  describe('Cosine Similarity condition', () => {
-    it('matches the page view if vector similarity is above threshold', () => {
-      const conditions = [cosineSimilarityCondition];
+    it('matches the page view if vector similarity is above threshold', async () => {
+      const conditions = [vectorCondition];
 
       const pageViews: PageView[] = [
         {
@@ -79,7 +79,7 @@ describe('Cosine Similarity condition test', () => {
           features: {
             topicDist: {
               version: 1,
-              value: [0.4, 0.8, 0.3],
+              value: [0.2, 0.5, 0.1],
             },
           },
         },
@@ -90,8 +90,8 @@ describe('Cosine Similarity condition test', () => {
       expect(result).toEqual(true);
     });
 
-    it('does not match the page view if similarity is not above threshold', () => {
-      const conditions = [cosineSimilarityCondition];
+    it('does not match the page view if similarity is not above threshold', async () => {
+      const conditions = [vectorCondition];
 
       const pageViews: PageView[] = [
         {
@@ -99,7 +99,7 @@ describe('Cosine Similarity condition test', () => {
           features: {
             topicDist: {
               version: 1,
-              value: [0.2, 0.8, 0.1],
+              value: [0.3, 0.2, 0.1],
             },
           },
         },
@@ -108,7 +108,7 @@ describe('Cosine Similarity condition test', () => {
           features: {
             topicDist: {
               version: 1,
-              value: [0.3, 0.8, 0.1],
+              value: [0.3, 0.2, 0.2],
             },
           },
         },
@@ -120,9 +120,13 @@ describe('Cosine Similarity condition test', () => {
     });
   });
 
-  describe('Cosine Similarity condition with a bumped featureVersion', () => {
-    it('matches the page view if similarity is above threshold and has the same featureVersion', () => {
-      const conditions = [cosineSimilarityConditionV2];
+  describe('Vector condition with a bumped featureVersion', () => {
+    beforeAll(() => {
+      clearStore();
+    });
+
+    it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
+      const conditions = [vectorConditionV2];
 
       const pageViews: PageView[] = [
         {
@@ -130,7 +134,7 @@ describe('Cosine Similarity condition test', () => {
           features: {
             topicDist: {
               version: 2,
-              value: [0.4, 0.8, 0.3],
+              value: [0.2, 0.5, 0.1],
             },
           },
         },
@@ -141,8 +145,8 @@ describe('Cosine Similarity condition test', () => {
       expect(result).toBe(true);
     });
 
-    it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
-      const conditions = [cosineSimilarityConditionV2];
+    it('does not match the page view if similar enough but does not have the same featureVersion', async () => {
+      const conditions = [vectorConditionV2];
 
       const pageViews: PageView[] = [
         {
@@ -150,7 +154,7 @@ describe('Cosine Similarity condition test', () => {
           features: {
             topicDist: {
               version: 1,
-              value: [0.4, 0.8, 0.3],
+              value: [0.2, 0.5, 0.1],
             },
           },
         },
