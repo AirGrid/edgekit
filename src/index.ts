@@ -1,4 +1,5 @@
 import { viewStore, matchedAudienceStore } from './store';
+import { engine } from './engine';
 import { waitForConsent } from './gdpr';
 import { Edkt } from '../types';
 
@@ -17,16 +18,17 @@ const run: Edkt['run'] = async (config) => {
     if (!hasConsent) return;
   }
 
-  // This is a no-op if undefined or lesser than 0
   viewStore.setStorageSize(featureStorageSize);
 
-  // TODO the problem here is that it is not immediately clear
-  // that call order for viewStore.savePageViews and
-  // matchedAudienceStore.saveMatchingAudiences matters,
-  // but it do.
   viewStore.savePageViews(pageFeatures, pageMetadata);
 
-  matchedAudienceStore.saveMatchingAudiences(audienceDefinitions, viewStore);
+  const matchedAudiences = engine(
+    audienceDefinitions,
+    matchedAudienceStore,
+    viewStore
+  );
+
+  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };
 
 export const edkt: Edkt = {
