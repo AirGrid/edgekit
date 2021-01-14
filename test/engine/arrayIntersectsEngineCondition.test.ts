@@ -1,11 +1,11 @@
-import { check } from '../src/engine';
+import { check } from '../../src/engine';
 import {
   EngineCondition,
   QueryFilterComparisonType,
   ArrayIntersectsFilter,
   PageView,
-} from '../types';
-import { clearStore } from './helpers/localStorageSetup';
+} from '../../types';
+import { clearStore } from '../helpers/localStorageSetup';
 
 const sports1xConditionGt: EngineCondition<ArrayIntersectsFilter> = {
   filter: {
