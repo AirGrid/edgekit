@@ -26,7 +26,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     1
   );
 
-  it('matches for condition above threshold on fisrt query object', () => {
+  it('does match for condition above threshold on fisrt query object', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
     const pageViews = [makeTopicDistPageView([1, 0, 0], 1)];
 
@@ -35,7 +35,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     expect(result).toEqual(true);
   });
 
-  it('matches for condition above threshold on second query object', () => {
+  it('does match for condition above threshold on second query object', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
     const pageViews = [makeTopicDistPageView([0, 1, 0], 1)];
 
@@ -44,7 +44,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     expect(result).toEqual(true);
   });
 
-  it('does not matches for condition below threshold on every query object', () => {
+  it('does not match for condition below threshold on every query object', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
     const pageViews = [makeTopicDistPageView([0, 0, 1], 1)];
 
@@ -53,7 +53,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     expect(result).toEqual(false);
   });
 
-  it('matches for condition above threshold on at least one (pageView, condition) pair', () => {
+  it('does match for condition above threshold on at least one (pageView, condition) pair', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
 
     expect(
@@ -70,7 +70,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     ).toEqual(true);
   });
 
-  it('does not matches for different (condition, pageView) versions attributes', () => {
+  it('does not match for different (condition, pageView) versions attributes', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
     const pageViews = [
       makeTopicDistPageView([1, 0, 0], 2),
@@ -84,7 +84,7 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     expect(result).toEqual(false);
   });
 
-  it('successfully matches for mixed versions/conditions', () => {
+  it('does match for mixed versions/conditions with enough evidence', () => {
     const conditions = [multipleNonOverlapingQueriesCondition];
     const pageViews = [
       makeTopicDistPageView([1, 0, 0], 1),
