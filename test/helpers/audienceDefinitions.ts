@@ -1,5 +1,14 @@
-import { AudienceDefinition, QueryFilterComparisonType } from '../../types';
+import {
+  AudienceDefinition,
+  QueryFilterComparisonType,
+  AudienceQueryDefinition,
+  VectorQueryValue,
+  StringArrayQueryValue,
+} from '../../types';
 
+// stringArray audiences
+
+const ID = 'testid';
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
 const OCCURRENCES = 2;
@@ -31,53 +40,80 @@ export const automotiveKeywords = [
   'transport',
 ];
 
-export const sportInterestAudience: AudienceDefinition = {
+const makeAudienceDefinition = (
+  partialAudienceDefinition: Partial<AudienceDefinition>
+): AudienceDefinition => ({
+  id: ID,
+  version: VERSION,
+  ttl: TTL_IN_SECS,
+  lookBack: LOOK_BACK_IN_SECS,
+  occurrences: OCCURRENCES,
+  definition: [],
+  ...partialAudienceDefinition,
+});
+
+const makeStringArrayQuery = (
+  queryValue: StringArrayQueryValue
+): AudienceQueryDefinition => ({
+  featureVersion: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+  queryValue,
+});
+
+export const sportInterestAudience = makeAudienceDefinition({
   id: 'iab-607',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryValue: sportKeywords,
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(sportKeywords)],
+});
 
-export const travelInterestAudience: AudienceDefinition = {
+export const travelInterestAudience = makeAudienceDefinition({
   id: 'iab-719',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: travelKeywords,
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(travelKeywords)],
+});
 
-export const automotiveInterestAudience: AudienceDefinition = {
+export const automotiveInterestAudience = makeAudienceDefinition({
   id: 'iab-243',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
+  definition: [makeStringArrayQuery(automotiveKeywords)],
+});
+
+// vectorDistance audiences
+
+// cosineSimilarity audiences
+
+const makeCosineSimQuery = (
+  queryValue: VectorQueryValue
+): AudienceQueryDefinition => ({
+  featureVersion: 1,
+  queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+  queryProperty: 'dv',
+  queryValue,
+});
+
+export const cosineSimAudience = makeAudienceDefinition({
+  occurrences: 1,
   definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: automotiveKeywords,
-    },
+    makeCosineSimQuery({
+      threshold: 0.8,
+      vector: [1, 1, 1],
+    }),
   ],
-};
+});
+
+export const multiCosineSimAudience = makeAudienceDefinition({
+  occurrences: 1,
+  definition: [
+    makeCosineSimQuery({
+      threshold: 0.99,
+      vector: [1, 1, 1],
+    }),
+    makeCosineSimQuery({
+      threshold: 0.99,
+      vector: [1, 0, 1],
+    }),
+  ],
+});
+
+// all audiences export
 
 export const allAudienceDefinitions = [
   sportInterestAudience,
