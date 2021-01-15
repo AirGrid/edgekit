@@ -6,7 +6,7 @@ import {
 } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
-export const pageViewCreator = (
+export const makePageViews = (
   timestamp: number,
   keywords: Array<string>,
   numberOfPageViews: number

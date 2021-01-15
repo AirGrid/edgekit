@@ -6,8 +6,6 @@ import {
   StringArrayQueryValue,
 } from '../../types';
 
-// stringArray audiences
-
 const ID = 'testid';
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
@@ -40,7 +38,7 @@ export const automotiveKeywords = [
   'transport',
 ];
 
-const makeAudienceDefinition = (
+export const makeAudienceDefinition = (
   partialAudienceDefinition: Partial<AudienceDefinition>
 ): AudienceDefinition => ({
   id: ID,
@@ -52,7 +50,9 @@ const makeAudienceDefinition = (
   ...partialAudienceDefinition,
 });
 
-const makeStringArrayQuery = (
+// stringArray audiences
+
+export const makeStringArrayQuery = (
   queryValue: StringArrayQueryValue
 ): AudienceQueryDefinition => ({
   featureVersion: 1,
@@ -78,9 +78,18 @@ export const automotiveInterestAudience = makeAudienceDefinition({
 
 // vectorDistance audiences
 
+export const makeVectorDistanceQuery = (
+  queryValue: VectorQueryValue
+): AudienceQueryDefinition => ({
+  featureVersion: 1,
+  queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
+  queryProperty: 'topicDist',
+  queryValue,
+});
+
 // cosineSimilarity audiences
 
-const makeCosineSimQuery = (
+export const makeCosineSimilarityQuery = (
   queryValue: VectorQueryValue
 ): AudienceQueryDefinition => ({
   featureVersion: 1,
@@ -92,8 +101,8 @@ const makeCosineSimQuery = (
 export const cosineSimAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
-    makeCosineSimQuery({
-      threshold: 0.8,
+    makeCosineSimilarityQuery({
+      threshold: 0.99,
       vector: [1, 1, 1],
     }),
   ],
@@ -102,11 +111,11 @@ export const cosineSimAudience = makeAudienceDefinition({
 export const multiCosineSimAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
-    makeCosineSimQuery({
+    makeCosineSimilarityQuery({
       threshold: 0.99,
       vector: [1, 1, 1],
     }),
-    makeCosineSimQuery({
+    makeCosineSimilarityQuery({
       threshold: 0.99,
       vector: [1, 0, 1],
     }),
