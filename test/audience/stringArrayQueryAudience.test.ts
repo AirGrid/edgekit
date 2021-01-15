@@ -1,26 +1,24 @@
+import { edkt } from '../../src';
 import {
   sportInterestAudience,
   sportKeywords,
 } from '../helpers/audienceDefinitions';
-import { edkt } from '../../src';
 import {
-  clearStore,
   getPageViews,
   getMatchedAudiences,
 } from '../helpers/localStorageSetup';
 
-const sportPageFeature = {
-  keywords: {
-    version: 1,
-    value: sportKeywords,
-  },
-};
-
 describe('Test edkt audience matching', () => {
-  beforeAll(async () => {
-    clearStore();
+  const sportPageFeature = {
+    keywords: {
+      version: 1,
+      value: sportKeywords,
+    },
+  };
+
+  beforeAll(() => {
     // add one initial view
-    await edkt.run({
+    edkt.run({
       pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
       omitGdprConsent: true,
