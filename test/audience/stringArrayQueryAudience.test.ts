@@ -34,8 +34,8 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    expect(getPageViews().length).toEqual(2);
-    expect(getMatchedAudiences().length).toEqual(0);
+    expect(getPageViews()).toHaveLength(2);
+    expect(getMatchedAudiences()).toHaveLength(0);
   });
 
   it('Second run -> add another page view & match', async () => {
@@ -45,8 +45,8 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    expect(getPageViews().length).toEqual(3);
-    expect(getMatchedAudiences().length).toEqual(1);
+    expect(getPageViews()).toHaveLength(3);
+    expect(getMatchedAudiences()).toHaveLength(1);
   });
 
   it('Third run -> add another page view & match', async () => {
@@ -56,7 +56,7 @@ describe('Test edkt audience matching', () => {
       omitGdprConsent: true,
     });
 
-    expect(getPageViews().length).toEqual(4);
-    expect(getMatchedAudiences().length).toEqual(1);
+    expect(getPageViews()).toHaveLength(4);
+    expect(getMatchedAudiences()).toHaveLength(1);
   });
 });
