@@ -11,16 +11,14 @@ import {
 
 describe('Cosine similarity based audiences', () => {
   describe('Cosine similarity single query audiences', () => {
-    beforeAll(() => {
-      clearStore();
-    });
-
     const pageFeatures = {
       dv: {
         value: [1, 1, 1],
         version: 1,
       },
     };
+
+    beforeAll(clearStore);
 
     it('Check page views are empty', () => {
       expect(getPageViews()).toHaveLength(0);
@@ -61,9 +59,7 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences matches any', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+    beforeAll(clearStore);
 
     const pageFeaturesMatch0 = {
       dv: {
@@ -118,9 +114,7 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences does not matches below threshold', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+    beforeAll(clearStore);
 
     const pageFeaturesNotMatch = {
       dv: {
