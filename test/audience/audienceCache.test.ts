@@ -44,7 +44,7 @@ describe('Test audience cache', () => {
       ],
     };
 
-    expect(getCachedAudiences().length).toEqual(3);
+    expect(getCachedAudiences()).toHaveLength(3);
 
     // - 2 seconds incase slow test run
     expect(edktCachedAudienceMetaData.cachedAt).toBeGreaterThanOrEqual(
@@ -78,7 +78,7 @@ describe('Test audience cache', () => {
     const edktCachedAudienceMetaData =
       cachedAudienceStore.cachedAudiencesMetaData;
 
-    expect(edktCachedAudiences.length).toEqual(3);
+    expect(edktCachedAudiences).toHaveLength(3);
 
     const expectedCachedAudienceMetaData: CachedAudienceMetaData = {
       cachedAt: timeStampInSecs(),
@@ -105,6 +105,6 @@ describe('Test audience cache', () => {
       expectedCachedAudienceMetaData.audiences
     );
     // 3 because we have only updated the version of the travel audience not the id
-    expect(edktCachedAudiences.length).toEqual(3);
+    expect(edktCachedAudiences).toHaveLength(3);
   });
 });

@@ -167,9 +167,9 @@ describe('Test basic edkt run', () => {
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
 
-    expect(edktPageViews.length).toEqual(ONE_SPORTS_PAGE_VIEW.length + 1);
+    expect(edktPageViews).toHaveLength(ONE_SPORTS_PAGE_VIEW.length + 1);
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
-    expect(getMatchedAudiences().length).toEqual(0);
+    expect(getMatchedAudiences()).toHaveLength(0);
   });
 
   it('does match with two sport page view', async () => {
@@ -188,7 +188,7 @@ describe('Test basic edkt run', () => {
     // The default audience condition matches on (>=) -- see engine/translate.ts
     expect(edktPageViews.length).toBeGreaterThan(sportAudience.occurrences);
     expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
-    expect(getMatchedAudiences().length).toEqual(1);
+    expect(getMatchedAudiences()).toHaveLength(1);
   });
 
   it('does not match with mismatched audience filter / page feature', async () => {
@@ -204,12 +204,12 @@ describe('Test basic edkt run', () => {
     const latestKeywords =
       edktPageViews[edktPageViews.length - 1].features.keywords;
 
-    expect(edktPageViews.length).toEqual(TWO_SPORTS_PAGE_VIEW.length + 1);
+    expect(edktPageViews).toHaveLength(TWO_SPORTS_PAGE_VIEW.length + 1);
     expect(latestKeywords).toEqual({
       version: 1,
       value: ['sport'],
     });
-    expect(getMatchedAudiences().length).toEqual(0);
+    expect(getMatchedAudiences()).toHaveLength(0);
   });
 });
 
@@ -224,7 +224,7 @@ describe('Test look back edkt run', () => {
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
-    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(edktMatchedAudiences).toHaveLength(1);
     expect(edktMatchedAudiences[0].id).toEqual('look_back_infinity_id');
   });
 
@@ -238,7 +238,7 @@ describe('Test look back edkt run', () => {
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
-    expect(edktMatchedAudiences.length).toEqual(1);
+    expect(edktMatchedAudiences).toHaveLength(1);
     expect(edktMatchedAudiences[0].id).toEqual('look_back_id');
   });
 
@@ -252,7 +252,7 @@ describe('Test look back edkt run', () => {
     });
 
     const edktMatchedAudiences = edkt.getMatchedAudiences();
-    expect(edktMatchedAudiences.length).toEqual(0);
+    expect(edktMatchedAudiences).toHaveLength(0);
   });
 });
 
@@ -281,7 +281,7 @@ describe('Topic model run', () => {
         },
       },
     ]);
-    expect(getMatchedAudiences().length).toEqual(0);
+    expect(getMatchedAudiences()).toHaveLength(0);
   });
 
   it('does match with two page views', async () => {
