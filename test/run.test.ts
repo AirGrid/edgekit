@@ -1,12 +1,11 @@
 import { edkt } from '../src';
-import { PageView } from '../types';
 import { timeStampInSecs } from '../src/utils';
-import { viewStore, matchedAudienceStore } from '../src/store';
 import {
   clearStore,
   makePageViews,
   getPageViews,
   getMatchedAudiences,
+  setUpLocalStorage,
 } from './helpers/localStorageSetup';
 import {
   makeAudienceDefinition,
@@ -16,14 +15,6 @@ import {
 } from './helpers/audienceDefinitions';
 
 describe('Edkt run method', () => {
-  const setUpLocalStorage = (pageViews: PageView[]) => {
-    localStorage.clear();
-    localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
-    //We need to reload from local storage because its only done on construction
-    viewStore._load();
-    matchedAudienceStore._load();
-  };
-
   describe('Test basic edkt run', () => {
     const sportPageFeature = {
       keywords: {
@@ -43,7 +34,7 @@ describe('Edkt run method', () => {
 
     beforeAll(clearStore);
 
-    it('does not match with one sport page view', async () => {
+    it('does add page view to store', async () => {
       setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
       await edkt.run({
@@ -58,6 +49,17 @@ describe('Edkt run method', () => {
 
       expect(edktPageViews).toHaveLength(ONE_SPORTS_PAGE_VIEW.length + 1);
       expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
+    });
+
+    it('does not match with one sport page view', async () => {
+      setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
+
+      await edkt.run({
+        pageFeatures: sportPageFeature,
+        audienceDefinitions: [sportAudience],
+        omitGdprConsent: true,
+      });
+
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
@@ -70,13 +72,6 @@ describe('Edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktPageViews = getPageViews();
-      const latestKeywords =
-        edktPageViews[edktPageViews.length - 1].features.keywords;
-
-      // The default audience condition matches on (>=) -- see engine/translate.ts
-      expect(edktPageViews.length).toBeGreaterThan(sportAudience.occurrences);
-      expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
       expect(getMatchedAudiences()).toHaveLength(1);
     });
 
@@ -146,7 +141,8 @@ describe('Edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktMatchedAudiences = edkt.getMatchedAudiences();
+      const edktMatchedAudiences = getMatchedAudiences();
+
       expect(edktMatchedAudiences).toHaveLength(1);
       expect(edktMatchedAudiences[0].id).toEqual('look_back_infinity_id');
     });
@@ -160,7 +156,8 @@ describe('Edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktMatchedAudiences = edkt.getMatchedAudiences();
+      const edktMatchedAudiences = getMatchedAudiences();
+
       expect(edktMatchedAudiences).toHaveLength(1);
       expect(edktMatchedAudiences[0].id).toEqual('look_back_id');
     });
@@ -174,8 +171,7 @@ describe('Edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktMatchedAudiences = edkt.getMatchedAudiences();
-      expect(edktMatchedAudiences).toHaveLength(0);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
   });
 
@@ -239,11 +235,6 @@ describe('Edkt run method', () => {
           features: topicModelPageFeature,
         },
       ]);
-
-      // The default audience condition matches on (>=) -- see engine/translate.ts
-      expect(edktPageViews.length).toBeGreaterThan(
-        topicModelAudience.occurrences
-      );
       expect(edktMatchedAudiences).toEqual([
         {
           id: topicModelAudience.id,
@@ -255,6 +246,17 @@ describe('Edkt run method', () => {
       ]);
     });
   });
+
+  const mixedPageFeatures = {
+    topicDist: {
+      version: 1,
+      value: [0.2, 0.5, 0.1],
+    },
+    keywords: {
+      version: 1,
+      value: ['dummy'],
+    },
+  };
 
   describe('Topic model run with additional audience', () => {
     const topicModelAudience = makeAudienceDefinition({
@@ -274,24 +276,12 @@ describe('Edkt run method', () => {
       definition: [makeStringArrayQuery(['sport', 'Leeds United A.F.C.'])],
     });
 
-    const pageFeatures = {
-      topicDist: {
-        version: 1,
-        value: [0.2, 0.5, 0.1],
-      },
-      keywords: {
-        version: 1,
-        value: ['dummy'],
-      },
-    };
-
-    const run = async () => {
-      await edkt.run({
-        pageFeatures,
+    const run = () =>
+      edkt.run({
+        pageFeatures: mixedPageFeatures,
         audienceDefinitions: [topicModelAudience, keywordsAudience],
         omitGdprConsent: true,
       });
-    };
 
     beforeAll(clearStore);
 
@@ -305,18 +295,13 @@ describe('Edkt run method', () => {
       expect(edktPageViews).toEqual([
         {
           ts: edktPageViews[0].ts,
-          features: pageFeatures,
+          features: mixedPageFeatures,
         },
         {
           ts: edktPageViews[1].ts,
-          features: pageFeatures,
+          features: mixedPageFeatures,
         },
       ]);
-
-      // The default audience condition matches on (>=) -- see engine/translate.ts
-      expect(edktPageViews.length).toBeGreaterThan(
-        topicModelAudience.occurrences
-      );
       expect(edktMatchedAudiences).toEqual([
         {
           id: topicModelAudience.id,
@@ -355,24 +340,12 @@ describe('Edkt run method', () => {
       ],
     });
 
-    const pageFeatures = {
-      topicDist: {
-        version: 1,
-        value: [0.2, 0.5, 0.1],
-      },
-      keywords: {
-        version: 1,
-        value: ['dummy'],
-      },
-    };
-
-    const run = async () => {
-      await edkt.run({
-        pageFeatures,
+    const run = () =>
+      edkt.run({
+        pageFeatures: mixedPageFeatures,
         audienceDefinitions: [topicModelAudience, keywordsAudience],
         omitGdprConsent: true,
       });
-    };
 
     beforeAll(clearStore);
 
@@ -381,20 +354,18 @@ describe('Edkt run method', () => {
       await run();
 
       const edktPageViews = getPageViews();
-      const edktMatchedAudiences = getMatchedAudiences();
 
       expect(edktPageViews).toEqual([
         {
           ts: edktPageViews[0].ts,
-          features: pageFeatures,
+          features: mixedPageFeatures,
         },
         {
           ts: edktPageViews[1].ts,
-          features: pageFeatures,
+          features: mixedPageFeatures,
         },
       ]);
-
-      expect(edktMatchedAudiences).toEqual([]);
+      expect(getMatchedAudiences()).toEqual([]);
     });
   });
 });
