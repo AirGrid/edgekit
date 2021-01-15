@@ -1,6 +1,6 @@
-import { viewStore } from '../src/store';
-import { edkt } from '../src';
-import { getPageViews } from './helpers/localStorageSetup';
+import { viewStore } from '../../src/store';
+import { edkt } from '../../src';
+import { getPageViews } from '../helpers/localStorageSetup';
 
 describe('setPageFeatures', () => {
   const vendorIds = [873];
