@@ -3,13 +3,13 @@ import {
   QueryFilterComparisonType,
   AudienceQueryDefinition,
   VectorQueryValue,
-} from '../types';
-import { edkt } from '../src';
+} from '../../types';
+import { edkt } from '../../src';
 import {
   clearStore,
   getMatchedAudiences,
   getPageViews,
-} from './helpers/localStorageSetup';
+} from '../helpers/localStorageSetup';
 
 const makeCosineSimAudience = (
   definition: AudienceQueryDefinition[]
@@ -49,7 +49,6 @@ const multiCosineSimAudience = makeCosineSimAudience([
   }),
 ]);
 
-/* These tests will improve soon */
 describe('Cosine similarity based audiences', () => {
   describe('Cosine similarity single query audiences', () => {
     beforeAll(() => {
