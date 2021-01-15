@@ -1,53 +1,13 @@
-import {
-  AudienceDefinition,
-  QueryFilterComparisonType,
-  AudienceQueryDefinition,
-  VectorQueryValue,
-} from '../../types';
 import { edkt } from '../../src';
 import {
   clearStore,
   getMatchedAudiences,
   getPageViews,
 } from '../helpers/localStorageSetup';
-
-const makeCosineSimAudience = (
-  definition: AudienceQueryDefinition[]
-): AudienceDefinition => ({
-  lookBack: 2592000,
-  occurrences: 1,
-  ttl: 2592000,
-  definition,
-  id: 'testid',
-  version: 1,
-});
-
-const makeCosineSimQuery = (
-  queryValue: VectorQueryValue
-): AudienceQueryDefinition => ({
-  featureVersion: 1,
-  queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-  queryProperty: 'dv',
-  queryValue,
-});
-
-const cosineSimAudience = makeCosineSimAudience([
-  makeCosineSimQuery({
-    threshold: 0.8,
-    vector: [1, 1, 1],
-  }),
-]);
-
-const multiCosineSimAudience = makeCosineSimAudience([
-  makeCosineSimQuery({
-    threshold: 0.99,
-    vector: [1, 1, 1],
-  }),
-  makeCosineSimQuery({
-    threshold: 0.99,
-    vector: [1, 0, 1],
-  }),
-]);
+import {
+  cosineSimAudience,
+  multiCosineSimAudience,
+} from '../helpers/audienceDefinitions';
 
 describe('Cosine similarity based audiences', () => {
   describe('Cosine similarity single query audiences', () => {
@@ -63,7 +23,7 @@ describe('Cosine similarity based audiences', () => {
     };
 
     it('Check page views are empty', () => {
-      expect(getPageViews().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(0);
     });
 
     it('First run -> add 1st page view and do not match audience definition', async () => {
@@ -73,8 +33,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(1);
-      expect(getMatchedAudiences().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(1);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
 
     it('Second run -> add 2nd page view and match audience definition', async () => {
@@ -84,8 +44,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(2);
-      expect(getMatchedAudiences().length).toEqual(1);
+      expect(getPageViews()).toHaveLength(2);
+      expect(getMatchedAudiences()).toHaveLength(1);
     });
 
     it('Third run -> add 3rd page view', async () => {
@@ -95,8 +55,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(3);
-      expect(getMatchedAudiences().length).toEqual(1);
+      expect(getPageViews()).toHaveLength(3);
+      expect(getMatchedAudiences()).toHaveLength(1);
     });
   });
 
@@ -120,7 +80,7 @@ describe('Cosine similarity based audiences', () => {
     };
 
     it('Check page views are empty', () => {
-      expect(getPageViews().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(0);
     });
 
     it('First run -> add 1st page view and do not match audience definition', async () => {
@@ -130,8 +90,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(1);
-      expect(getMatchedAudiences().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(1);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
 
     it('Second run -> add 2nd page view and match audience definition', async () => {
@@ -141,8 +101,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(2);
-      expect(getMatchedAudiences().length).toEqual(1);
+      expect(getPageViews()).toHaveLength(2);
+      expect(getMatchedAudiences()).toHaveLength(1);
     });
 
     it('Third run -> add 3rd page view', async () => {
@@ -152,8 +112,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(3);
-      expect(getMatchedAudiences().length).toEqual(1);
+      expect(getPageViews()).toHaveLength(3);
+      expect(getMatchedAudiences()).toHaveLength(1);
     });
   });
 
@@ -170,7 +130,7 @@ describe('Cosine similarity based audiences', () => {
     };
 
     it('Check page views are empty', () => {
-      expect(getPageViews().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(0);
     });
 
     it('First run -> add 1st page view and do not match audience definition', async () => {
@@ -180,8 +140,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(1);
-      expect(getMatchedAudiences().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(1);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
 
     it('Second run -> add 2nd page view and match audience definition', async () => {
@@ -191,8 +151,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(2);
-      expect(getMatchedAudiences().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(2);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
 
     it('Third run -> add 3rd page view', async () => {
@@ -202,8 +162,8 @@ describe('Cosine similarity based audiences', () => {
         omitGdprConsent: true,
       });
 
-      expect(getPageViews().length).toEqual(3);
-      expect(getMatchedAudiences().length).toEqual(0);
+      expect(getPageViews()).toHaveLength(3);
+      expect(getMatchedAudiences()).toHaveLength(0);
     });
   });
 });
