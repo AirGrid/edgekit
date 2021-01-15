@@ -32,8 +32,6 @@ describe('Edkt run method', () => {
 
     const TWO_SPORTS_PAGE_VIEW = makePageViews(timeStampInSecs(), ['sport'], 2);
 
-    beforeAll(clearStore);
-
     it('does add page view to store', async () => {
       setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 

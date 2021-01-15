@@ -7,16 +7,11 @@ import {
 } from '../helpers/audienceDefinitions';
 import { timeStampInSecs } from '../../src/utils';
 import {
-  clearStore,
   getCachedAudiences,
   getCachedAudiencesMetaData,
 } from '../helpers/localStorageSetup';
 
 describe('Test audience cache', () => {
-  beforeAll(async () => {
-    clearStore();
-  });
-
   it('Successfully adds audiences to the audience cache with local storage', async () => {
     cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,
