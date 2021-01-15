@@ -8,7 +8,7 @@ import {
   getMatchedAudiences,
 } from '../helpers/localStorageSetup';
 
-describe('Test edkt audience matching', () => {
+describe('test edkt audience matching', () => {
   const sportPageFeature = {
     keywords: {
       version: 1,
@@ -25,7 +25,7 @@ describe('Test edkt audience matching', () => {
     });
   });
 
-  it('First run -> add page view but do not match', async () => {
+  it('first run -> add page view but do not match', async () => {
     await edkt.run({
       pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
@@ -36,7 +36,7 @@ describe('Test edkt audience matching', () => {
     expect(getMatchedAudiences()).toHaveLength(0);
   });
 
-  it('Second run -> add another page view & match', async () => {
+  it('second run -> add another page view & match', async () => {
     await edkt.run({
       pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],
@@ -47,7 +47,7 @@ describe('Test edkt audience matching', () => {
     expect(getMatchedAudiences()).toHaveLength(1);
   });
 
-  it('Third run -> add another page view & match', async () => {
+  it('third run -> add another page view & match', async () => {
     await edkt.run({
       pageFeatures: sportPageFeature,
       audienceDefinitions: [sportInterestAudience],

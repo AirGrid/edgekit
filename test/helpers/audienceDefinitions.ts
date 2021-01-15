@@ -79,9 +79,10 @@ export const automotiveInterestAudience = makeAudienceDefinition({
 // vectorDistance audiences
 
 export const makeVectorDistanceQuery = (
-  queryValue: VectorQueryValue
+  queryValue: VectorQueryValue,
+  featureVersion = 1
 ): AudienceQueryDefinition => ({
-  featureVersion: 1,
+  featureVersion,
   queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
   queryProperty: 'topicDist',
   queryValue,
@@ -90,11 +91,12 @@ export const makeVectorDistanceQuery = (
 // cosineSimilarity audiences
 
 export const makeCosineSimilarityQuery = (
-  queryValue: VectorQueryValue
+  queryValue: VectorQueryValue,
+  featureVersion = 1
 ): AudienceQueryDefinition => ({
-  featureVersion: 1,
+  featureVersion,
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-  queryProperty: 'dv',
+  queryProperty: 'topicDist',
   queryValue,
 });
 

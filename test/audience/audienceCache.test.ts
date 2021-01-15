@@ -11,8 +11,8 @@ import {
   getCachedAudiencesMetaData,
 } from '../helpers/localStorageSetup';
 
-describe('Test audience cache', () => {
-  it('Successfully adds audiences to the audience cache with local storage', async () => {
+describe('test audience cache', () => {
+  it('successfully adds audiences to the audience cache with local storage', async () => {
     cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,
       travelInterestAudience,
@@ -50,7 +50,7 @@ describe('Test audience cache', () => {
     );
   });
 
-  it('Successfully update the audience cache', async () => {
+  it('successfully update the audience cache', async () => {
     cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,
       travelInterestAudience,

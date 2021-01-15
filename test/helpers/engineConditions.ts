@@ -1,48 +1,63 @@
 import {
   EngineCondition,
   EngineConditionQuery,
-  QueryFilterComparisonType,
   PageView,
-  VectorQueryValue,
   AudienceQueryDefinition,
+  EngineConditionRule,
 } from '../../types';
-
-export const makeQuery = <T extends AudienceQueryDefinition>(
-  queryValue: VectorQueryValue,
-  featureVersion: number,
-  queryFilterComparisonType: QueryFilterComparisonType
-): EngineConditionQuery<T> =>
-  ({
-    featureVersion,
-    queryProperty: 'topicDist',
-    queryFilterComparisonType,
-    queryValue,
-  } as EngineConditionQuery<T>);
 
 export const makeEngineCondition = <T extends AudienceQueryDefinition>(
   queries: EngineConditionQuery<T>[],
-  occurences: number
+  occurences: EngineConditionRule['matcher']['args'] = 1,
+  condition: EngineConditionRule['matcher']['name'] = 'ge'
 ): EngineCondition<T> => ({
-  filter: { queries },
+  filter: {
+    any: false,
+    queries,
+  },
   rules: [
     {
       reducer: {
         name: 'count',
       },
       matcher: {
-        name: 'ge',
+        name: condition,
         args: occurences,
       },
     },
   ],
 });
 
-export const makePageView = (value: number[], version: number): PageView => ({
-  ts: 100,
+export const makeTopicDistPageView = (
+  value: number[],
+  version: number,
+  ts = 100
+): PageView => ({
+  ts,
   features: {
     topicDist: {
       version,
       value,
+    },
+  },
+});
+
+export const makeSportsPageView = (ts: number): PageView => ({
+  ts,
+  features: {
+    keywords: {
+      version: 1,
+      value: ['sport', 'football'],
+    },
+  },
+});
+
+export const makeTestPageView = (ts: number): PageView => ({
+  ts,
+  features: {
+    keywords: {
+      version: 1,
+      value: ['test', 'test2'],
     },
   },
 });

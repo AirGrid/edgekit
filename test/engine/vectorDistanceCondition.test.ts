@@ -1,89 +1,25 @@
 import { check } from '../../src/engine';
 import {
-  EngineCondition,
-  QueryFilterComparisonType,
-  VectorDistanceFilter,
-  PageView,
-} from '../../types';
-import { clearStore } from '../helpers/localStorageSetup';
+  makeEngineCondition,
+  makeTopicDistPageView,
+} from '../helpers/engineConditions';
+import { makeVectorDistanceQuery } from '../helpers/audienceDefinitions';
 
-const vectorCondition: EngineCondition<VectorDistanceFilter> = {
-  filter: {
-    any: false,
-    queries: [
-      {
-        featureVersion: 1,
-        queryProperty: 'topicDist',
-        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: {
+describe('engine matching behaviour for vector distance condition', () => {
+  describe('vector distance condition with same condition/pageView version', () => {
+    const vectorCondition = makeEngineCondition([
+      makeVectorDistanceQuery(
+        {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.5,
         },
-      },
-    ],
-  },
-  rules: [
-    {
-      reducer: {
-        name: 'count',
-      },
-      matcher: {
-        name: 'ge',
-        args: 1,
-      },
-    },
-  ],
-};
-
-// Vector condition with a bumped featureVersion
-const vectorConditionV2: EngineCondition<VectorDistanceFilter> = {
-  filter: {
-    any: false,
-    queries: [
-      {
-        featureVersion: 2,
-        queryProperty: 'topicDist',
-        queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-        queryValue: {
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.5,
-        },
-      },
-    ],
-  },
-  rules: [
-    {
-      reducer: {
-        name: 'count',
-      },
-      matcher: {
-        name: 'ge',
-        args: 1,
-      },
-    },
-  ],
-};
-
-describe('Vector Distance Engine condition', () => {
-  describe('Vector condition', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+        1
+      ),
+    ]);
 
     it('matches the page view if vector similarity is above threshold', async () => {
       const conditions = [vectorCondition];
-
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            topicDist: {
-              version: 1,
-              value: [0.2, 0.5, 0.1],
-            },
-          },
-        },
-      ];
+      const pageViews = [makeTopicDistPageView([0.2, 0.5, 0.1], 1, 100)];
 
       const result = check(conditions, pageViews);
 
@@ -92,26 +28,9 @@ describe('Vector Distance Engine condition', () => {
 
     it('does not match the page view if similarity is not above threshold', async () => {
       const conditions = [vectorCondition];
-
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            topicDist: {
-              version: 1,
-              value: [0.3, 0.2, 0.1],
-            },
-          },
-        },
-        {
-          ts: 101,
-          features: {
-            topicDist: {
-              version: 1,
-              value: [0.3, 0.2, 0.2],
-            },
-          },
-        },
+      const pageViews = [
+        makeTopicDistPageView([0.3, 0.2, 0.1], 1, 100),
+        makeTopicDistPageView([0.3, 0.2, 0.2], 1, 101),
       ];
 
       const result = check(conditions, pageViews);
@@ -120,25 +39,21 @@ describe('Vector Distance Engine condition', () => {
     });
   });
 
-  describe('Vector condition with a bumped featureVersion', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+  describe('vector condition with a bumped featureVersion', () => {
+    // Vector condition with a bumped featureVersion
+    const vectorCondition = makeEngineCondition([
+      makeVectorDistanceQuery(
+        {
+          vector: [0.4, 0.8, 0.3],
+          threshold: 0.5,
+        },
+        2
+      ),
+    ]);
 
     it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
-      const conditions = [vectorConditionV2];
-
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            topicDist: {
-              version: 2,
-              value: [0.2, 0.5, 0.1],
-            },
-          },
-        },
-      ];
+      const conditions = [vectorCondition];
+      const pageViews = [makeTopicDistPageView([0.2, 0.5, 0.1], 2, 100)];
 
       const result = check(conditions, pageViews);
 
@@ -146,19 +61,8 @@ describe('Vector Distance Engine condition', () => {
     });
 
     it('does not match the page view if similar enough but does not have the same featureVersion', async () => {
-      const conditions = [vectorConditionV2];
-
-      const pageViews: PageView[] = [
-        {
-          ts: 100,
-          features: {
-            topicDist: {
-              version: 1,
-              value: [0.2, 0.5, 0.1],
-            },
-          },
-        },
-      ];
+      const conditions = [vectorCondition];
+      const pageViews = [makeTopicDistPageView([0.2, 0.5, 0.1], 1, 100)];
 
       const result = check(conditions, pageViews);
 
