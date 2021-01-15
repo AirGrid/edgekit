@@ -3,6 +3,7 @@ import { PageView } from '../types';
 import { timeStampInSecs } from '../src/utils';
 import { viewStore, matchedAudienceStore } from '../src/store';
 import {
+  clearStore,
   makePageViews,
   getPageViews,
   getMatchedAudiences,
@@ -39,6 +40,8 @@ describe('Edkt run method', () => {
     const ONE_SPORTS_PAGE_VIEW = makePageViews(timeStampInSecs(), ['sport'], 1);
 
     const TWO_SPORTS_PAGE_VIEW = makePageViews(timeStampInSecs(), ['sport'], 2);
+
+    beforeAll(clearStore);
 
     it('does not match with one sport page view', async () => {
       setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
@@ -132,6 +135,8 @@ describe('Edkt run method', () => {
       lookBackInfinityAudience.occurrences
     );
 
+    beforeAll(clearStore);
+
     it('does match with lookBack set to 0 with two demo page view at any point in the past', async () => {
       setUpLocalStorage(LOOK_BACK_INFINITY_PAGE_VIEW);
 
@@ -194,9 +199,7 @@ describe('Edkt run method', () => {
       ],
     });
 
-    beforeAll(() => {
-      setUpLocalStorage([]);
-    });
+    beforeAll(clearStore);
 
     it('does not match with one page view', async () => {
       await edkt.run({
@@ -290,9 +293,7 @@ describe('Edkt run method', () => {
       });
     };
 
-    beforeAll(() => {
-      setUpLocalStorage([]);
-    });
+    beforeAll(clearStore);
 
     it('does match with two page views', async () => {
       await run();
@@ -373,9 +374,7 @@ describe('Edkt run method', () => {
       });
     };
 
-    beforeAll(() => {
-      setUpLocalStorage([]);
-    });
+    beforeAll(clearStore);
 
     it('does not match with two page views since version is mismatched', async () => {
       await run();
