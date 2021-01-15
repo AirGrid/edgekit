@@ -9,8 +9,8 @@ import {
   multiCosineSimAudience,
 } from '../helpers/audienceDefinitions';
 
-describe('cosine similarity based audiences', () => {
-  describe('cosine similarity single query audiences', () => {
+describe('cosine similarity audiences matching behaviour', () => {
+  describe('cosine similarity with single query audiences', () => {
     const pageFeatures = {
       topicDist: {
         value: [1, 1, 1],
@@ -18,11 +18,7 @@ describe('cosine similarity based audiences', () => {
       },
     };
 
-    it('check page views are empty', () => {
-      expect(getPageViews()).toHaveLength(0);
-    });
-
-    it('first run -> add 1st page view and do not match audience definition', async () => {
+    it('adds 1st page view and does not match on first run', async () => {
       await edkt.run({
         pageFeatures: pageFeatures,
         audienceDefinitions: [cosineSimAudience],
@@ -33,7 +29,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
-    it('second run -> add 2nd page view and match audience definition', async () => {
+    it('adds 2nd page view and does match on second run', async () => {
       await edkt.run({
         pageFeatures: pageFeatures,
         audienceDefinitions: [cosineSimAudience],
@@ -44,7 +40,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(1);
     });
 
-    it('third run -> add 3rd page view', async () => {
+    it('adds 3rd page view on third run', async () => {
       await edkt.run({
         pageFeatures: pageFeatures,
         audienceDefinitions: [cosineSimAudience],
@@ -56,7 +52,7 @@ describe('cosine similarity based audiences', () => {
     });
   });
 
-  describe('cosine similarity multi query audiences matches any', () => {
+  describe('cosine similarity multi query audiences matching above threshold', () => {
     const pageFeaturesMatch0 = {
       topicDist: {
         value: [1, 1, 1],
@@ -73,11 +69,7 @@ describe('cosine similarity based audiences', () => {
 
     beforeAll(clearStore);
 
-    it('check page views are empty', () => {
-      expect(getPageViews()).toHaveLength(0);
-    });
-
-    it('first run -> add 1st page view and do not match audience definition', async () => {
+    it('adds 1st page view and does not match on first run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesMatch0,
         audienceDefinitions: [multiCosineSimAudience],
@@ -88,7 +80,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
-    it('second run -> add 2nd page view and match audience definition', async () => {
+    it('adds 2nd page view and match second run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesMatch1,
         audienceDefinitions: [multiCosineSimAudience],
@@ -99,7 +91,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(1);
     });
 
-    it('third run -> add 3rd page view', async () => {
+    it('adds 3rd page view third run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesMatch0,
         audienceDefinitions: [cosineSimAudience],
@@ -111,7 +103,7 @@ describe('cosine similarity based audiences', () => {
     });
   });
 
-  describe('cosine similarity multi query audiences does not matches below threshold', () => {
+  describe('cosine similarity multi query audiences not matching below threshold', () => {
     const pageFeaturesNotMatch = {
       topicDist: {
         value: [0, 1, 0],
@@ -121,11 +113,7 @@ describe('cosine similarity based audiences', () => {
 
     beforeAll(clearStore);
 
-    it('check page views are empty', () => {
-      expect(getPageViews()).toHaveLength(0);
-    });
-
-    it('first run -> add 1st page view and do not match audience definition', async () => {
+    it('adds 1st page view and does not match on first run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesNotMatch,
         audienceDefinitions: [multiCosineSimAudience],
@@ -136,7 +124,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
-    it('second run -> add 2nd page view and match audience definition', async () => {
+    it('adds 2nd page view and does not match on second run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesNotMatch,
         audienceDefinitions: [multiCosineSimAudience],
@@ -147,7 +135,7 @@ describe('cosine similarity based audiences', () => {
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
-    it('third run -> add 3rd page view', async () => {
+    it('adds 3rd page view and does not match on third run', async () => {
       await edkt.run({
         pageFeatures: pageFeaturesNotMatch,
         audienceDefinitions: [multiCosineSimAudience],

@@ -17,7 +17,7 @@ describe('engine matching behaviour for vector distance condition', () => {
       ),
     ]);
 
-    it('matches the page view if vector similarity is above threshold', async () => {
+    it('does match the page view if vector similarity is above threshold', async () => {
       const conditions = [vectorCondition];
       const pageViews = [makeTopicDistPageView([0.2, 0.5, 0.1], 1, 100)];
 
@@ -51,7 +51,7 @@ describe('engine matching behaviour for vector distance condition', () => {
       ),
     ]);
 
-    it('matches the page view if similarity is above threshold and has the same featureVersion', async () => {
+    it('does match the page view if similarity is above threshold and has the same featureVersion', async () => {
       const conditions = [vectorCondition];
       const pageViews = [makeTopicDistPageView([0.2, 0.5, 0.1], 2, 100)];
 

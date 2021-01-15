@@ -14,8 +14,8 @@ import {
   makeCosineSimilarityQuery,
 } from './helpers/audienceDefinitions';
 
-describe('Edkt run method', () => {
-  describe('Test basic edkt run', () => {
+describe('edkt run method', () => {
+  describe('basic edkt run behaviour', () => {
     const sportPageFeature = {
       keywords: {
         version: 1,
@@ -96,7 +96,7 @@ describe('Edkt run method', () => {
     });
   });
 
-  describe('Test look back edkt run', () => {
+  describe('look back edkt run behaviour', () => {
     const lookBackPageFeature = {
       keywords: {
         version: 1,
@@ -173,7 +173,7 @@ describe('Edkt run method', () => {
     });
   });
 
-  describe('Topic model run', () => {
+  describe('topic model run behaviour', () => {
     const topicModelPageFeature = {
       topicDist: {
         version: 1,
@@ -256,7 +256,7 @@ describe('Edkt run method', () => {
     },
   };
 
-  describe('Topic model run with additional audience', () => {
+  describe('topic model run behaviour with additional audience', () => {
     const topicModelAudience = makeAudienceDefinition({
       id: 'iab-608',
       occurrences: 1,
@@ -312,7 +312,7 @@ describe('Edkt run method', () => {
     });
   });
 
-  describe('Topic model run version mismatch', () => {
+  describe('topic model run behaviour with version mismatch', () => {
     const topicModelAudience = makeAudienceDefinition({
       id: 'iab-608',
       occurrences: 1,

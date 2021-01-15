@@ -11,7 +11,7 @@ import {
   getCachedAudiencesMetaData,
 } from '../helpers/localStorageSetup';
 
-describe('test audience cache', () => {
+describe('audience cache behaviour', () => {
   it('successfully adds audiences to the audience cache with local storage', async () => {
     cachedAudienceStore.updateAudienceCache([
       sportInterestAudience,

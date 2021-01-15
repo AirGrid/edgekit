@@ -17,7 +17,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
       ),
     ]);
 
-    it('matches the page view if vector similarity is above threshold', () => {
+    it('does match the page view if vector similarity is above threshold', () => {
       const conditions = [cosineSimilarityCondition];
       const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 1)];
 
@@ -51,7 +51,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
       ),
     ]);
 
-    it('matches the page view if similarity is above threshold and has the same featureVersion', () => {
+    it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
       const conditions = [cosineSimilarityCondition];
       const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 2, 100)];
 
