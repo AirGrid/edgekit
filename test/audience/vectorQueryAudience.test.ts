@@ -18,8 +18,6 @@ describe('Cosine similarity based audiences', () => {
       },
     };
 
-    beforeAll(clearStore);
-
     it('Check page views are empty', () => {
       expect(getPageViews()).toHaveLength(0);
     });
@@ -59,8 +57,6 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences matches any', () => {
-    beforeAll(clearStore);
-
     const pageFeaturesMatch0 = {
       dv: {
         value: [1, 1, 1],
@@ -74,6 +70,8 @@ describe('Cosine similarity based audiences', () => {
         version: 1,
       },
     };
+
+    beforeAll(clearStore);
 
     it('Check page views are empty', () => {
       expect(getPageViews()).toHaveLength(0);
@@ -114,14 +112,14 @@ describe('Cosine similarity based audiences', () => {
   });
 
   describe('Cosine similarity multi query audiences does not matches below threshold', () => {
-    beforeAll(clearStore);
-
     const pageFeaturesNotMatch = {
       dv: {
         value: [0, 1, 0],
         version: 1,
       },
     };
+
+    beforeAll(clearStore);
 
     it('Check page views are empty', () => {
       expect(getPageViews()).toHaveLength(0);
