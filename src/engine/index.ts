@@ -1,7 +1,6 @@
 import { evaluateCondition } from './evaluate';
 import { timeStampInSecs } from '../utils';
 import { translate } from './translate';
-import { ViewStore, MatchedAudienceStore } from '../store';
 import {
   PageView,
   EngineCondition,
@@ -14,71 +13,33 @@ const check = (
   conditions: EngineCondition<AudienceDefinitionFilter>[],
   pageViews: PageView[],
   any = false
-): boolean => {
-  const checkedConditions = conditions.map((condition) =>
+): boolean =>
+  conditions[any ? 'some' : 'every']((condition) =>
     evaluateCondition(condition, pageViews)
   );
 
-  return any
-    ? checkedConditions.includes(true)
-    : !checkedConditions.includes(false);
-};
-
-const doesAudienceVersionMatch = (
-  audience: AudienceDefinition,
-  matchedAudience: MatchedAudience
-) =>
-  audience.id === matchedAudience.id &&
-  audience.version === matchedAudience.version;
-
-const engine = (
+const getMatchingAudiences = (
   audienceDefinitions: AudienceDefinition[],
-  matchedAudienceStore: MatchedAudienceStore,
-  viewStore: ViewStore
+  pageViewsWithinLookBack: PageView[][]
 ): MatchedAudience[] => {
   const currentTS = timeStampInSecs();
 
-  const matchedAudiences = matchedAudienceStore.getMatchedAudiences();
-
-  const newlyMatchedAudiences = audienceDefinitions
-    // drop prev matched audiences with same version
-    .filter((audience) => {
-      return !matchedAudiences.some((matchedAudience) =>
-        doesAudienceVersionMatch(audience, matchedAudience)
-      );
-    })
-    // translate audience definitions into engine queries
-    .map((audience) => {
-      return {
-        ...audience,
-        conditions: translate(audience),
-      };
-    })
-    // check if query matches any pageViews
-    .map((query) => {
-      const pageViewsWithinLookBack = viewStore.getPageViewsWithinLookBack(
-        query.lookBack
-      );
-      return {
-        id: query.id,
-        version: query.version,
-        matchedAt: currentTS,
-        expiresAt: currentTS + query.ttl,
-        matchedOnCurrentPageView: true,
-        matched: check(query.conditions, pageViewsWithinLookBack),
-      };
-    })
-    // keep only matched audiences
-    .filter((audience) => audience.matched);
-
-  // We also want to keep prev matched audiences with matching versions
-  const prevMatchedAudiences = matchedAudiences.filter((matchedAudience) =>
-    audienceDefinitions.some((audience) =>
-      doesAudienceVersionMatch(audience, matchedAudience)
-    )
-  );
-
-  return [...prevMatchedAudiences, ...newlyMatchedAudiences];
+  return audienceDefinitions.reduce((acc, audience, i) => {
+    const conditions = translate(audience);
+    const pageViews = pageViewsWithinLookBack[i];
+    return check(conditions, pageViews)
+      ? [
+          ...acc,
+          {
+            id: audience.id,
+            version: audience.version,
+            matchedAt: currentTS,
+            expiresAt: currentTS + audience.ttl,
+            matchedOnCurrentPageView: true,
+          },
+        ]
+      : acc;
+  }, [] as MatchedAudience[]);
 };
 
-export { translate, check, engine };
+export { translate, check, getMatchingAudiences };

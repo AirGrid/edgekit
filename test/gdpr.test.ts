@@ -193,7 +193,6 @@ describe.only('EdgeKit GDPR tests', () => {
         {
           ...edktMatchedAudiences[0],
           id: 'sport_id',
-          matched: true,
           matchedOnCurrentPageView: true,
         },
       ]);

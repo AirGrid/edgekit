@@ -47,3 +47,24 @@ export class MatchedAudienceStore {
 }
 
 export const matchedAudienceStore = new MatchedAudienceStore();
+
+// getPrevMatchedAudiences(
+//   matchedAudiences: MatchedAudience[]
+// ): MatchedAudience[] {
+//   return this.matchedAudiences.filter((matchedAudience) =>
+//     matchedAudiences.some((audience) =>
+//       this.doesAudienceVersionMatch(audience, matchedAudience)
+//     )
+//   );
+// }
+//
+// doesAudienceVersionMatch(
+//   audienceFst: MatchedAudience,
+//   audienceSnd: MatchedAudience
+// ): boolean {
+//   return (
+//     audienceFst.id === audienceSnd.id &&
+//     audienceFst.version === audienceSnd.version
+//   );
+// }
+//

@@ -327,7 +327,6 @@ describe('Topic model run', () => {
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,
-        matched: true,
       },
     ]);
   });
@@ -434,7 +433,6 @@ describe('Topic model run with additional audience', () => {
         matchedAt: edktMatchedAudiences[0].matchedAt,
         expiresAt: edktMatchedAudiences[0].expiresAt,
         matchedOnCurrentPageView: true,
-        matched: true,
       },
     ]);
   });

@@ -1,5 +1,5 @@
 import { viewStore, matchedAudienceStore } from './store';
-import { engine } from './engine';
+import * as engine from './engine';
 import { waitForConsent } from './gdpr';
 import { Edkt } from '../types';
 
@@ -19,13 +19,14 @@ const run: Edkt['run'] = async (config) => {
   }
 
   viewStore.setStorageSize(featureStorageSize);
-
   viewStore.savePageViews(pageFeatures, pageMetadata);
 
-  const matchedAudiences = engine(
+  const pageViews = audienceDefinitions.map(({ lookBack }) =>
+    viewStore.getPageViewsWithinLookBack(lookBack)
+  );
+  const matchedAudiences = engine.getMatchingAudiences(
     audienceDefinitions,
-    matchedAudienceStore,
-    viewStore
+    pageViews
   );
 
   matchedAudienceStore.setMatchedAudiences(matchedAudiences);
