@@ -35,7 +35,7 @@ const run: Edkt['run'] = async (config) => {
 export const edkt: Edkt = {
   run,
   getMatchedAudiences: () => matchedAudienceStore.getMatchedAudiences(),
-  getCopyOfPageViews: () => viewStore.getPageViews(),
+  getCopyOfPageViews: () => viewStore.getCopyOfPageViews(),
 };
 
 export * from './store';

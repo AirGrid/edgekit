@@ -3,7 +3,7 @@ import { PageView, StorageKeys, PageFeatureResult } from '../../types';
 
 const DEFAULT_MAX_FEATURES_SIZE = 300;
 
-export class ViewStore {
+class ViewStore {
   private pageViews: PageView[];
   private storageSize: number;
 
@@ -58,7 +58,7 @@ export class ViewStore {
     });
   }
 
-  getPageViews(): PageView[] {
+  getCopyOfPageViews(): PageView[] {
     return [...this.pageViews];
   }
 }

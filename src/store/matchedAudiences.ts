@@ -1,7 +1,7 @@
 import { storage, timeStampInSecs } from '../utils';
 import { StorageKeys, MatchedAudience } from '../../types';
 
-export class MatchedAudienceStore {
+class MatchedAudienceStore {
   private matchedAudiences: MatchedAudience[];
   private matchedAudienceIds: string[];
 
@@ -47,24 +47,3 @@ export class MatchedAudienceStore {
 }
 
 export const matchedAudienceStore = new MatchedAudienceStore();
-
-// getPrevMatchedAudiences(
-//   matchedAudiences: MatchedAudience[]
-// ): MatchedAudience[] {
-//   return this.matchedAudiences.filter((matchedAudience) =>
-//     matchedAudiences.some((audience) =>
-//       this.doesAudienceVersionMatch(audience, matchedAudience)
-//     )
-//   );
-// }
-//
-// doesAudienceVersionMatch(
-//   audienceFst: MatchedAudience,
-//   audienceSnd: MatchedAudience
-// ): boolean {
-//   return (
-//     audienceFst.id === audienceSnd.id &&
-//     audienceFst.version === audienceSnd.version
-//   );
-// }
-//
