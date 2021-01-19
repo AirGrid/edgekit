@@ -2,8 +2,8 @@ import { storage, timeStampInSecs } from '../utils';
 import { StorageKeys, MatchedAudience } from '../../types';
 
 class MatchedAudienceStore {
-  matchedAudiences: MatchedAudience[];
-  matchedAudienceIds: string[];
+  private matchedAudiences: MatchedAudience[];
+  private matchedAudienceIds: string[];
 
   constructor() {
     this.matchedAudiences = [];
@@ -11,7 +11,7 @@ class MatchedAudienceStore {
     this._load();
   }
 
-  _load() {
+  _load(): void {
     const audiences: MatchedAudience[] =
       storage.get(StorageKeys.MATCHED_AUDIENCES) || [];
     const unExpiredAudiences = audiences
@@ -30,24 +30,19 @@ class MatchedAudienceStore {
     this._save();
   }
 
-  _save() {
+  _save(): void {
     storage.set(StorageKeys.MATCHED_AUDIENCES, this.matchedAudiences);
     storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
-  setMatchedAudiences(newlyMatchedAudiences: MatchedAudience[]) {
-    // TODO: decide if we need to check duplicate audiences here...
-
-    if (newlyMatchedAudiences.length === 0) return;
-    const allMatchedAudiences = [
-      ...this.matchedAudiences,
-      ...newlyMatchedAudiences,
-    ];
-    this.matchedAudiences = allMatchedAudiences;
-    this.matchedAudienceIds = allMatchedAudiences.map(
-      (audience) => audience.id
-    );
+  setMatchedAudiences(matchedAudiences: MatchedAudience[]): void {
+    this.matchedAudiences = matchedAudiences;
+    this.matchedAudienceIds = matchedAudiences.map((audience) => audience.id);
     this._save();
+  }
+
+  getMatchedAudiences(): MatchedAudience[] {
+    return [...this.matchedAudiences];
   }
 }
 
