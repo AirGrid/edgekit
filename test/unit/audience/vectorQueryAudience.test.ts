@@ -1,13 +1,13 @@
-import { edkt } from '../../src';
+import { edkt } from '../../../src';
 import {
   clearStore,
   getMatchedAudiences,
   getPageViews,
-} from '../helpers/localStorageSetup';
+} from '../../helpers/localStorage';
 import {
   cosineSimAudience,
   multiCosineSimAudience,
-} from '../helpers/audienceDefinitions';
+} from '../../helpers/audienceDefinitions';
 
 describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity with single query audiences', () => {

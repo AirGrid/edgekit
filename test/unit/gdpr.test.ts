@@ -1,11 +1,14 @@
-import { edkt } from '../src';
-import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
-import { TCData } from '../types';
+import { edkt } from '../../src';
+import { checkConsentStatus, waitForTcfApiTimeout } from '../../src/gdpr';
+import { TCData } from '../../types';
 import {
   makeAudienceDefinition,
   makeStringArrayQuery,
-} from './helpers/audienceDefinitions';
-import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
+} from '../helpers/audienceDefinitions';
+import {
+  getPageViews,
+  getMatchedAudiences,
+} from '../helpers/localStorage';
 
 const airgridVendorId = 782;
 

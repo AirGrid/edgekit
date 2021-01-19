@@ -1,15 +1,15 @@
-import { cachedAudienceStore } from '../../src/store';
-import { CachedAudienceMetaData } from '../../types';
+import { cachedAudienceStore } from '../../../src/store';
+import { CachedAudienceMetaData } from '../../../types';
 import {
   sportInterestAudience,
   travelInterestAudience,
   automotiveInterestAudience,
-} from '../helpers/audienceDefinitions';
-import { timeStampInSecs } from '../../src/utils';
+} from '../../helpers/audienceDefinitions';
+import { timeStampInSecs } from '../../../src/utils';
 import {
   getCachedAudiences,
   getCachedAudiencesMetaData,
-} from '../helpers/localStorageSetup';
+} from '../../helpers/localStorage';
 
 describe('audience cache behaviour', () => {
   it('successfully adds audiences to the audience cache with local storage', async () => {

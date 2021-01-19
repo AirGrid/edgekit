@@ -1,9 +1,9 @@
-import { check } from '../../src/engine';
+import { check } from '../../../src/engine';
 import {
   makeEngineCondition,
   makeTopicDistPageView,
-} from '../helpers/engineConditions';
-import { makeVectorDistanceQuery } from '../helpers/audienceDefinitions';
+} from '../../helpers/engineConditions';
+import { makeVectorDistanceQuery } from '../../helpers/audienceDefinitions';
 
 describe('engine matching behaviour for vector distance condition', () => {
   describe('vector distance condition with same condition/pageView version', () => {

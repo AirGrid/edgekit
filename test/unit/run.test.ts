@@ -1,18 +1,18 @@
-import { edkt } from '../src';
-import { timeStampInSecs } from '../src/utils';
+import { edkt } from '../../src';
+import { timeStampInSecs } from '../../src/utils';
 import {
   clearStore,
   makePageViews,
   getPageViews,
   getMatchedAudiences,
   setUpLocalStorage,
-} from './helpers/localStorageSetup';
+} from '../helpers/localStorage';
 import {
   makeAudienceDefinition,
   makeStringArrayQuery,
   makeVectorDistanceQuery,
   makeCosineSimilarityQuery,
-} from './helpers/audienceDefinitions';
+} from '../helpers/audienceDefinitions';
 
 describe('edkt run method', () => {
   describe('basic edkt run behaviour', () => {

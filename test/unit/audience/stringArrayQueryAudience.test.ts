@@ -1,12 +1,12 @@
-import { edkt } from '../../src';
+import { edkt } from '../../../src';
 import {
   sportInterestAudience,
   sportKeywords,
-} from '../helpers/audienceDefinitions';
+} from '../../helpers/audienceDefinitions';
 import {
   getPageViews,
   getMatchedAudiences,
-} from '../helpers/localStorageSetup';
+} from '../../helpers/localStorage';
 
 describe('string array audience matching behaviour', () => {
   const sportPageFeature = {

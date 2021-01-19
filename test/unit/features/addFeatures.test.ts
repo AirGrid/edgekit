@@ -1,5 +1,5 @@
-import { edkt } from '../../src';
-import { getPageViews } from '../helpers/localStorageSetup';
+import { edkt } from '../../../src';
+import { getPageViews } from '../../helpers/localStorage';
 
 describe('edkt viewStore add behaviour', () => {
   const vendorIds = [873];
