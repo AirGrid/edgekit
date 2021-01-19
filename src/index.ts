@@ -21,9 +21,8 @@ const run: Edkt['run'] = async (config) => {
   viewStore.setStorageSize(featureStorageSize);
   viewStore.savePageViews(pageFeatures, pageMetadata);
 
-  const pageViews = audienceDefinitions.map(({ lookBack }) =>
-    viewStore.getPageViewsWithinLookBack(lookBack)
-  );
+  const pageViews = viewStore.getCopyOfPageViews();
+
   const matchedAudiences = engine.getMatchingAudiences(
     audienceDefinitions,
     pageViews

@@ -51,13 +51,6 @@ class ViewStore {
     this._save();
   }
 
-  getPageViewsWithinLookBack(lookBack: number): PageView[] {
-    const ts = timeStampInSecs();
-    return this.pageViews.filter((pageView) => {
-      return lookBack === 0 || pageView.ts > ts - lookBack;
-    });
-  }
-
   getCopyOfPageViews(): PageView[] {
     return [...this.pageViews];
   }

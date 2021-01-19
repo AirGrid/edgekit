@@ -20,14 +20,17 @@ const check = (
 
 const getMatchingAudiences = (
   audienceDefinitions: AudienceDefinition[],
-  pageViewsWithinLookBack: PageView[][]
+  pageViews: PageView[]
 ): MatchedAudience[] => {
   const currentTS = timeStampInSecs();
 
-  return audienceDefinitions.reduce((acc, audience, i) => {
+  return audienceDefinitions.reduce((acc, audience) => {
     const conditions = translate(audience);
-    const pageViews = pageViewsWithinLookBack[i];
-    return check(conditions, pageViews)
+    const pageViewsWithinLookBack = pageViews.filter(
+      (pageView) =>
+        audience.lookBack === 0 || pageView.ts > currentTS - audience.lookBack
+    );
+    return check(conditions, pageViewsWithinLookBack)
       ? [
           ...acc,
           {
