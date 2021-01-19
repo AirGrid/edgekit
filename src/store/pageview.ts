@@ -35,7 +35,7 @@ class ViewStore {
     this.storageSize = storageSize;
   }
 
-  savePageViews(
+  savePageView(
     features: Record<string, PageFeatureResult> | undefined,
     metadata?: Record<string, string | number | boolean>
   ): void {

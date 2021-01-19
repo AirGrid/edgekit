@@ -19,7 +19,7 @@ const run: Edkt['run'] = async (config) => {
   }
 
   viewStore.setStorageSize(featureStorageSize);
-  viewStore.savePageViews(pageFeatures, pageMetadata);
+  viewStore.savePageView(pageFeatures, pageMetadata);
 
   const pageViews = viewStore.getCopyOfPageViews();
 
