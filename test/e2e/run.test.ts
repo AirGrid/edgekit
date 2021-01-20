@@ -1,29 +1,54 @@
 /// <reference types="jest-playwright-preset" />
-/// <reference types="expect-playwright" />
 
-import { mockHtmlResponse } from '../helpers/network';
-import * as examplePage from '../fixtures/examplePage.json';
-import { edkt } from '../../src/index';
+import {
+  makeAudienceDefinition,
+  makeStringArrayQuery,
+} from '../helpers/audienceDefinitions';
+
+type Store = {edkt_matched_audiences: string, edkt_page_views: string}
+
+const getPageViewsFromStore = (store: Store) => JSON.parse(store['edkt_page_views'])
+const getMatchedAudiencesFromStore = (store: Store) => JSON.parse(store['edkt_matched_audiences'])
+const getLocalStorageFromPage = (): Promise<Store> => page.evaluate('localStorage')
 
 describe('edgekit basic run behaviour', () => {
-  const testUrl = 'https://example.com/';
+  const testUrl = 'http://localhost:9000';
 
-  beforeEach(async () => {
-    mockHtmlResponse(page, `${testUrl}?edktDebug=true`, examplePage);
+  const sportAudience = makeAudienceDefinition({
+    id: 'sport_id',
+    occurrences: 1,
+    definition: [makeStringArrayQuery(['sport'])],
   });
 
-  it('runs', async () => {
-    await page.goto(`${testUrl}?edktDebug=true`, { waitUntil: 'load' });
-    await page.evaluate(
-      (params) => {
-        console.log(localStorage);
-        edkt.run(params);
-      },
-      {
-        audienceDefinitions: [],
-        pageFeatures: {},
-        omitGdprConsent: true,
-      }
-    );
+  const sportPageFeatures = {
+    keywords: {
+      version: 1,
+      value: ['sport'],
+    }
+  }
+
+  const runEdkt = async () =>
+    await page.evaluate((params) => (<any>window).edkt.edkt.run(params), {
+      audienceDefinitions: [sportAudience],
+      pageFeatures: sportPageFeatures,
+      omitGdprConsent: true,
+    })
+
+  beforeAll(async () => {
+    await page.goto(`${testUrl}?edktDebug=true`, { waitUntil: 'networkidle' });
+  })
+
+  it('runs and adds pageView to store', async () => {
+    await runEdkt()
+    const store = await getLocalStorageFromPage()
+    expect(getPageViewsFromStore(store)).toHaveLength(1)
+    expect(getMatchedAudiencesFromStore(store)).toHaveLength(0)
+  });
+
+  it('adds another pageView and match audienceDefinition', async () => {
+    await runEdkt()
+    const store = await getLocalStorageFromPage()
+    expect(getPageViewsFromStore(store)).toHaveLength(2)
+    expect(getMatchedAudiencesFromStore(store)).toHaveLength(1)
   });
 });
