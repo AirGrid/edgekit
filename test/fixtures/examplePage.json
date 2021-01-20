@@ -1,8 +1,0 @@
-{
-  "body": "<h1>Wrapper Test Page</h1>",
-  "headers": {
-    "content-type": "text/html",
-    "cache-control": "no-cache",
-    "pragma": "no-cache"
-  }
-}
