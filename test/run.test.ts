@@ -239,7 +239,7 @@ describe('edkt run method', () => {
           matchedAt: edktMatchedAudiences[0].matchedAt,
           expiresAt: edktMatchedAudiences[0].expiresAt,
           matchedOnCurrentPageView: true,
-          matched: true,
+          version: 1,
         },
       ]);
     });
@@ -306,7 +306,7 @@ describe('edkt run method', () => {
           matchedAt: edktMatchedAudiences[0].matchedAt,
           expiresAt: edktMatchedAudiences[0].expiresAt,
           matchedOnCurrentPageView: true,
-          matched: true,
+          version: 1,
         },
       ]);
     });
