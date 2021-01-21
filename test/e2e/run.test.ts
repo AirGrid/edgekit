@@ -5,11 +5,14 @@ import {
   makeStringArrayQuery,
 } from '../helpers/audienceDefinitions';
 
-type Store = {edkt_matched_audiences: string, edkt_page_views: string}
+type Store = { edkt_matched_audiences: string; edkt_page_views: string };
 
-const getPageViewsFromStore = (store: Store) => JSON.parse(store['edkt_page_views'])
-const getMatchedAudiencesFromStore = (store: Store) => JSON.parse(store['edkt_matched_audiences'])
-const getLocalStorageFromPage = (): Promise<Store> => page.evaluate('localStorage')
+const getPageViewsFromStore = (store: Store) =>
+  JSON.parse(store['edkt_page_views']);
+const getMatchedAudiencesFromStore = (store: Store) =>
+  JSON.parse(store['edkt_matched_audiences']);
+const getLocalStorageFromPage = (): Promise<Store> =>
+  page.evaluate('localStorage');
 
 describe('edgekit basic run behaviour', () => {
   const testUrl = 'http://localhost:9000';
@@ -24,31 +27,31 @@ describe('edgekit basic run behaviour', () => {
     keywords: {
       version: 1,
       value: ['sport'],
-    }
-  }
+    },
+  };
 
   const runEdkt = async () =>
     await page.evaluate((params) => (<any>window).edkt.edkt.run(params), {
       audienceDefinitions: [sportAudience],
       pageFeatures: sportPageFeatures,
       omitGdprConsent: true,
-    })
+    });
 
   beforeAll(async () => {
     await page.goto(`${testUrl}?edktDebug=true`, { waitUntil: 'networkidle' });
-  })
+  });
 
   it('runs and adds pageView to store', async () => {
-    await runEdkt()
-    const store = await getLocalStorageFromPage()
-    expect(getPageViewsFromStore(store)).toHaveLength(1)
-    expect(getMatchedAudiencesFromStore(store)).toHaveLength(0)
+    await runEdkt();
+    const store = await getLocalStorageFromPage();
+    expect(getPageViewsFromStore(store)).toHaveLength(1);
+    expect(getMatchedAudiencesFromStore(store)).toHaveLength(0);
   });
 
   it('adds another pageView and match audienceDefinition', async () => {
-    await runEdkt()
-    const store = await getLocalStorageFromPage()
-    expect(getPageViewsFromStore(store)).toHaveLength(2)
-    expect(getMatchedAudiencesFromStore(store)).toHaveLength(1)
+    await runEdkt();
+    const store = await getLocalStorageFromPage();
+    expect(getPageViewsFromStore(store)).toHaveLength(2);
+    expect(getMatchedAudiencesFromStore(store)).toHaveLength(1);
   });
 });

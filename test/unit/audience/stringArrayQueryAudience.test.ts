@@ -3,10 +3,7 @@ import {
   sportInterestAudience,
   sportKeywords,
 } from '../../helpers/audienceDefinitions';
-import {
-  getPageViews,
-  getMatchedAudiences,
-} from '../../helpers/localStorage';
+import { getPageViews, getMatchedAudiences } from '../../helpers/localStorage';
 
 describe('string array audience matching behaviour', () => {
   const sportPageFeature = {

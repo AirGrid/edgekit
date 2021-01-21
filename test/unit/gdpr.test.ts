@@ -5,10 +5,7 @@ import {
   makeAudienceDefinition,
   makeStringArrayQuery,
 } from '../helpers/audienceDefinitions';
-import {
-  getPageViews,
-  getMatchedAudiences,
-} from '../helpers/localStorage';
+import { getPageViews, getMatchedAudiences } from '../helpers/localStorage';
 
 const airgridVendorId = 782;
 
