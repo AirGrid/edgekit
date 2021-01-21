@@ -1,15 +1,15 @@
-import { sportKeywords } from './helpers/audienceDefinitions';
-import { edkt } from '../src';
+import { sportKeywords } from '../helpers/audienceDefinitions';
+import { edkt } from '../../src';
 import {
   clearStore,
   getPageViews,
   getMatchedAudiences,
-} from './helpers/localStorageSetup';
+} from '../helpers/localStorageSetup';
 import {
   AudienceDefinition,
   QueryFilterComparisonType,
   StringArrayQueryValue,
-} from '../types';
+} from '../../types';
 
 const sportPageFeature = {
   keywords: {
