@@ -31,6 +31,7 @@ describe('edgekit basic run behaviour', () => {
   };
 
   const runEdkt = async () =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await page.evaluate((params) => (<any>window).edkt.edkt.run(params), {
       audienceDefinitions: [sportAudience],
       pageFeatures: sportPageFeatures,
