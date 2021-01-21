@@ -1,6 +1,6 @@
-import { viewStore } from '../../src/store';
-import { edkt } from '../../src';
-import { getPageViews } from '../helpers/localStorageSetup';
+import { viewStore } from '../../../src/store';
+import { edkt } from '../../../src';
+import { getPageViews } from '../../helpers/localStorage';
 
 describe('edkt viewStore cleaning behaviour', () => {
   const omitGdprConsent = true;

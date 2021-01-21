@@ -1,11 +1,11 @@
-import { check } from '../../src/engine';
-import { PageView, EngineConditionRule } from '../../types';
+import { check } from '../../../src/engine';
+import { PageView, EngineConditionRule } from '../../../types';
 import {
   makeEngineCondition,
   makeSportsPageView,
   makeTestPageView,
-} from '../helpers/engineConditions';
-import { makeStringArrayQuery } from '../helpers/audienceDefinitions';
+} from '../../helpers/engineConditions';
+import { makeStringArrayQuery } from '../../helpers/audienceDefinitions';
 
 describe('engine test with sports condition', () => {
   const sports1xCondition = (

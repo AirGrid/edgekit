@@ -1,9 +1,9 @@
-import { check } from '../../src/engine';
+import { check } from '../../../src/engine';
 import {
   makeEngineCondition,
   makeTopicDistPageView,
-} from '../helpers/engineConditions';
-import { makeCosineSimilarityQuery } from '../helpers/audienceDefinitions';
+} from '../../helpers/engineConditions';
+import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 
 describe('engine matching behaviour for multiple engine condition values', () => {
   const multipleNonOverlapingQueriesCondition = makeEngineCondition(

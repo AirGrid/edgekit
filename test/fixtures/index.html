@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script async>
+      // this will get the transpiled edgekit from a local
+      // server and inject it into the blank page
+      (function () {
+        var edktInitializor = (window.edktInitializor =
+          window.edktInitializor || {});
+        if (!edktInitializor.invoked) {
+          edktInitializor.invoked = true;
+          edktInitializor.load = function (e) {
+            var p = e ? e : 'sdk';
+            var n = document.createElement('script');
+            n.type = 'text/javascript';
+            n.async = true;
+            n.src = 'http://localhost:8000/edgekit.min.umd.js';
+            var a = document.getElementsByTagName('script')[0];
+            a.parentNode.insertBefore(n, a);
+          };
+          edktInitializor.load();
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <h2>Edge | Jest Test</h2>
+  </body>
+</html>
