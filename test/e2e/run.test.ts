@@ -2,7 +2,7 @@
 
 import {
   makeAudienceDefinition,
-  makeStringArrayQuery,
+  makeCosineSimilarityQuery,
 } from '../helpers/audienceDefinitions';
 
 type Store = { edkt_matched_audiences: string; edkt_page_views: string };
@@ -19,16 +19,21 @@ describe('edgekit basic run behaviour', () => {
   // look at jest-playwright.config.js
   const testUrl = 'http://localhost:9000';
 
-  const sportAudience = makeAudienceDefinition({
-    id: 'sport_id',
+  const topicModelAudience = makeAudienceDefinition({
+    id: 'topic_dist_model_id',
     occurrences: 1,
-    definition: [makeStringArrayQuery(['sport'])],
+    definition: [
+      makeCosineSimilarityQuery({
+        threshold: 0.99,
+        vector: [0.2, 0.5, 0.1],
+      }),
+    ],
   });
 
-  const sportPageFeatures = {
-    keywords: {
+  const pageFeatures = {
+    topicDist: {
       version: 1,
-      value: ['sport'],
+      value: [0.2, 0.5, 0.1],
     },
   };
 
@@ -38,8 +43,8 @@ describe('edgekit basic run behaviour', () => {
   const runEdkt = async () =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await page.evaluate((params) => (<any>window).edkt.edkt.run(params), {
-      audienceDefinitions: [sportAudience],
-      pageFeatures: sportPageFeatures,
+      audienceDefinitions: [topicModelAudience],
+      pageFeatures,
       omitGdprConsent: true,
     });
 
