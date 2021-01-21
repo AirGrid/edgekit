@@ -15,6 +15,8 @@ const getLocalStorageFromPage = (): Promise<Store> =>
   page.evaluate('localStorage');
 
 describe('edgekit basic run behaviour', () => {
+  // We are serving a mock page with the edgekit transpiled code.
+  // look at jest-playwright.config.js
   const testUrl = 'http://localhost:9000';
 
   const sportAudience = makeAudienceDefinition({
@@ -30,6 +32,9 @@ describe('edgekit basic run behaviour', () => {
     },
   };
 
+  // edkt should already be present on our visited page globals.
+  // we run it with our test defined params and check for its
+  // consequences on the environment
   const runEdkt = async () =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await page.evaluate((params) => (<any>window).edkt.edkt.run(params), {
