@@ -2,7 +2,7 @@ module.exports = {
   browsers: ['chromium', 'firefox', 'webkit'],
   serverOptions: [
     {
-      command: 'npm run bundle && npx serve -C -l 8000 dist/sdk',
+      command: 'npx serve -C -l 8000 dist/sdk',
       port: 8000,
       launchTimeout: 15000,
     },
