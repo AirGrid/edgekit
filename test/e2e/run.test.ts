@@ -1,5 +1,3 @@
-/// <reference types="jest-playwright-preset" />
-
 import {
   makeAudienceDefinition,
   makeCosineSimilarityQuery,

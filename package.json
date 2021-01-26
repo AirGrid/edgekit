@@ -40,7 +40,7 @@
     "test:unit": "jest --config jest.unit.config.js",
     "test:unit:watch": "jest --config jest.unit.config.js --watch",
     "test:unit:coverage": "jest --coverage",
-    "test:e2e": "jest --config jest.e2e.config.js",
+    "test:e2e": "npm run bundle && jest --config jest.e2e.config.js",
     "lint": "eslint src test --ext js,ts",
     "lint:fix": "eslint src test --ext js,ts --fix"
   },
@@ -50,6 +50,7 @@
     "@typescript-eslint/parser": "^3.3.0",
     "eslint": "^7.3.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest-playwright": "^0.2.1",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.1.0",
     "jest-fetch-mock": "^3.0.3",
