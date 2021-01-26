@@ -5,9 +5,4 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  testEnvironmentOptions: {
-    'jest-playwright': {
-      browsers: ['chromium', 'firefox', 'webkit'],
-    },
-  },
 };

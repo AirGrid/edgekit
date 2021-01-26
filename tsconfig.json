@@ -1,6 +1,7 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
+    "types": ["jest-playwright-preset", "expect-playwright", "jest"],
     "rootDir": ".",
     "outDir": "dist",
     "lib": ["dom", "esnext"],
