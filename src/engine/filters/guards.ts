@@ -6,6 +6,7 @@ import {
   EngineConditionQuery,
   VectorDistanceFilter,
   VectorQueryValue,
+  LogisticRegressionQueryValue,
   QueryFilterComparisonType,
 } from '../../../types';
 
@@ -28,7 +29,7 @@ export const isVectorQueryValue = (
 export const isLogRegQueryValue = (
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   value: any
-): value is VectorQueryValue =>
+): value is LogisticRegressionQueryValue =>
   isNumberArray(value.vector) &&
   typeof value.threshold === 'number' &&
   typeof value.bias === 'number';
