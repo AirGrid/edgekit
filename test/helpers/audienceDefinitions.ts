@@ -3,6 +3,7 @@ import {
   QueryFilterComparisonType,
   AudienceQueryDefinition,
   VectorQueryValue,
+  LogisticRegressionQueryValue,
   StringArrayQueryValue,
 } from '../../types';
 
@@ -76,6 +77,12 @@ export const automotiveInterestAudience = makeAudienceDefinition({
   definition: [makeStringArrayQuery(automotiveKeywords)],
 });
 
+export const allAudienceDefinitions = [
+  sportInterestAudience,
+  travelInterestAudience,
+  automotiveInterestAudience,
+];
+
 // vectorDistance audiences
 
 export const makeVectorDistanceQuery = (
@@ -124,10 +131,14 @@ export const multiCosineSimAudience = makeAudienceDefinition({
   ],
 });
 
-// all audiences export
+// logistic regression audiences
 
-export const allAudienceDefinitions = [
-  sportInterestAudience,
-  travelInterestAudience,
-  automotiveInterestAudience,
-];
+export const makeLogisticRegressionQuery = (
+  queryValue: LogisticRegressionQueryValue,
+  featureVersion = 1
+): AudienceQueryDefinition => ({
+  featureVersion,
+  queryFilterComparisonType: QueryFilterComparisonType.LOGISTIC_REGRESSION,
+  queryProperty: 'docVector',
+  queryValue,
+});

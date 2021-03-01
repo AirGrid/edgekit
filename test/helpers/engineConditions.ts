@@ -42,6 +42,20 @@ export const makeTopicDistPageView = (
   },
 });
 
+export const makeDocVectorPageView = (
+  value: number[],
+  version: number,
+  ts = 100
+): PageView => ({
+  ts,
+  features: {
+    docVector: {
+      version,
+      value,
+    },
+  },
+});
+
 export const makeSportsPageView = (ts: number): PageView => ({
   ts,
   features: {

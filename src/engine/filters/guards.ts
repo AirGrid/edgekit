@@ -2,6 +2,7 @@ import {
   ArrayIntersectsFilter,
   AudienceDefinitionFilter,
   CosineSimilarityFilter,
+  LogisticRegressionFilter,
   EngineConditionQuery,
   VectorDistanceFilter,
   VectorQueryValue,
@@ -19,6 +20,12 @@ export const isNumberArray = (value: any): value is number[] =>
   value instanceof Array && value.every((item) => typeof item === 'number');
 
 export const isVectorQueryValue = (
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  value: any
+): value is VectorQueryValue =>
+  isNumberArray(value.vector) && typeof value.threshold === 'number';
+
+export const isLogRegQueryValue = (
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   value: any
 ): value is VectorQueryValue =>
@@ -51,5 +58,15 @@ export const isCosineSimilarityFilterType = (
     query.queryFilterComparisonType ===
       QueryFilterComparisonType.COSINE_SIMILARITY &&
     isVectorQueryValue(query.queryValue)
+  );
+};
+
+export const isLogisticRegressionFilterType = (
+  query: EngineConditionQuery<AudienceDefinitionFilter>
+): query is EngineConditionQuery<LogisticRegressionFilter> => {
+  return (
+    query.queryFilterComparisonType ===
+      QueryFilterComparisonType.LOGISTIC_REGRESSION &&
+    isLogRegQueryValue(query.queryValue)
   );
 };
