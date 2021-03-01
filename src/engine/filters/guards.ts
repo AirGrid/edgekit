@@ -29,7 +29,9 @@ export const isLogRegQueryValue = (
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   value: any
 ): value is VectorQueryValue =>
-  isNumberArray(value.vector) && typeof value.threshold === 'number';
+  isNumberArray(value.vector) &&
+  typeof value.threshold === 'number' &&
+  typeof value.bias === 'number';
 
 export const isArrayIntersectsFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
