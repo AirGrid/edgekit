@@ -21,10 +21,17 @@ export type VectorQueryValue = {
   threshold: number;
 };
 
+export type LogisticRegressionQueryValue = {
+  vector: Extract<PageFeatureValue, number[]>;
+  bias: number;
+  threshold: number;
+};
+
 export enum QueryFilterComparisonType {
   VECTOR_DISTANCE = 'vectorDistance',
   COSINE_SIMILARITY = 'cosineSimilarity',
   ARRAY_INTERSECTS = 'arrayIntersects',
+  LOGISTIC_REGRESSION = 'logisticRegression',
 }
 
 export type ArrayIntersectsFilter = {
@@ -42,10 +49,16 @@ export type CosineSimilarityFilter = {
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
 };
 
+export type LogisticRegressionFilter = {
+  queryValue: LogisticRegressionQueryValue;
+  queryFilterComparisonType: QueryFilterComparisonType.LOGISTIC_REGRESSION;
+};
+
 export type AudienceDefinitionFilter =
   | VectorDistanceFilter
   | CosineSimilarityFilter
-  | ArrayIntersectsFilter;
+  | ArrayIntersectsFilter
+  | LogisticRegressionFilter;
 
 export type AudienceQueryDefinition = {
   featureVersion: number;

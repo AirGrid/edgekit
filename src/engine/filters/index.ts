@@ -8,6 +8,7 @@ import {
   arrayIntersectsCondition,
   vectorDistanceCondition,
   cosineSimilarityCondition,
+  logisticRegressionCondition,
 } from './conditions';
 
 export const queryMatches = (
@@ -23,5 +24,6 @@ export const queryMatches = (
     arrayIntersectsCondition,
     vectorDistanceCondition,
     cosineSimilarityCondition,
+    logisticRegressionCondition,
   ].some((match) => match(query, pageFeatures));
 };
