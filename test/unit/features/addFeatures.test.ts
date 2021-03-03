@@ -1,8 +1,7 @@
-import { viewStore } from '../src/store';
-import { edkt } from '../src';
-import { getPageViews } from './helpers/localStorageSetup';
+import { edkt } from '../../../src';
+import { getPageViews } from '../../helpers/localStorage';
 
-describe('setPageFeatures', () => {
+describe('edkt viewStore add behaviour', () => {
   const vendorIds = [873];
   const omitGdprConsent = true;
 
@@ -23,14 +22,6 @@ describe('setPageFeatures', () => {
       value: ['foo', 'bar', 'baz'],
     },
   };
-
-  beforeAll(() => {
-    viewStore._load();
-  });
-
-  afterAll(() => {
-    localStorage.clear();
-  });
 
   it('should set the page features in the store', async () => {
     await edkt.run({

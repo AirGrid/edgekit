@@ -1,6 +1,5 @@
-import * as engine from './engine';
 import { viewStore, matchedAudienceStore } from './store';
-import { timeStampInSecs } from './utils';
+import * as engine from './engine';
 import { waitForConsent } from './gdpr';
 import { Edkt } from '../types';
 
@@ -19,52 +18,23 @@ const run: Edkt['run'] = async (config) => {
     if (!hasConsent) return;
   }
 
-  // This is a no-op if undefined, equals current value or lesser than 0
   viewStore.setStorageSize(featureStorageSize);
-  viewStore.insert(pageFeatures, pageMetadata);
+  viewStore.savePageView(pageFeatures, pageMetadata);
 
-  const matchedAudiences = audienceDefinitions
-    .filter((audience) => {
-      return !matchedAudienceStore.matchedAudienceIds.includes(audience.id);
-    })
-    .map((audience) => {
-      return {
-        ...audience,
-        conditions: engine.translate(audience),
-      };
-    })
-    .map((audience) => {
-      const currentTS = timeStampInSecs();
-      const pageViewsWithinLookBack = viewStore.pageViews.filter((pageView) => {
-        return audience.lookBack === 0
-          ? true
-          : pageView.ts > currentTS - audience.lookBack;
-      });
-      return {
-        id: audience.id,
-        matchedAt: currentTS,
-        expiresAt: currentTS + audience.ttl,
-        matchedOnCurrentPageView: true,
-        matched: engine.check(audience.conditions, pageViewsWithinLookBack),
-      };
-    })
-    .filter((audience) => audience.matched);
+  const pageViews = viewStore.getCopyOfPageViews();
+
+  const matchedAudiences = engine.getMatchingAudiences(
+    audienceDefinitions,
+    pageViews
+  );
 
   matchedAudienceStore.setMatchedAudiences(matchedAudiences);
 };
 
-const getMatchedAudiences: Edkt['getMatchedAudiences'] = () => {
-  return matchedAudienceStore.matchedAudiences;
-};
-
-const getCopyOfPageViews: Edkt['getCopyOfPageViews'] = () => {
-  return [...viewStore.pageViews];
-};
-
 export const edkt: Edkt = {
   run,
-  getMatchedAudiences,
-  getCopyOfPageViews,
+  getMatchedAudiences: () => matchedAudienceStore.getMatchedAudiences(),
+  getCopyOfPageViews: () => viewStore.getCopyOfPageViews(),
 };
 
 export * from './store';

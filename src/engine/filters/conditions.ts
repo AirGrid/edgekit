@@ -1,15 +1,19 @@
-import { dotProduct, cosineSimilarity } from './math';
+import { dotProduct, cosineSimilarity, sigmoid } from './math';
 import {
   isStringArray,
   isNumberArray,
   isArrayIntersectsFilterType,
   isVectorDistanceFilterType,
   isCosineSimilarityFilterType,
+  isLogisticRegressionFilterType,
 } from './guards';
 import {
   AudienceDefinitionFilter,
   EngineConditionQuery,
   PageFeatureResult,
+  StringArrayQueryValue,
+  VectorQueryValue,
+  LogisticRegressionQueryValue,
 } from '../../../types';
 
 /* =======================================
@@ -23,13 +27,13 @@ export const versionMatches = (
 ): boolean => pageFeatures.version === query.featureVersion;
 
 const stringArrayIntersects = (
-  queryValue: string[],
+  queryValue: StringArrayQueryValue,
   pageFeatures: string[]
 ): boolean =>
   pageFeatures.some((feature) => queryValue.indexOf(feature) !== -1);
 
 const isVectorDistanceGreatherThanThreshold = (
-  queryValue: { vector: number[]; threshold: number },
+  queryValue: VectorQueryValue,
   pageFeatures: number[]
 ): boolean =>
   pageFeatures.length === queryValue.vector.length
@@ -37,11 +41,20 @@ const isVectorDistanceGreatherThanThreshold = (
     : false;
 
 const isCosineSimilarityGreatherThanThreshold = (
-  queryValue: { vector: number[]; threshold: number },
+  queryValue: VectorQueryValue,
   pageFeatures: number[]
 ): boolean =>
   pageFeatures.length === queryValue.vector.length
     ? cosineSimilarity(pageFeatures, queryValue.vector) > queryValue.threshold
+    : false;
+
+const isLogisticRegressionGreatherThanThreshold = (
+  queryValue: LogisticRegressionQueryValue,
+  pageFeatures: number[]
+): boolean =>
+  pageFeatures.length === queryValue.vector.length
+    ? sigmoid(dotProduct(queryValue.vector, pageFeatures) + queryValue.bias) >
+      queryValue.threshold
     : false;
 
 /* =======================================
@@ -77,3 +90,19 @@ export const cosineSimilarityCondition = (
   isCosineSimilarityFilterType(query) &&
   isNumberArray(pageFeatures.value) &&
   isCosineSimilarityGreatherThanThreshold(query.queryValue, pageFeatures.value);
+
+/* =======================================
+ * logReg array condition
+ * =======================================
+ */
+
+export const logisticRegressionCondition = (
+  query: EngineConditionQuery<AudienceDefinitionFilter>,
+  pageFeatures: PageFeatureResult
+): boolean =>
+  isLogisticRegressionFilterType(query) &&
+  isNumberArray(pageFeatures.value) &&
+  isLogisticRegressionGreatherThanThreshold(
+    query.queryValue,
+    pageFeatures.value
+  );

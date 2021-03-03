@@ -6,7 +6,7 @@ import {
 } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
-export const pageViewCreator = (
+export const makePageViews = (
   timestamp: number,
   keywords: Array<string>,
   numberOfPageViews: number
@@ -28,6 +28,14 @@ export const pageViewCreator = (
 
 export const clearStore = (): void => {
   localStorage.clear();
+  //We need to reload from local storage because its only done on construction
+  viewStore._load();
+  matchedAudienceStore._load();
+};
+
+export const setUpLocalStorage = (pageViews: PageView[]): void => {
+  localStorage.clear();
+  localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
   //We need to reload from local storage because its only done on construction
   viewStore._load();
   matchedAudienceStore._load();

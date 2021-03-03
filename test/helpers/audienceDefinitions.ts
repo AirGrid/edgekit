@@ -1,5 +1,13 @@
-import { AudienceDefinition, QueryFilterComparisonType } from '../../types';
+import {
+  AudienceDefinition,
+  QueryFilterComparisonType,
+  AudienceQueryDefinition,
+  VectorQueryValue,
+  LogisticRegressionQueryValue,
+  StringArrayQueryValue,
+} from '../../types';
 
+const ID = 'testid';
 const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
 const OCCURRENCES = 2;
@@ -31,56 +39,133 @@ export const automotiveKeywords = [
   'transport',
 ];
 
-export const sportInterestAudience: AudienceDefinition = {
+export const makeAudienceDefinition = (
+  partialAudienceDefinition: Partial<AudienceDefinition>
+): AudienceDefinition => ({
+  id: ID,
+  version: VERSION,
+  ttl: TTL_IN_SECS,
+  lookBack: LOOK_BACK_IN_SECS,
+  occurrences: OCCURRENCES,
+  definition: [],
+  ...partialAudienceDefinition,
+});
+
+// stringArray audiences
+
+export const makeStringArrayQuery = (
+  queryValue: StringArrayQueryValue
+): AudienceQueryDefinition => ({
+  featureVersion: 1,
+  queryProperty: 'keywords',
+  queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
+  queryValue,
+});
+
+export const sportInterestAudience = makeAudienceDefinition({
   id: 'iab-607',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryValue: sportKeywords,
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(sportKeywords)],
+});
 
-export const travelInterestAudience: AudienceDefinition = {
+export const travelInterestAudience = makeAudienceDefinition({
   id: 'iab-719',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: travelKeywords,
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(travelKeywords)],
+});
 
-export const automotiveInterestAudience: AudienceDefinition = {
+export const automotiveInterestAudience = makeAudienceDefinition({
   id: 'iab-243',
-  version: VERSION,
-  ttl: TTL_IN_SECS,
-  lookBack: LOOK_BACK_IN_SECS,
-  occurrences: OCCURRENCES,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: automotiveKeywords,
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(automotiveKeywords)],
+});
 
 export const allAudienceDefinitions = [
   sportInterestAudience,
   travelInterestAudience,
   automotiveInterestAudience,
 ];
+
+// vectorDistance audiences
+
+export const makeVectorDistanceQuery = (
+  queryValue: VectorQueryValue,
+  featureVersion = 1
+): AudienceQueryDefinition => ({
+  featureVersion,
+  queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
+  queryProperty: 'topicDist',
+  queryValue,
+});
+
+// cosineSimilarity audiences
+
+export const makeCosineSimilarityQuery = (
+  queryValue: VectorQueryValue,
+  featureVersion = 1
+): AudienceQueryDefinition => ({
+  featureVersion,
+  queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
+  queryProperty: 'topicDist',
+  queryValue,
+});
+
+export const cosineSimAudience = makeAudienceDefinition({
+  occurrences: 1,
+  definition: [
+    makeCosineSimilarityQuery({
+      threshold: 0.99,
+      vector: [1, 1, 1],
+    }),
+  ],
+});
+
+export const multiCosineSimAudience = makeAudienceDefinition({
+  occurrences: 1,
+  definition: [
+    makeCosineSimilarityQuery({
+      threshold: 0.99,
+      vector: [1, 1, 1],
+    }),
+    makeCosineSimilarityQuery({
+      threshold: 0.99,
+      vector: [1, 0, 1],
+    }),
+  ],
+});
+
+// logistic regression audiences
+
+export const makeLogisticRegressionQuery = (
+  queryValue: LogisticRegressionQueryValue,
+  featureVersion = 1
+): AudienceQueryDefinition => ({
+  featureVersion,
+  queryFilterComparisonType: QueryFilterComparisonType.LOGISTIC_REGRESSION,
+  queryProperty: 'docVector',
+  queryValue,
+});
+
+export const logRegAudience = makeAudienceDefinition({
+  occurrences: 1,
+  definition: [
+    makeLogisticRegressionQuery({
+      threshold: 0.9,
+      vector: [1, 1, 1],
+      bias: 0,
+    }),
+  ],
+});
+
+export const multiLogRegAudience = makeAudienceDefinition({
+  occurrences: 1,
+  definition: [
+    makeLogisticRegressionQuery({
+      threshold: 0.9,
+      vector: [1, 1, 1],
+      bias: 0,
+    }),
+    makeLogisticRegressionQuery({
+      threshold: 0.9,
+      vector: [1, 0, 1],
+      bias: 1,
+    }),
+  ],
+});

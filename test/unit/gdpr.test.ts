@@ -1,11 +1,11 @@
-import { edkt } from '../src';
-import { checkConsentStatus, waitForTcfApiTimeout } from '../src/gdpr';
+import { edkt } from '../../src';
+import { checkConsentStatus, waitForTcfApiTimeout } from '../../src/gdpr';
+import { TCData } from '../../types';
 import {
-  TCData,
-  AudienceDefinition,
-  QueryFilterComparisonType,
-} from '../types';
-import { getPageViews, getMatchedAudiences } from './helpers/localStorageSetup';
+  makeAudienceDefinition,
+  makeStringArrayQuery,
+} from '../helpers/audienceDefinitions';
+import { getPageViews, getMatchedAudiences } from '../helpers/localStorage';
 
 const airgridVendorId = 782;
 
@@ -88,21 +88,12 @@ const updateTCDataAfterDelay = (): Promise<[number, number]> => {
   });
 };
 
-const sportAudience: AudienceDefinition = {
+const sportAudience = makeAudienceDefinition({
   id: 'sport_id',
-  version: 1,
-  ttl: 100,
   lookBack: 10,
   occurrences: 0,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-      queryValue: ['sport'],
-    },
-  ],
-};
+  definition: [makeStringArrayQuery(['sport'])],
+});
 
 const sportPageFeature = {
   keywords: {
@@ -180,12 +171,7 @@ describe.only('EdgeKit GDPR tests', () => {
       expect(edktPageViews).toEqual([
         {
           ts: edktPageViews[0].ts,
-          features: {
-            keywords: {
-              version: 1,
-              value: ['sport'],
-            },
-          },
+          features: sportPageFeature,
         },
       ]);
 
@@ -193,7 +179,6 @@ describe.only('EdgeKit GDPR tests', () => {
         {
           ...edktMatchedAudiences[0],
           id: 'sport_id',
-          matched: true,
           matchedOnCurrentPageView: true,
         },
       ]);

@@ -2,9 +2,11 @@ import {
   ArrayIntersectsFilter,
   AudienceDefinitionFilter,
   CosineSimilarityFilter,
+  LogisticRegressionFilter,
   EngineConditionQuery,
   VectorDistanceFilter,
   VectorQueryValue,
+  LogisticRegressionQueryValue,
   QueryFilterComparisonType,
 } from '../../../types';
 
@@ -23,6 +25,14 @@ export const isVectorQueryValue = (
   value: any
 ): value is VectorQueryValue =>
   isNumberArray(value.vector) && typeof value.threshold === 'number';
+
+export const isLogRegQueryValue = (
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  value: any
+): value is LogisticRegressionQueryValue =>
+  isNumberArray(value.vector) &&
+  typeof value.threshold === 'number' &&
+  typeof value.bias === 'number';
 
 export const isArrayIntersectsFilterType = (
   query: EngineConditionQuery<AudienceDefinitionFilter>
@@ -51,5 +61,15 @@ export const isCosineSimilarityFilterType = (
     query.queryFilterComparisonType ===
       QueryFilterComparisonType.COSINE_SIMILARITY &&
     isVectorQueryValue(query.queryValue)
+  );
+};
+
+export const isLogisticRegressionFilterType = (
+  query: EngineConditionQuery<AudienceDefinitionFilter>
+): query is EngineConditionQuery<LogisticRegressionFilter> => {
+  return (
+    query.queryFilterComparisonType ===
+      QueryFilterComparisonType.LOGISTIC_REGRESSION &&
+    isLogRegQueryValue(query.queryValue)
   );
 };

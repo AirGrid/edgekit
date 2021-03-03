@@ -1,9 +1,8 @@
-import { viewStore } from '../src/store';
-import { edkt } from '../src';
-import { getPageViews } from './helpers/localStorageSetup';
+import { viewStore } from '../../../src/store';
+import { edkt } from '../../../src';
+import { getPageViews } from '../../helpers/localStorage';
 
-describe('ViewStore cleaning behaviour', () => {
-  const vendorIds = [873];
+describe('edkt viewStore cleaning behaviour', () => {
   const omitGdprConsent = true;
 
   const oldFeatures = {
@@ -20,15 +19,6 @@ describe('ViewStore cleaning behaviour', () => {
     },
   };
 
-  beforeEach(() => {
-    localStorage.clear();
-    viewStore._load();
-  });
-
-  afterAll(() => {
-    localStorage.clear();
-  });
-
   it('should delete old pageView entries beyond maxStorageSize', async () => {
     viewStore.setStorageSize(Infinity);
 
@@ -43,7 +33,6 @@ describe('ViewStore cleaning behaviour', () => {
         pageFeatures: oldFeatures,
         audienceDefinitions: [],
         omitGdprConsent,
-        vendorIds,
       });
     }
 
@@ -56,7 +45,6 @@ describe('ViewStore cleaning behaviour', () => {
       pageFeatures: newFeatures,
       audienceDefinitions: [],
       omitGdprConsent,
-      vendorIds,
     });
 
     expect(getPageViews()).toHaveLength(9);
@@ -66,7 +54,6 @@ describe('ViewStore cleaning behaviour', () => {
       pageFeatures: newFeatures,
       audienceDefinitions: [],
       omitGdprConsent,
-      vendorIds,
       featureStorageSize: 3,
     });
 
@@ -95,7 +82,6 @@ describe('ViewStore cleaning behaviour', () => {
         pageFeatures: oldFeatures,
         audienceDefinitions: [],
         omitGdprConsent,
-        vendorIds,
         featureStorageSize: 5,
       });
     }
@@ -106,7 +92,6 @@ describe('ViewStore cleaning behaviour', () => {
       pageFeatures: newFeatures,
       audienceDefinitions: [],
       omitGdprConsent,
-      vendorIds,
       featureStorageSize: 6,
     });
 
