@@ -1,10 +1,3 @@
-/* Should compute as follow:
- * - if a user has matched version 1, and the most recent audience version available is 1, we should not run the checking.
- * - if a user has matched version 1, and the most recent audience version available is 2, we should run the checking.
- *   - if they not do not match the new version (2), but had matched 1, we must remove this audience from matched.
- *   - if they matched v1 and now match on v2, they remain in the audience but with the updated version
- */
-
 import { edkt } from '../../../src';
 import {
   clearStore,
@@ -26,32 +19,35 @@ describe('edkt behaviour on audience version bump', () => {
     },
   };
 
-  const runEdktWithData = ({ vector, version }: {
+  const runEdktWithData = ({
+    vector,
+    version,
+  }: {
     vector: number[];
     version: number;
   }) => {
     const audienceDefinitions = [
-        makeAudienceDefinition({
-          version,
-          occurrences: 0,
-          definition: [
-            makeLogisticRegressionQuery({
-              queryValue: {
-                threshold: 0.9,
-                vector,
-                bias: 0,
-              },
-            }),
-          ],
-        })
-      ];
+      makeAudienceDefinition({
+        version,
+        occurrences: 0,
+        definition: [
+          makeLogisticRegressionQuery({
+            queryValue: {
+              threshold: 0.9,
+              vector,
+              bias: 0,
+            },
+          }),
+        ],
+      }),
+    ];
 
     return edkt.run({
       pageFeatures,
       audienceDefinitions,
       omitGdprConsent: true,
     });
-  }
+  };
 
   describe('edkt unmatching behaviour on audience version bump', () => {
     beforeAll(() => {
