@@ -28,18 +28,6 @@ type PartialAudienceQueryDefinition = Partial<
   Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'>
 >;
 
-// vectorDistance audiences
-
-export const makeVectorDistanceQuery = (
-  queryValue: VectorQueryValue,
-  featureVersion = 1
-): AudienceQueryDefinition => ({
-  featureVersion,
-  queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE,
-  queryProperty: 'topicDist',
-  queryValue,
-});
-
 // cosineSimilarity audiences
 
 export const makeCosineSimilarityQuery = ({
