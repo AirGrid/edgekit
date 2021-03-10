@@ -12,7 +12,7 @@ import {
 describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity with single query audiences', () => {
     const pageFeatures = {
-      topicDist: {
+      docVector: {
         value: [1, 1, 1],
         version: 1,
       },
@@ -54,14 +54,14 @@ describe('cosine similarity audiences matching behaviour', () => {
 
   describe('cosine similarity multi query audiences matching above threshold', () => {
     const pageFeaturesMatch0 = {
-      topicDist: {
+      docVector: {
         value: [1, 1, 1],
         version: 1,
       },
     };
 
     const pageFeaturesMatch1 = {
-      topicDist: {
+      docVector: {
         value: [1, 0, 1],
         version: 1,
       },
@@ -105,7 +105,7 @@ describe('cosine similarity audiences matching behaviour', () => {
 
   describe('cosine similarity multi query audiences not matching below threshold', () => {
     const pageFeaturesNotMatch = {
-      topicDist: {
+      docVector: {
         value: [0, 1, 0],
         version: 1,
       },
