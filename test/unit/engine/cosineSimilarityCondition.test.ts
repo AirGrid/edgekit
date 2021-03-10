@@ -8,13 +8,13 @@ import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 describe('engine matching behaviour for cosine similarity condition', () => {
   describe('cosine similarity condition with same condition/pageView version', () => {
     const cosineSimilarityCondition = makeEngineCondition([
-      makeCosineSimilarityQuery(
-        {
+      makeCosineSimilarityQuery({
+        queryValue: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.99,
         },
-        1
-      ),
+        featureVersion: 1,
+      }),
     ]);
 
     it('does match the page view if vector similarity is above threshold', () => {
@@ -42,13 +42,13 @@ describe('engine matching behaviour for cosine similarity condition', () => {
   describe('cosine similarity condition with a bumped featureVersion', () => {
     // Vector condition with a bumped featureVersion
     const cosineSimilarityCondition = makeEngineCondition([
-      makeCosineSimilarityQuery(
-        {
+      makeCosineSimilarityQuery({
+        queryValue: {
           vector: [0.4, 0.8, 0.3],
           threshold: 0.99,
         },
-        2
-      ),
+        featureVersion: 2,
+      }),
     ]);
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
