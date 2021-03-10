@@ -55,23 +55,3 @@ export const makeDocVectorPageView = (
     },
   },
 });
-
-export const makeSportsPageView = (ts: number): PageView => ({
-  ts,
-  features: {
-    keywords: {
-      version: 1,
-      value: ['sport', 'football'],
-    },
-  },
-});
-
-export const makeTestPageView = (ts: number): PageView => ({
-  ts,
-  features: {
-    keywords: {
-      version: 1,
-      value: ['test', 'test2'],
-    },
-  },
-});

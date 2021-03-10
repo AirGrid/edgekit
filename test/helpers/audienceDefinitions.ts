@@ -2,7 +2,7 @@ import {
   AudienceDefinition,
   QueryFilterComparisonType,
   AudienceQueryDefinition,
-  VectorQueryValue,
+  CosineSimilarityQueryValue,
   LogisticRegressionQueryValue,
 } from '../../types';
 
@@ -34,7 +34,7 @@ export const makeCosineSimilarityQuery = ({
   queryValue,
   ...partialAudienceQueryDefinition
 }: {
-  queryValue: VectorQueryValue;
+  queryValue: CosineSimilarityQueryValue;
 } & PartialAudienceQueryDefinition): AudienceQueryDefinition => ({
   featureVersion: 1,
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,

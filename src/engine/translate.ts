@@ -12,24 +12,22 @@ import {
  */
 export const translate = (
   audienceDefinition: AudienceDefinition
-): EngineCondition<AudienceDefinitionFilter>[] => {
-  return [
-    {
-      filter: {
-        any: false,
-        queries: audienceDefinition.definition,
-      },
-      rules: [
-        {
-          reducer: {
-            name: 'count',
-          },
-          matcher: {
-            name: 'gt',
-            args: audienceDefinition.occurrences,
-          },
-        },
-      ],
+): EngineCondition<AudienceDefinitionFilter> => {
+  return {
+    filter: {
+      any: false,
+      queries: audienceDefinition.definition,
     },
-  ];
+    rules: [
+      {
+        reducer: {
+          name: 'count',
+        },
+        matcher: {
+          name: 'gt',
+          args: audienceDefinition.occurrences,
+        },
+      },
+    ],
+  };
 };

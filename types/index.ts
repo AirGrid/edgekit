@@ -1,10 +1,8 @@
 // Page view interfaces
 
-export type PageFeatureValue = string[] | number[];
-
 export type PageFeatureResult = {
   version: number;
-  value: PageFeatureValue;
+  value: number[];
 };
 
 export interface PageView {
@@ -14,38 +12,24 @@ export interface PageView {
 
 // Audience definition interfaces
 
-export type StringArrayQueryValue = Extract<PageFeatureValue, string[]>;
-
-export type VectorQueryValue = {
-  vector: Extract<PageFeatureValue, number[]>;
+export type CosineSimilarityQueryValue = {
+  vector: PageFeatureResult['value'];
   threshold: number;
 };
 
 export type LogisticRegressionQueryValue = {
-  vector: Extract<PageFeatureValue, number[]>;
+  vector: PageFeatureResult['value'];
   bias: number;
   threshold: number;
 };
 
 export enum QueryFilterComparisonType {
-  VECTOR_DISTANCE = 'vectorDistance',
   COSINE_SIMILARITY = 'cosineSimilarity',
-  ARRAY_INTERSECTS = 'arrayIntersects',
   LOGISTIC_REGRESSION = 'logisticRegression',
 }
 
-export type ArrayIntersectsFilter = {
-  queryValue: StringArrayQueryValue;
-  queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS;
-};
-
-export type VectorDistanceFilter = {
-  queryValue: VectorQueryValue;
-  queryFilterComparisonType: QueryFilterComparisonType.VECTOR_DISTANCE;
-};
-
 export type CosineSimilarityFilter = {
-  queryValue: VectorQueryValue;
+  queryValue: CosineSimilarityQueryValue;
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY;
 };
 
@@ -55,9 +39,7 @@ export type LogisticRegressionFilter = {
 };
 
 export type AudienceDefinitionFilter =
-  | VectorDistanceFilter
   | CosineSimilarityFilter
-  | ArrayIntersectsFilter
   | LogisticRegressionFilter;
 
 export type AudienceQueryDefinition = {

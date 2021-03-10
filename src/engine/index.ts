@@ -10,13 +10,9 @@ import {
 } from '../../types';
 
 const check = (
-  conditions: EngineCondition<AudienceDefinitionFilter>[],
-  pageViews: PageView[],
-  any = false
-): boolean =>
-  conditions[any ? 'some' : 'every']((condition) =>
-    evaluateCondition(condition, pageViews)
-  );
+  condition: EngineCondition<AudienceDefinitionFilter>,
+  pageViews: PageView[]
+): boolean => evaluateCondition(condition, pageViews);
 
 const getMatchingAudiences = (
   audienceDefinitions: AudienceDefinition[],
@@ -25,12 +21,12 @@ const getMatchingAudiences = (
   const currentTS = timeStampInSecs();
 
   return audienceDefinitions.reduce((acc, audience) => {
-    const conditions = translate(audience);
+    const condition = translate(audience);
     const pageViewsWithinLookBack = pageViews.filter(
       (pageView) =>
         audience.lookBack === 0 || pageView.ts > currentTS - audience.lookBack
     );
-    return check(conditions, pageViewsWithinLookBack)
+    return check(condition, pageViewsWithinLookBack)
       ? [
           ...acc,
           {
