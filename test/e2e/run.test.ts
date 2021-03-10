@@ -22,8 +22,10 @@ describe('edgekit basic run behaviour', () => {
     occurrences: 1,
     definition: [
       makeCosineSimilarityQuery({
-        threshold: 0.99,
-        vector: [0.2, 0.5, 0.1],
+        queryValue: {
+          threshold: 0.99,
+          vector: [0.2, 0.5, 0.1],
+        },
       }),
     ],
   });
