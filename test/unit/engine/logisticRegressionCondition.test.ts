@@ -8,14 +8,14 @@ import { makeLogisticRegressionQuery } from '../../helpers/audienceDefinitions';
 describe('engine matching behaviour for logistic regression condition', () => {
   describe('logReg condition with same condition/pageView version', () => {
     const condition = makeEngineCondition([
-      makeLogisticRegressionQuery(
-        {
+      makeLogisticRegressionQuery({
+        queryValue: {
           vector: [1, 1, 1],
           threshold: 0.9,
           bias: 0,
         },
-        1
-      ),
+        featureVersion: 1,
+      }),
     ]);
 
     it('does match the page view if vector similarity is above threshold', () => {
@@ -43,14 +43,14 @@ describe('engine matching behaviour for logistic regression condition', () => {
   describe('logRef condition with a bumped featureVersion', () => {
     // Vector condition with a bumped featureVersion
     const logisticRegressionCondition = makeEngineCondition([
-      makeLogisticRegressionQuery(
-        {
+      makeLogisticRegressionQuery({
+        queryValue: {
           vector: [1, 1, 1],
           threshold: 0.9,
           bias: 0,
         },
-        2
-      ),
+        featureVersion: 2,
+      }),
     ]);
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {

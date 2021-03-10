@@ -51,15 +51,21 @@ export const makeAudienceDefinition = (
   ...partialAudienceDefinition,
 });
 
+type PartialAudienceQueryDefinition = Partial<
+  Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'>
+>;
+
 // stringArray audiences
 
 export const makeStringArrayQuery = (
-  queryValue: StringArrayQueryValue
+  queryValue: StringArrayQueryValue,
+  partialAudienceQueryDefinition: PartialAudienceQueryDefinition = {}
 ): AudienceQueryDefinition => ({
+  queryValue,
   featureVersion: 1,
   queryProperty: 'keywords',
   queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-  queryValue,
+  ...partialAudienceQueryDefinition,
 });
 
 export const sportInterestAudience = makeAudienceDefinition({
@@ -97,13 +103,16 @@ export const makeVectorDistanceQuery = (
 
 // cosineSimilarity audiences
 
-export const makeCosineSimilarityQuery = (
-  queryValue: VectorQueryValue,
-  featureVersion = 1
-): AudienceQueryDefinition => ({
-  featureVersion,
+export const makeCosineSimilarityQuery = ({
+  queryValue,
+  ...partialAudienceQueryDefinition
+}: {
+  queryValue: VectorQueryValue;
+} & PartialAudienceQueryDefinition): AudienceQueryDefinition => ({
+  featureVersion: 1,
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
   queryProperty: 'topicDist',
+  ...partialAudienceQueryDefinition,
   queryValue,
 });
 
@@ -111,8 +120,10 @@ export const cosineSimAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
     makeCosineSimilarityQuery({
-      threshold: 0.99,
-      vector: [1, 1, 1],
+      queryValue: {
+        threshold: 0.99,
+        vector: [1, 1, 1],
+      },
     }),
   ],
 });
@@ -121,25 +132,32 @@ export const multiCosineSimAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
     makeCosineSimilarityQuery({
-      threshold: 0.99,
-      vector: [1, 1, 1],
+      queryValue: {
+        threshold: 0.99,
+        vector: [1, 1, 1],
+      },
     }),
     makeCosineSimilarityQuery({
-      threshold: 0.99,
-      vector: [1, 0, 1],
+      queryValue: {
+        threshold: 0.99,
+        vector: [1, 0, 1],
+      },
     }),
   ],
 });
 
 // logistic regression audiences
 
-export const makeLogisticRegressionQuery = (
-  queryValue: LogisticRegressionQueryValue,
-  featureVersion = 1
-): AudienceQueryDefinition => ({
-  featureVersion,
+export const makeLogisticRegressionQuery = ({
+  queryValue,
+  ...partialAudienceQueryDefinition
+}: {
+  queryValue: LogisticRegressionQueryValue;
+} & PartialAudienceQueryDefinition): AudienceQueryDefinition => ({
+  featureVersion: 1,
   queryFilterComparisonType: QueryFilterComparisonType.LOGISTIC_REGRESSION,
   queryProperty: 'docVector',
+  ...partialAudienceQueryDefinition,
   queryValue,
 });
 
@@ -147,9 +165,11 @@ export const logRegAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
     makeLogisticRegressionQuery({
-      threshold: 0.9,
-      vector: [1, 1, 1],
-      bias: 0,
+      queryValue: {
+        threshold: 0.9,
+        vector: [1, 1, 1],
+        bias: 0,
+      },
     }),
   ],
 });
@@ -158,14 +178,18 @@ export const multiLogRegAudience = makeAudienceDefinition({
   occurrences: 1,
   definition: [
     makeLogisticRegressionQuery({
-      threshold: 0.9,
-      vector: [1, 1, 1],
-      bias: 0,
+      queryValue: {
+        threshold: 0.9,
+        vector: [1, 1, 1],
+        bias: 0,
+      },
     }),
     makeLogisticRegressionQuery({
-      threshold: 0.9,
-      vector: [1, 0, 1],
-      bias: 1,
+      queryValue: {
+        threshold: 0.9,
+        vector: [1, 0, 1],
+        bias: 1,
+      },
     }),
   ],
 });

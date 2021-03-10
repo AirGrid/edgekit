@@ -8,20 +8,20 @@ import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 describe('engine matching behaviour for multiple engine condition values', () => {
   const multipleNonOverlapingQueriesCondition = makeEngineCondition(
     [
-      makeCosineSimilarityQuery(
-        {
+      makeCosineSimilarityQuery({
+        queryValue: {
           vector: [0, 1, 0],
           threshold: 0.99,
         },
-        1
-      ),
-      makeCosineSimilarityQuery(
-        {
+        featureVersion: 1,
+      }),
+      makeCosineSimilarityQuery({
+        queryValue: {
           vector: [1, 0, 0],
           threshold: 0.99,
         },
-        1
-      ),
+        featureVersion: 1,
+      }),
     ],
     1
   );

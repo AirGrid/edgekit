@@ -80,8 +80,10 @@ describe('edkt run method', () => {
         id: 'sport_id',
         definition: [
           makeCosineSimilarityQuery({
-            threshold: 0.8,
-            vector: [1, 1, 1],
+            queryValue: {
+              threshold: 0.8,
+              vector: [1, 1, 1],
+            },
           }),
         ],
       });
