@@ -1,7 +1,7 @@
 import { evaluateCondition } from '../../../src/engine';
 import {
   makeEngineCondition,
-  makeTopicDistPageView,
+  makePageView,
 } from '../../helpers/engineConditions';
 import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 
@@ -18,7 +18,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     ]);
 
     it('does match the page view if vector similarity is above threshold', () => {
-      const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 1)];
+      const pageViews = [makePageView([0.4, 0.8, 0.3], 1)];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
@@ -27,8 +27,8 @@ describe('engine matching behaviour for cosine similarity condition', () => {
 
     it('does not match the page view if similarity is not above threshold', () => {
       const pageViews = [
-        makeTopicDistPageView([0.2, 0.8, 0.1], 1, 100),
-        makeTopicDistPageView([0.3, 0.8, 0.1], 1, 101),
+        makePageView([0.2, 0.8, 0.1], 1, 100),
+        makePageView([0.3, 0.8, 0.1], 1, 101),
       ];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
@@ -50,7 +50,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     ]);
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
-      const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 2, 100)];
+      const pageViews = [makePageView([0.4, 0.8, 0.3], 2, 100)];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
@@ -58,7 +58,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     });
 
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
-      const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 1, 100)];
+      const pageViews = [makePageView([0.4, 0.8, 0.3], 1, 100)];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 

@@ -117,6 +117,7 @@ describe('edkt run method', () => {
               threshold: 0.9,
               vector: matchingVector,
             },
+            queryProperty: 'misconfiguredProperty',
           }),
         ],
       });

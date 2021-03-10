@@ -15,7 +15,7 @@ describe('edkt viewStore add behaviour', () => {
   const moreFeatures = {
     metaKeywords: {
       version: 1,
-      value: ['foo', 'bar', 'baz'],
+      value: [0, 0, 0],
     },
   };
 
