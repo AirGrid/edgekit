@@ -1,4 +1,4 @@
-import { check } from '../../../src/engine';
+import { evaluateCondition } from '../../../src/engine';
 import {
   makeEngineCondition,
   makeTopicDistPageView,
@@ -29,7 +29,10 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   it('does match for condition above threshold on fisrt query object', () => {
     const pageViews = [makeTopicDistPageView([1, 0, 0], 1)];
 
-    const result = check(multipleNonOverlapingQueriesCondition, pageViews);
+    const result = evaluateCondition(
+      multipleNonOverlapingQueriesCondition,
+      pageViews
+    );
 
     expect(result).toEqual(true);
   });
@@ -37,7 +40,10 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   it('does match for condition above threshold on second query object', () => {
     const pageViews = [makeTopicDistPageView([0, 1, 0], 1)];
 
-    const result = check(multipleNonOverlapingQueriesCondition, pageViews);
+    const result = evaluateCondition(
+      multipleNonOverlapingQueriesCondition,
+      pageViews
+    );
 
     expect(result).toEqual(true);
   });
@@ -45,20 +51,23 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   it('does not match for condition below threshold on every query object', () => {
     const pageViews = [makeTopicDistPageView([0, 0, 1], 1)];
 
-    const result = check(multipleNonOverlapingQueriesCondition, pageViews);
+    const result = evaluateCondition(
+      multipleNonOverlapingQueriesCondition,
+      pageViews
+    );
 
     expect(result).toEqual(false);
   });
 
   it('does match for condition above threshold on at least one (pageView, condition) pair', () => {
     expect(
-      check(multipleNonOverlapingQueriesCondition, [
+      evaluateCondition(multipleNonOverlapingQueriesCondition, [
         makeTopicDistPageView([1, 0, 0], 1),
         makeTopicDistPageView([0, 0, 1], 1),
       ])
     ).toEqual(true);
     expect(
-      check(multipleNonOverlapingQueriesCondition, [
+      evaluateCondition(multipleNonOverlapingQueriesCondition, [
         makeTopicDistPageView([0, 1, 0], 1),
         makeTopicDistPageView([0, 0, 1], 1),
       ])
@@ -73,7 +82,10 @@ describe('engine matching behaviour for multiple engine condition values', () =>
       makeTopicDistPageView([1, 1, 1], 2),
     ];
 
-    const result = check(multipleNonOverlapingQueriesCondition, pageViews);
+    const result = evaluateCondition(
+      multipleNonOverlapingQueriesCondition,
+      pageViews
+    );
 
     expect(result).toEqual(false);
   });
@@ -86,7 +98,10 @@ describe('engine matching behaviour for multiple engine condition values', () =>
       makeTopicDistPageView([1, 1, 1], 2),
     ];
 
-    const result = check(multipleNonOverlapingQueriesCondition, pageViews);
+    const result = evaluateCondition(
+      multipleNonOverlapingQueriesCondition,
+      pageViews
+    );
 
     expect(result).toEqual(true);
   });

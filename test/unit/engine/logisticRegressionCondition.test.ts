@@ -1,4 +1,4 @@
-import { check } from '../../../src/engine';
+import { evaluateCondition } from '../../../src/engine';
 import {
   makeEngineCondition,
   makeDocVectorPageView,
@@ -21,7 +21,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     it('does match the page view if vector similarity is above threshold', () => {
       const pageViews = [makeDocVectorPageView([1, 1, 1], 1)];
 
-      const result = check(versionOneCondition, pageViews);
+      const result = evaluateCondition(versionOneCondition, pageViews);
 
       expect(result).toEqual(true);
     });
@@ -32,7 +32,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
         makeDocVectorPageView([0.3, 0.8, 0.1], 1, 101),
       ];
 
-      const result = check(versionOneCondition, pageViews);
+      const result = evaluateCondition(versionOneCondition, pageViews);
 
       expect(result).toEqual(false);
     });
@@ -54,7 +54,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
       const pageViews = [makeDocVectorPageView([1, 1, 1], 2, 100)];
 
-      const result = check(versionTwoCondition, pageViews);
+      const result = evaluateCondition(versionTwoCondition, pageViews);
 
       expect(result).toBe(true);
     });
@@ -62,7 +62,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
       const pageViews = [makeDocVectorPageView([0.4, 0.8, 0.3], 1, 100)];
 
-      const result = check(versionTwoCondition, pageViews);
+      const result = evaluateCondition(versionTwoCondition, pageViews);
 
       expect(result).toBe(false);
     });
