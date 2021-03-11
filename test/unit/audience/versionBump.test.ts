@@ -8,6 +8,7 @@ import {
   makeAudienceDefinition,
   makeLogisticRegressionQuery,
 } from '../../helpers/audienceDefinitions';
+import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
 
 describe('edkt behaviour on audience version bump', () => {
   const matchingVector = [1, 1, 1];
@@ -50,9 +51,7 @@ describe('edkt behaviour on audience version bump', () => {
   };
 
   describe('edkt unmatching behaviour on audience version bump', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+    beforeAll(clearStore);
 
     it('should match pageView against audienceDefinition', async () => {
       await runEdktWithData({
@@ -60,11 +59,17 @@ describe('edkt behaviour on audience version bump', () => {
         version: 1,
       });
 
+      const matchedAudiences = getMatchedAudiences();
+
       expect(getPageViews()).toHaveLength(1);
-      expect(getMatchedAudiences()).toHaveLength(1);
+      expect(matchedAudiences).toHaveLength(1);
+      expect(matchedAudiences[0]).toHaveProperty(
+        'matchedOnCurrentPageView',
+        true
+      );
     });
 
-    it('should unmatch pageView on audienceDefinition version bump', async () => {
+    it('should unmatch matchedAudience on audienceDefinition version bump', async () => {
       await runEdktWithData({
         version: 2,
         vector: [0, 0, 0], // this does not match
@@ -76,15 +81,15 @@ describe('edkt behaviour on audience version bump', () => {
   });
 
   describe('edkt feature version bump behaviour on matching audience version bump', () => {
-    beforeAll(() => {
-      clearStore();
-    });
+    beforeAll(clearStore);
 
-    it('should update pageView version on matching audienceDefinition with version bump', async () => {
+    it('should update matchedAudience version on matching audienceDefinition with version bump', async () => {
       await runEdktWithData({
         version: 1,
         vector: matchingVector,
       });
+
+      matchedAudienceStore._load();
 
       await runEdktWithData({
         version: 2,
@@ -97,6 +102,10 @@ describe('edkt behaviour on audience version bump', () => {
       expect(pageViews).toHaveLength(2);
       expect(matchedAudiences).toHaveLength(1);
       expect(matchedAudiences[0]).toHaveProperty('version', 2);
+      expect(matchedAudiences[0]).toHaveProperty(
+        'matchedOnCurrentPageView',
+        false
+      );
     });
   });
 });

@@ -28,7 +28,10 @@ const run: Edkt['run'] = async (config) => {
     pageViews
   );
 
-  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
+  matchedAudienceStore.updateMatchedAudiences(
+    matchedAudiences,
+    audienceDefinitions
+  );
 };
 
 export const edkt: Edkt = {

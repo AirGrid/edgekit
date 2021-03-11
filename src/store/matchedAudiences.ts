@@ -1,5 +1,5 @@
 import { storage, timeStampInSecs } from '../utils';
-import { StorageKeys, MatchedAudience } from '../../types';
+import { StorageKeys, MatchedAudience, AudienceDefinition } from '../../types';
 
 class MatchedAudienceStore {
   private matchedAudiences: MatchedAudience[];
@@ -35,9 +35,59 @@ class MatchedAudienceStore {
     storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
-  setMatchedAudiences(matchedAudiences: MatchedAudience[]): void {
-    this.matchedAudiences = matchedAudiences;
-    this.matchedAudienceIds = matchedAudiences.map((audience) => audience.id);
+  updateMatchedAudiences(
+    matchedAudiences: MatchedAudience[],
+    audienceDefinitions: AudienceDefinition[]
+  ): void {
+    const newlyMatchedAudienceIds = matchedAudiences.map(
+      (audience) => audience.id
+    );
+
+    // get old matched audiences with bumped version
+    const rematchedAudiences = this.matchedAudiences
+      .filter((audience) => newlyMatchedAudienceIds.includes(audience.id))
+      .map((audience) => {
+        const newlyMatchedAudience = matchedAudiences.find(
+          (newAudience) => newAudience.id === audience.id
+        );
+        // typescript says this can be undefined, so lets check it
+        if (!newlyMatchedAudience) return audience;
+        return {
+          ...audience,
+          version: newlyMatchedAudience.version,
+        };
+      });
+
+    // get the newly matched audiences that are not previously matched
+    const newlyMatchedAudiences = matchedAudiences.filter(
+      (audience) => !this.matchedAudienceIds.includes(audience.id)
+    );
+
+    // get the old matched audiences which are not version bumped (excluding the ones that are not rematched)
+    const oldMatchedAudiences = this.matchedAudiences.filter((audience) => {
+      const definition = audienceDefinitions.find(
+        (def) => def.id === audience.id
+      );
+      if (!definition) return false;
+      return (
+        !newlyMatchedAudienceIds.includes(audience.id) &&
+        audience.version === definition.version
+      );
+    });
+
+    // merge previously matched (version bumped) audiences with newly matched ones
+    const mergedMatchedAudiences = [
+      ...oldMatchedAudiences,
+      ...rematchedAudiences,
+      ...newlyMatchedAudiences,
+    ];
+
+    const mergedMatchedAudiencesIds = mergedMatchedAudiences.map(
+      ({ id }) => id
+    );
+
+    this.matchedAudiences = mergedMatchedAudiences;
+    this.matchedAudienceIds = mergedMatchedAudiencesIds;
     this._save();
   }
 
