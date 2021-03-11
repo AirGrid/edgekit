@@ -31,9 +31,9 @@ describe('matchedAudienceStore set and load behaviour', () => {
     matchedOnCurrentPageView: false,
   });
 
-  const matchedAudienceId = 'testId';
+  const matchedAudienceId = 'matchedAudienceId';
   const fixedAudienceId = 'fixedAudienceId';
-  const newlyMatchedAudienceId = 'totallyNewAudience';
+  const newlyMatchedAudienceId = 'newlyMatchedAudienceId';
 
   // matchedAudiences and definitions
   const [
@@ -106,7 +106,7 @@ describe('matchedAudienceStore set and load behaviour', () => {
 
   it('should preserve `matchedOnCurrentPageView` flag and timestamps on rematched audiences', () => {
     matchedAudienceStore.updateMatchedAudiences(
-      [rematchedAudience],
+      [rematchedAudience, oldFixedMatchedAudience],
       [rematchedAudienceDefinition, fixedAudienceDefinition]
     );
 
