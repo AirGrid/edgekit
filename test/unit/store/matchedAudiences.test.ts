@@ -70,6 +70,9 @@ describe('matchedAudienceStore set and load behaviour', () => {
   const oldRematchedAudience = unsetMatchedOnCurrentPageViewFlag(
     rematchedAudience
   );
+  const oldNewlyMatchedAudience = unsetMatchedOnCurrentPageViewFlag(
+    newlyMatchedAudience
+  );
 
   beforeAll(clearStore);
 
@@ -126,6 +129,35 @@ describe('matchedAudienceStore set and load behaviour', () => {
     const matchedAudiences = matchedAudienceStore.getMatchedAudiences();
     expect(matchedAudiences).toHaveLength(3);
     expect(matchedAudiences).toContainEqual(newlyMatchedAudience);
+    expect(matchedAudiences).toContainEqual(oldRematchedAudience);
+    expect(matchedAudiences).toContainEqual(oldFixedMatchedAudience);
+  });
+
+  it('should not mess with old audiences on no new additions', () => {
+    matchedAudienceStore.updateMatchedAudiences(
+      [],
+      [
+        newlyMatchedAudienceDefinition,
+        rematchedAudienceDefinition,
+        fixedAudienceDefinition,
+      ]
+    );
+
+    const matchedAudiences = matchedAudienceStore.getMatchedAudiences();
+    expect(matchedAudiences).toHaveLength(3);
+    expect(matchedAudiences).toContainEqual(oldNewlyMatchedAudience);
+    expect(matchedAudiences).toContainEqual(oldRematchedAudience);
+    expect(matchedAudiences).toContainEqual(oldFixedMatchedAudience);
+  });
+
+  it('should remove matchedAudiences on audienceDefinition removal', () => {
+    matchedAudienceStore.updateMatchedAudiences(
+      [],
+      [rematchedAudienceDefinition, fixedAudienceDefinition]
+    );
+
+    const matchedAudiences = matchedAudienceStore.getMatchedAudiences();
+    expect(matchedAudiences).toHaveLength(2);
     expect(matchedAudiences).toContainEqual(oldRematchedAudience);
     expect(matchedAudiences).toContainEqual(oldFixedMatchedAudience);
   });
