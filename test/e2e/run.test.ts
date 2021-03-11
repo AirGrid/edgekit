@@ -31,7 +31,7 @@ describe('edgekit basic run behaviour', () => {
   });
 
   const pageFeatures = {
-    topicDist: {
+    docVector: {
       version: 1,
       value: [0.2, 0.5, 0.1],
     },
