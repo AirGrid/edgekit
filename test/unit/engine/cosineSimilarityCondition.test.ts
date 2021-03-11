@@ -1,4 +1,4 @@
-import { check } from '../../../src/engine';
+import { evaluateCondition } from '../../../src/engine';
 import {
   makeEngineCondition,
   makeTopicDistPageView,
@@ -18,22 +18,20 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     ]);
 
     it('does match the page view if vector similarity is above threshold', () => {
-      const conditions = [cosineSimilarityCondition];
       const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 1)];
 
-      const result = check(conditions, pageViews);
+      const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
       expect(result).toEqual(true);
     });
 
     it('does not match the page view if similarity is not above threshold', () => {
-      const conditions = [cosineSimilarityCondition];
       const pageViews = [
         makeTopicDistPageView([0.2, 0.8, 0.1], 1, 100),
         makeTopicDistPageView([0.3, 0.8, 0.1], 1, 101),
       ];
 
-      const result = check(conditions, pageViews);
+      const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
       expect(result).toEqual(false);
     });
@@ -52,19 +50,17 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     ]);
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
-      const conditions = [cosineSimilarityCondition];
       const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 2, 100)];
 
-      const result = check(conditions, pageViews);
+      const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
       expect(result).toBe(true);
     });
 
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
-      const conditions = [cosineSimilarityCondition];
       const pageViews = [makeTopicDistPageView([0.4, 0.8, 0.3], 1, 100)];
 
-      const result = check(conditions, pageViews);
+      const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
       expect(result).toBe(false);
     });
