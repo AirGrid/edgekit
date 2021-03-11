@@ -4,10 +4,13 @@ import { clearStore } from '../../helpers/localStorage';
 import { MatchedAudience, AudienceDefinition } from '../../../types';
 
 describe('matchedAudienceStore set and load behaviour', () => {
-  const makeMatchedAudienceAndDefinition = (
-    id: string,
-    version: number
-  ): [MatchedAudience, AudienceDefinition] => {
+  const makeMatchedAudienceAndDefinition = ({
+    id,
+    version,
+  }: {
+    id: AudienceDefinition['id'];
+    version: AudienceDefinition['version'];
+  }): [MatchedAudience, AudienceDefinition] => {
     const currentTS = timeStampInSecs();
     return [
       {
@@ -30,32 +33,42 @@ describe('matchedAudienceStore set and load behaviour', () => {
 
   const matchedAudienceId = 'testId';
   const fixedAudienceId = 'fixedAudienceId';
+  const newlyMatchedAudienceId = 'totallyNewAudience';
 
+  // matchedAudiences and definitions
   const [
     matchedAudience,
     matchedAudienceDefinition,
-  ] = makeMatchedAudienceAndDefinition(matchedAudienceId, 1);
-  const [
-    fixedMatchedAudience,
-    fixedAudienceDefinition,
-  ] = makeMatchedAudienceAndDefinition(fixedAudienceId, 1);
-
+  ] = makeMatchedAudienceAndDefinition({
+    id: matchedAudienceId,
+    version: 1,
+  });
   const [
     _rematchedAudience,
     rematchedAudienceDefinition,
-  ] = makeMatchedAudienceAndDefinition(matchedAudienceId, 2);
+  ] = makeMatchedAudienceAndDefinition({ id: matchedAudienceId, version: 2 });
   const rematchedAudience = unsetMatchedOnCurrentPageViewFlag(
     _rematchedAudience
   );
-
+  const [
+    fixedMatchedAudience,
+    fixedAudienceDefinition,
+  ] = makeMatchedAudienceAndDefinition({ id: fixedAudienceId, version: 1 });
   const [
     newlyMatchedAudience,
     newlyMatchedAudienceDefinition,
-  ] = makeMatchedAudienceAndDefinition('totallyNewAudience', 1);
+  ] = makeMatchedAudienceAndDefinition({
+    id: newlyMatchedAudienceId,
+    version: 1,
+  });
 
+  // updated matchedAudiences (matchedOnCurrentPageView unset)
   const oldMatchedAudience = unsetMatchedOnCurrentPageViewFlag(matchedAudience);
   const oldFixedMatchedAudience = unsetMatchedOnCurrentPageViewFlag(
     fixedMatchedAudience
+  );
+  const oldRematchedAudience = unsetMatchedOnCurrentPageViewFlag(
+    rematchedAudience
   );
 
   beforeAll(clearStore);
@@ -108,10 +121,6 @@ describe('matchedAudienceStore set and load behaviour', () => {
         rematchedAudienceDefinition,
         fixedAudienceDefinition,
       ]
-    );
-
-    const oldRematchedAudience = unsetMatchedOnCurrentPageViewFlag(
-      rematchedAudience
     );
 
     const matchedAudiences = matchedAudienceStore.getMatchedAudiences();
