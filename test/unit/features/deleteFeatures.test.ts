@@ -6,16 +6,16 @@ describe('edkt viewStore cleaning behaviour', () => {
   const omitGdprConsent = true;
 
   const oldFeatures = {
-    keywords: {
+    docVector: {
       version: 1,
-      value: ['Haskell Curry', 'death', 'combinatory logic'],
+      value: [1, 1, 1],
     },
   };
 
   const newFeatures = {
-    keywords: {
+    docVector: {
       version: 1,
-      value: ['virus', 'politics', 'ai'],
+      value: [0, 0, 0],
     },
   };
 

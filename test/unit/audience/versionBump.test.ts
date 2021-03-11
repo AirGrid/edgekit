@@ -1,4 +1,3 @@
-import { sportKeywords } from '../../helpers/audienceDefinitions';
 import { edkt } from '../../../src';
 import {
   clearStore,
@@ -6,57 +5,50 @@ import {
   getMatchedAudiences,
 } from '../../helpers/localStorage';
 import {
-  AudienceDefinition,
-  QueryFilterComparisonType,
-  StringArrayQueryValue,
-} from '../../../types';
-
-const sportPageFeature = {
-  keywords: {
-    version: 1,
-    value: sportKeywords,
-  },
-};
-
-type MakeAudienceData = {
-  version: number;
-  queryValue: StringArrayQueryValue;
-};
-
-export const makeAudience = ({
-  version,
-  queryValue,
-}: MakeAudienceData): AudienceDefinition => ({
-  id: 'iab-607',
-  version,
-  ttl: 3600,
-  lookBack: 0,
-  occurrences: 0,
-  definition: [
-    {
-      featureVersion: 1,
-      queryProperty: 'keywords',
-      queryValue,
-      queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-    },
-  ],
-});
-
-const runEdktWithData = (data: MakeAudienceData) =>
-  edkt.run({
-    pageFeatures: sportPageFeature,
-    audienceDefinitions: [makeAudience(data)],
-    omitGdprConsent: true,
-  });
-
-/* Should compute as follow:
- * - if a user has matched version 1, and the most recent audience version available is 1, we should not run the checking.
- * - if a user has matched version 1, and the most recent audience version available is 2, we should run the checking.
- *   - if they not do not match the new version (2), but had matched 1, we must remove this audience from matched.
- *   - if they matched v1 and now match on v2, they remain in the audience but with the updated version
- */
+  makeAudienceDefinition,
+  makeLogisticRegressionQuery,
+} from '../../helpers/audienceDefinitions';
 
 describe('edkt behaviour on audience version bump', () => {
+  const matchingVector = [1, 1, 1];
+
+  const pageFeatures = {
+    docVector: {
+      version: 1,
+      value: matchingVector,
+    },
+  };
+
+  const runEdktWithData = ({
+    vector,
+    version,
+  }: {
+    vector: number[];
+    version: number;
+  }) => {
+    const audienceDefinitions = [
+      makeAudienceDefinition({
+        version,
+        occurrences: 0,
+        definition: [
+          makeLogisticRegressionQuery({
+            queryValue: {
+              threshold: 0.9,
+              vector,
+              bias: 0,
+            },
+          }),
+        ],
+      }),
+    ];
+
+    return edkt.run({
+      pageFeatures,
+      audienceDefinitions,
+      omitGdprConsent: true,
+    });
+  };
+
   describe('edkt unmatching behaviour on audience version bump', () => {
     beforeAll(() => {
       clearStore();
@@ -64,8 +56,8 @@ describe('edkt behaviour on audience version bump', () => {
 
     it('should match pageView against audienceDefinition', async () => {
       await runEdktWithData({
+        vector: matchingVector,
         version: 1,
-        queryValue: sportKeywords,
       });
 
       expect(getPageViews()).toHaveLength(1);
@@ -75,7 +67,7 @@ describe('edkt behaviour on audience version bump', () => {
     it('should unmatch pageView on audienceDefinition version bump', async () => {
       await runEdktWithData({
         version: 2,
-        queryValue: ['Ferrari', 'Lamborghini', 'Mercedes'],
+        vector: [0, 0, 0], // this does not match
       });
 
       expect(getPageViews()).toHaveLength(2);
@@ -91,12 +83,12 @@ describe('edkt behaviour on audience version bump', () => {
     it('should update pageView version on matching audienceDefinition with version bump', async () => {
       await runEdktWithData({
         version: 1,
-        queryValue: sportKeywords,
+        vector: matchingVector,
       });
 
       await runEdktWithData({
         version: 2,
-        queryValue: sportKeywords,
+        vector: matchingVector,
       });
 
       const matchedAudiences = getMatchedAudiences();

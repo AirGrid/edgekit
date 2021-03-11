@@ -6,26 +6,6 @@ import {
 } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
-export const makePageViews = (
-  timestamp: number,
-  keywords: Array<string>,
-  numberOfPageViews: number
-): Array<PageView> => {
-  const pageViews = [];
-  for (let index = 0; index < numberOfPageViews; index++) {
-    pageViews.push({
-      ts: timestamp,
-      features: {
-        keywords: {
-          version: 1,
-          value: keywords,
-        },
-      },
-    });
-  }
-  return pageViews;
-};
-
 export const clearStore = (): void => {
   localStorage.clear();
   //We need to reload from local storage because its only done on construction

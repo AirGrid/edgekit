@@ -4,7 +4,6 @@ import {
   AudienceQueryDefinition,
   VectorQueryValue,
   LogisticRegressionQueryValue,
-  StringArrayQueryValue,
 } from '../../types';
 
 const ID = 'testid';
@@ -12,32 +11,6 @@ const TTL_IN_SECS = 100;
 const LOOK_BACK_IN_SECS = 100;
 const OCCURRENCES = 2;
 const VERSION = 1;
-
-export const sportKeywords = ['golf', 'liverpool', 'football', 'sport'];
-
-export const travelKeywords = [
-  'british airways',
-  'cruise ship',
-  'ship',
-  'airline',
-  'hotel',
-  'travel',
-  'holland america line',
-  'royal navy',
-  'tourism',
-  'cruise line',
-];
-
-export const automotiveKeywords = [
-  'international space station',
-  'vehicle',
-  'road',
-  'driving',
-  'elon musk',
-  'walking',
-  'traffic',
-  'transport',
-];
 
 export const makeAudienceDefinition = (
   partialAudienceDefinition: Partial<AudienceDefinition>
@@ -54,40 +27,6 @@ export const makeAudienceDefinition = (
 type PartialAudienceQueryDefinition = Partial<
   Pick<AudienceQueryDefinition, 'featureVersion' | 'queryProperty'>
 >;
-
-// stringArray audiences
-
-export const makeStringArrayQuery = (
-  queryValue: StringArrayQueryValue,
-  partialAudienceQueryDefinition: PartialAudienceQueryDefinition = {}
-): AudienceQueryDefinition => ({
-  queryValue,
-  featureVersion: 1,
-  queryProperty: 'keywords',
-  queryFilterComparisonType: QueryFilterComparisonType.ARRAY_INTERSECTS,
-  ...partialAudienceQueryDefinition,
-});
-
-export const sportInterestAudience = makeAudienceDefinition({
-  id: 'iab-607',
-  definition: [makeStringArrayQuery(sportKeywords)],
-});
-
-export const travelInterestAudience = makeAudienceDefinition({
-  id: 'iab-719',
-  definition: [makeStringArrayQuery(travelKeywords)],
-});
-
-export const automotiveInterestAudience = makeAudienceDefinition({
-  id: 'iab-243',
-  definition: [makeStringArrayQuery(automotiveKeywords)],
-});
-
-export const allAudienceDefinitions = [
-  sportInterestAudience,
-  travelInterestAudience,
-  automotiveInterestAudience,
-];
 
 // vectorDistance audiences
 
