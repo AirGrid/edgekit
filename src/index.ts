@@ -23,9 +23,10 @@ const run: Edkt['run'] = async (config) => {
 
   const pageViews = viewStore.getCopyOfPageViews();
 
-  matchedAudienceStore.unmatchAudiencesDueToVersionUpdate(audienceDefinitions);
+  matchedAudienceStore.unsetAudiencesIfVersionIncremented(audienceDefinitions);
+
   const audiencesToMatch = audienceDefinitions.filter((audience) => {
-    return !matchedAudienceStore.hasAudienceBeenMatched(audience.id, audience.version);
+    return !matchedAudienceStore.isMatched(audience.id, audience.version);
   });
 
   const matchedAudiences = engine.getMatchingAudiences(
@@ -33,7 +34,7 @@ const run: Edkt['run'] = async (config) => {
     pageViews
   );
 
-  matchedAudienceStore.setMatchedAudiences(matchedAudiences);
+  matchedAudienceStore.setAudiences(matchedAudiences);
 };
 
 export const edkt: Edkt = {

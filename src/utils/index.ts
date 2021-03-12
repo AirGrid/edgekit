@@ -32,7 +32,7 @@ const remove = (key: string): void => {
   } catch (e) {
     // ignore...
   }
-}
+};
 
 export const storage = {
   set,

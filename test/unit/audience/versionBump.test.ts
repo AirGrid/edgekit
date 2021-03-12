@@ -8,7 +8,7 @@ import {
   makeAudienceDefinition,
   makeLogisticRegressionQuery,
 } from '../../helpers/audienceDefinitions';
-import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
+// import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
 
 describe('edkt behaviour on audience version bump', () => {
   const matchingVector = [1, 1, 1];
@@ -59,7 +59,7 @@ describe('edkt behaviour on audience version bump', () => {
         version: 1,
       });
 
-      const matchedAudiences = getMatchedAudiences()
+      const matchedAudiences = getMatchedAudiences();
 
       expect(getPageViews()).toHaveLength(1);
       expect(matchedAudiences).toHaveLength(1);
@@ -88,8 +88,6 @@ describe('edkt behaviour on audience version bump', () => {
         version: 1,
         vector: matchingVector,
       });
-
-      matchedAudienceStore._load();
 
       await runEdktWithData({
         version: 2,
