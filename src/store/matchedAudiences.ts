@@ -1,14 +1,26 @@
 import { storage, timeStampInSecs } from '../utils';
 import { StorageKeys, MatchedAudience } from '../../types';
 
+type MatchedVersionLookup = {
+  [key: string]: number
+}
+
 class MatchedAudienceStore {
   private matchedAudiences: MatchedAudience[];
   private matchedAudienceIds: string[];
+  private matchedVersionLookup: MatchedVersionLookup;
 
   constructor() {
     this.matchedAudiences = [];
     this.matchedAudienceIds = [];
+    this.matchedVersionLookup = {}
     this._load();
+  }
+
+  _createMatchedVersionLookup(audiences: MatchedAudience[]): MatchedVersionLookup {
+    return audiences.reduce((acc, cur) => ({
+      ...acc, [cur.id]: cur.version
+    }), {});
   }
 
   _load(): void {
@@ -27,6 +39,7 @@ class MatchedAudienceStore {
     );
     this.matchedAudiences = unExpiredAudiences;
     this.matchedAudienceIds = unExpiredAudienceIds;
+    this.matchedVersionLookup = this._createMatchedVersionLookup(unExpiredAudiences);
     this._save();
   }
 
@@ -35,8 +48,23 @@ class MatchedAudienceStore {
     storage.set(StorageKeys.MATCHED_AUDIENCE_IDS, this.matchedAudienceIds);
   }
 
+  hasAudienceBeenMatched(audienceId: string, audienceVersion: number): boolean {
+    if (this.matchedVersionLookup[audienceId]) {
+      if (this.matchedVersionLookup[audienceId] >= audienceVersion) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   setMatchedAudiences(matchedAudiences: MatchedAudience[]): void {
-    this.matchedAudiences = matchedAudiences;
+    this.matchedAudiences = matchedAudiences.map((audience) => {
+      if (this.matchedVersionLookup[audience.id]) {
+        audience.matchedOnCurrentPageView = false;
+      }
+      return audience
+    });
+    
     this.matchedAudienceIds = matchedAudiences.map((audience) => audience.id);
     this._save();
   }
