@@ -50,8 +50,6 @@ export const evaluateCondition = (
   );
 
   return rules.every((rule) => {
-    // TODO: allow other reducers...
-    //     // const reducer = reducers[rule.reducer.name](rule.reducer.args);
     const reducer = reducers[rule.reducer.name]();
     const value = reducer(filteredPageViews);
     const matches = matchers[rule.matcher.name](rule.matcher.args);

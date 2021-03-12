@@ -92,9 +92,8 @@ export interface MatchedAudience {
   matchedOnCurrentPageView: boolean;
 }
 
-export interface CachedAudienceMetaData {
-  cachedAt: number;
-  audiences: AudienceMetaData[];
+export type MatchedAudiences = {
+  [key: string]: MatchedAudience
 }
 
 export interface AudienceMetaData {
