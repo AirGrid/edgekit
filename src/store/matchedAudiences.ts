@@ -1,5 +1,5 @@
 import { storage, timeStampInSecs } from '../utils';
-import { StorageKeys, MatchedAudience } from '../../types';
+import { StorageKeys, MatchedAudience, AudienceDefinition } from '../../types';
 
 type MatchedVersionLookup = {
   [key: string]: number
@@ -57,15 +57,25 @@ class MatchedAudienceStore {
     return false;
   }
 
+  unmatchAudiencesDueToVersionUpdate(audienceDefinitions: AudienceDefinition[]): void {
+    audienceDefinitions.forEach((audience) => {
+      
+    })
+  }
+
   setMatchedAudiences(matchedAudiences: MatchedAudience[]): void {
-    this.matchedAudiences = matchedAudiences.map((audience) => {
+    const audiencesMatchedOnCurrentLoad = matchedAudiences.map((audience) => {
       if (this.matchedVersionLookup[audience.id]) {
         audience.matchedOnCurrentPageView = false;
       }
       return audience
     });
-    
-    this.matchedAudienceIds = matchedAudiences.map((audience) => audience.id);
+    this.matchedAudiences = [
+      ...this.matchedAudiences, 
+      ...audiencesMatchedOnCurrentLoad
+    ];
+    this.matchedVersionLookup = this._createMatchedVersionLookup(this.matchedAudiences);
+    this.matchedAudienceIds = this.matchedAudiences.map((audience) => audience.id);
     this._save();
   }
 

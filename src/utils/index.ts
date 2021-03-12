@@ -26,7 +26,16 @@ const set = (key: string, value: any): void => {
   }
 };
 
+const remove = (key: string): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    // ignore...
+  }
+}
+
 export const storage = {
   set,
   get,
+  remove,
 };
