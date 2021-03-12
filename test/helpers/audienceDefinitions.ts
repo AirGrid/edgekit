@@ -38,7 +38,7 @@ export const makeCosineSimilarityQuery = ({
 } & PartialAudienceQueryDefinition): AudienceQueryDefinition => ({
   featureVersion: 1,
   queryFilterComparisonType: QueryFilterComparisonType.COSINE_SIMILARITY,
-  queryProperty: 'topicDist',
+  queryProperty: 'docVector',
   ...partialAudienceQueryDefinition,
   queryValue,
 });

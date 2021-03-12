@@ -28,28 +28,15 @@ export const makeEngineCondition = <T extends AudienceQueryDefinition>(
   ],
 });
 
-export const makeTopicDistPageView = (
+export const makePageView = (
   value: number[],
   version: number,
-  ts = 100
+  ts = 100,
+  queryProperty = 'docVector'
 ): PageView => ({
   ts,
   features: {
-    topicDist: {
-      version,
-      value,
-    },
-  },
-});
-
-export const makeDocVectorPageView = (
-  value: number[],
-  version: number,
-  ts = 100
-): PageView => ({
-  ts,
-  features: {
-    docVector: {
+    [queryProperty]: {
       version,
       value,
     },

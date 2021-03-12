@@ -30,7 +30,10 @@ describe('multiple audiences types matching behaviour', () => {
       ],
     });
 
-  const makeCosSimAudience = (vector: number[], queryProperty = 'topicDist') =>
+  const makeCosSimAudience = (
+    vector: number[],
+    queryProperty = 'featureVector'
+  ) =>
     makeAudienceDefinition({
       id: cosSimId,
       occurrences: 0,
@@ -55,7 +58,7 @@ describe('multiple audiences types matching behaviour', () => {
 
     describe('logistic regression plus cosine similarity audiences, query matching both', () => {
       const pageFeatures = {
-        topicDist: {
+        featureVector: {
           value: [1, 1, 1],
           version: 1,
         },
@@ -91,7 +94,7 @@ describe('multiple audiences types matching behaviour', () => {
 
     describe('logistic regression plus cosine similarity audiences, query matching cosSim only', () => {
       const pageFeatures = {
-        topicDist: {
+        featureVector: {
           value: [1, 1, 1],
           version: 1,
         },
@@ -127,7 +130,7 @@ describe('multiple audiences types matching behaviour', () => {
 
     describe('logistic regression plus cosine similarity audiences, query matching logReg only', () => {
       const pageFeatures = {
-        topicDist: {
+        featureVector: {
           value: [0, 0, 0], //doesn't match
           version: 1,
         },

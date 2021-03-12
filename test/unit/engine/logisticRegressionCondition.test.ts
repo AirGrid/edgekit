@@ -1,7 +1,7 @@
 import { evaluateCondition } from '../../../src/engine';
 import {
   makeEngineCondition,
-  makeDocVectorPageView,
+  makePageView,
 } from '../../helpers/engineConditions';
 import { makeLogisticRegressionQuery } from '../../helpers/audienceDefinitions';
 
@@ -19,7 +19,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     ]);
 
     it('does match the page view if vector similarity is above threshold', () => {
-      const pageViews = [makeDocVectorPageView([1, 1, 1], 1)];
+      const pageViews = [makePageView([1, 1, 1], 1)];
 
       const result = evaluateCondition(versionOneCondition, pageViews);
 
@@ -28,8 +28,8 @@ describe('engine matching behaviour for logistic regression condition', () => {
 
     it('does not match the page view if similarity is not above threshold', () => {
       const pageViews = [
-        makeDocVectorPageView([0.2, 0.8, 0.1], 1, 100),
-        makeDocVectorPageView([0.3, 0.8, 0.1], 1, 101),
+        makePageView([0.2, 0.8, 0.1], 1, 100),
+        makePageView([0.3, 0.8, 0.1], 1, 101),
       ];
 
       const result = evaluateCondition(versionOneCondition, pageViews);
@@ -52,7 +52,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     ]);
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
-      const pageViews = [makeDocVectorPageView([1, 1, 1], 2, 100)];
+      const pageViews = [makePageView([1, 1, 1], 2, 100)];
 
       const result = evaluateCondition(versionTwoCondition, pageViews);
 
@@ -60,7 +60,7 @@ describe('engine matching behaviour for logistic regression condition', () => {
     });
 
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
-      const pageViews = [makeDocVectorPageView([0.4, 0.8, 0.3], 1, 100)];
+      const pageViews = [makePageView([0.4, 0.8, 0.3], 1, 100)];
 
       const result = evaluateCondition(versionTwoCondition, pageViews);
 
