@@ -7,8 +7,13 @@ type Store = { edkt_matched_audiences: string; edkt_page_views: string };
 
 const getPageViewsFromStore = (store: Store) =>
   JSON.parse(store['edkt_page_views']);
-const getMatchedAudiencesFromStore = (store: Store) =>
-  JSON.parse(store['edkt_matched_audiences']);
+const getMatchedAudiencesFromStore = (store: Store) => {
+  // TODO: this is added for backward compat.
+  // https://github.com/AirGrid/edgekit/issues/152
+  const matchedAudiences = JSON.parse(store['edkt_matched_audiences']);
+  return Object.entries(matchedAudiences).map(([_, audience]) => audience);
+}
+
 const getLocalStorageFromPage = (): Promise<Store> =>
   page.evaluate('localStorage');
 
@@ -22,14 +27,16 @@ describe('edgekit basic run behaviour', () => {
     occurrences: 1,
     definition: [
       makeCosineSimilarityQuery({
-        threshold: 0.99,
-        vector: [0.2, 0.5, 0.1],
+        queryValue: {
+          threshold: 0.99,
+          vector: [0.2, 0.5, 0.1],
+        },
       }),
     ],
   });
 
   const pageFeatures = {
-    topicDist: {
+    docVector: {
       version: 1,
       value: [0.2, 0.5, 0.1],
     },

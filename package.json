@@ -1,6 +1,6 @@
 {
   "name": "@airgrid/edgekit",
-  "version": "0.0.0-dev.33",
+  "version": "0.0.0-dev.34",
   "homepage": "https://edgekit.org/",
   "author": "AirGrid <https://airgrid.io>",
   "license": "MIT",
@@ -61,7 +61,7 @@
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.1.1",
-    "tslib": "^2.0.0",
+    "tslib": "^2.1.0",
     "typescript": "^3.9.5"
   }
 }

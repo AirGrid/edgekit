@@ -2,71 +2,104 @@ import { edkt } from '../../src';
 import { timeStampInSecs } from '../../src/utils';
 import {
   clearStore,
-  makePageViews,
   getPageViews,
   getMatchedAudiences,
   setUpLocalStorage,
 } from '../helpers/localStorage';
 import {
   makeAudienceDefinition,
-  makeStringArrayQuery,
-  makeVectorDistanceQuery,
   makeCosineSimilarityQuery,
+  makeLogisticRegressionQuery,
 } from '../helpers/audienceDefinitions';
+import { PageView } from '../../types';
 
 describe('edkt run method', () => {
-  describe('basic edkt run behaviour', () => {
-    const sportPageFeature = {
-      keywords: {
-        version: 1,
-        value: ['sport'],
+  const makePageViews = (
+    timestamp: number,
+    pageViewFeatures: PageView['features'],
+    numberOfPageViews: number
+  ): PageView[] => {
+    return Array.from({ length: numberOfPageViews }).map(() => ({
+      ts: timestamp,
+      features: {
+        ...pageViewFeatures,
       },
-    };
+    }));
+  };
 
-    const sportAudience = makeAudienceDefinition({
+  const matchingVector = [1, 1, 1];
+
+  const pageFeatures = {
+    docVector: {
+      version: 1,
+      value: matchingVector,
+    },
+  };
+
+  describe('basic edkt run behaviour', () => {
+    const audienceDefinition = makeAudienceDefinition({
       id: 'sport_id',
-      definition: [makeStringArrayQuery(['sport'])],
+      definition: [
+        makeCosineSimilarityQuery({
+          queryValue: {
+            threshold: 0.99,
+            vector: matchingVector,
+          },
+          queryProperty: 'docVector',
+        }),
+      ],
     });
 
-    const ONE_SPORTS_PAGE_VIEW = makePageViews(timeStampInSecs(), ['sport'], 1);
+    const ONE_SPORTS_PAGE_VIEW = makePageViews(
+      timeStampInSecs(),
+      pageFeatures,
+      1
+    );
 
-    const TWO_SPORTS_PAGE_VIEW = makePageViews(timeStampInSecs(), ['sport'], 2);
+    const TWO_SPORTS_PAGE_VIEW = makePageViews(
+      timeStampInSecs(),
+      pageFeatures,
+      2
+    );
 
     it('does add page view to store', async () => {
       setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
       await edkt.run({
-        pageFeatures: sportPageFeature,
-        audienceDefinitions: [sportAudience],
+        pageFeatures,
+        audienceDefinitions: [audienceDefinition],
         omitGdprConsent: true,
       });
 
       const edktPageViews = getPageViews();
-      const latestKeywords =
-        edktPageViews[edktPageViews.length - 1].features.keywords;
+      const latestQueryFeature =
+        edktPageViews[edktPageViews.length - 1].features;
 
       expect(edktPageViews).toHaveLength(ONE_SPORTS_PAGE_VIEW.length + 1);
-      expect(latestKeywords).toEqual({ version: 1, value: ['sport'] });
+      expect(latestQueryFeature).toHaveProperty(
+        'docVector',
+        pageFeatures.docVector
+      );
     });
 
-    it('does not match with one sport page view', async () => {
+    it('does not match with sport page view', async () => {
       setUpLocalStorage(ONE_SPORTS_PAGE_VIEW);
 
       await edkt.run({
-        pageFeatures: sportPageFeature,
-        audienceDefinitions: [sportAudience],
+        pageFeatures,
+        audienceDefinitions: [audienceDefinition],
         omitGdprConsent: true,
       });
 
       expect(getMatchedAudiences()).toHaveLength(0);
     });
 
-    it('does match with two sport page view', async () => {
+    it('does match with two page view', async () => {
       setUpLocalStorage(TWO_SPORTS_PAGE_VIEW);
 
       await edkt.run({
-        pageFeatures: sportPageFeature,
-        audienceDefinitions: [sportAudience],
+        pageFeatures,
+        audienceDefinitions: [audienceDefinition],
         omitGdprConsent: true,
       });
 
@@ -80,14 +113,17 @@ describe('edkt run method', () => {
         id: 'sport_id',
         definition: [
           makeCosineSimilarityQuery({
-            threshold: 0.8,
-            vector: [1, 1, 1],
+            queryValue: {
+              threshold: 0.9,
+              vector: matchingVector,
+            },
+            queryProperty: 'misconfiguredProperty',
           }),
         ],
       });
 
       await edkt.run({
-        pageFeatures: sportPageFeature,
+        pageFeatures,
         audienceDefinitions: [misconfiguredSportAudience],
         omitGdprConsent: true,
       });
@@ -98,33 +134,49 @@ describe('edkt run method', () => {
 
   describe('look back edkt run behaviour', () => {
     const lookBackPageFeature = {
-      keywords: {
+      docVector: {
         version: 1,
-        value: [''],
+        value: matchingVector,
       },
     };
 
     const lookBackAudience = makeAudienceDefinition({
       id: 'look_back_id',
       lookBack: 2,
-      definition: [makeStringArrayQuery([''])],
+      definition: [
+        makeCosineSimilarityQuery({
+          queryValue: {
+            vector: matchingVector,
+            threshold: 0.99,
+          },
+          queryProperty: 'docVector',
+        }),
+      ],
     });
 
     const LOOK_BACK_PAGE_VIEW = makePageViews(
       timeStampInSecs(),
-      [''],
+      pageFeatures,
       lookBackAudience.occurrences
     );
 
     const lookBackInfinityAudience = makeAudienceDefinition({
       id: 'look_back_infinity_id',
       lookBack: 0,
-      definition: [makeStringArrayQuery([''])],
+      definition: [
+        makeCosineSimilarityQuery({
+          queryValue: {
+            threshold: 0.99,
+            vector: matchingVector,
+          },
+          queryProperty: 'docVector',
+        }),
+      ],
     });
 
     const LOOK_BACK_INFINITY_PAGE_VIEW = makePageViews(
       0,
-      [''],
+      pageFeatures,
       lookBackInfinityAudience.occurrences
     );
 
@@ -173,175 +225,42 @@ describe('edkt run method', () => {
     });
   });
 
-  describe('topic model run behaviour', () => {
-    const topicModelPageFeature = {
-      topicDist: {
-        version: 1,
-        value: [0.2, 0.5, 0.1],
-      },
-    };
-
-    const topicModelAudience = makeAudienceDefinition({
-      id: 'topic_model_id',
-      lookBack: 2,
+  describe('run behaviour with version mismatch', () => {
+    const cosSimAudience = makeAudienceDefinition({
+      id: 'cosSim_id',
       occurrences: 1,
       definition: [
-        makeVectorDistanceQuery({
-          vector: [0.4, 0.8, 0.3],
-          threshold: 0.5,
+        makeCosineSimilarityQuery({
+          queryValue: {
+            threshold: 0.99,
+            vector: matchingVector,
+          },
+          queryProperty: 'docVector',
+          featureVersion: 2,
         }),
       ],
     });
 
-    beforeAll(clearStore);
-
-    it('does not match with one page view', async () => {
-      await edkt.run({
-        pageFeatures: topicModelPageFeature,
-        audienceDefinitions: [topicModelAudience],
-        omitGdprConsent: true,
-      });
-
-      const edktPageViews = getPageViews();
-
-      expect(edktPageViews).toEqual([
-        {
-          ts: edktPageViews[0].ts,
-          features: topicModelPageFeature,
-        },
-      ]);
-      expect(getMatchedAudiences()).toHaveLength(0);
-    });
-
-    it('does match with two page views', async () => {
-      await edkt.run({
-        pageFeatures: topicModelPageFeature,
-        audienceDefinitions: [topicModelAudience],
-        omitGdprConsent: true,
-      });
-
-      const edktPageViews = getPageViews();
-      const edktMatchedAudiences = getMatchedAudiences();
-
-      expect(edktPageViews).toEqual([
-        {
-          ts: edktPageViews[0].ts,
-          features: topicModelPageFeature,
-        },
-        {
-          ts: edktPageViews[1].ts,
-          features: topicModelPageFeature,
-        },
-      ]);
-      expect(edktMatchedAudiences).toEqual([
-        {
-          id: topicModelAudience.id,
-          matchedAt: edktMatchedAudiences[0].matchedAt,
-          expiresAt: edktMatchedAudiences[0].expiresAt,
-          matchedOnCurrentPageView: true,
-          version: 1,
-        },
-      ]);
-    });
-  });
-
-  const mixedPageFeatures = {
-    topicDist: {
-      version: 1,
-      value: [0.2, 0.5, 0.1],
-    },
-    keywords: {
-      version: 1,
-      value: ['dummy'],
-    },
-  };
-
-  describe('topic model run behaviour with additional audience', () => {
-    const topicModelAudience = makeAudienceDefinition({
-      id: 'iab-608',
+    const logRegAudience = makeAudienceDefinition({
+      id: 'logReg_id',
       occurrences: 1,
       definition: [
-        makeVectorDistanceQuery({
-          threshold: 0.5,
-          vector: [0.4, 0.8, 0.3],
+        makeLogisticRegressionQuery({
+          queryValue: {
+            threshold: 0.99,
+            vector: matchingVector,
+            bias: 0,
+          },
+          queryProperty: 'docVector',
+          featureVersion: 2,
         }),
-      ],
-    });
-
-    const keywordsAudience = makeAudienceDefinition({
-      id: 'iab-607',
-      occurrences: 1,
-      definition: [makeStringArrayQuery(['sport', 'Leeds United A.F.C.'])],
-    });
-
-    const run = () =>
-      edkt.run({
-        pageFeatures: mixedPageFeatures,
-        audienceDefinitions: [topicModelAudience, keywordsAudience],
-        omitGdprConsent: true,
-      });
-
-    beforeAll(clearStore);
-
-    it('does match with two page views', async () => {
-      await run();
-      await run();
-
-      const edktPageViews = getPageViews();
-      const edktMatchedAudiences = getMatchedAudiences();
-
-      expect(edktPageViews).toEqual([
-        {
-          ts: edktPageViews[0].ts,
-          features: mixedPageFeatures,
-        },
-        {
-          ts: edktPageViews[1].ts,
-          features: mixedPageFeatures,
-        },
-      ]);
-      expect(edktMatchedAudiences).toEqual([
-        {
-          id: topicModelAudience.id,
-          matchedAt: edktMatchedAudiences[0].matchedAt,
-          expiresAt: edktMatchedAudiences[0].expiresAt,
-          matchedOnCurrentPageView: true,
-          version: 1,
-        },
-      ]);
-    });
-  });
-
-  describe('topic model run behaviour with version mismatch', () => {
-    const topicModelAudience = makeAudienceDefinition({
-      id: 'iab-608',
-      occurrences: 1,
-      definition: [
-        {
-          ...makeVectorDistanceQuery({
-            threshold: 0.5,
-            vector: [0.4, 0.8, 0.3],
-          }),
-          featureVersion: 2,
-        },
-      ],
-    });
-
-    const keywordsAudience = makeAudienceDefinition({
-      id: 'iab-607',
-      occurrences: 1,
-      definition: [
-        {
-          ...makeStringArrayQuery(['sport', 'Leeds United A.F.C.']),
-          featureVersion: 2,
-        },
       ],
     });
 
     const run = () =>
       edkt.run({
-        pageFeatures: mixedPageFeatures,
-        audienceDefinitions: [topicModelAudience, keywordsAudience],
+        pageFeatures,
+        audienceDefinitions: [cosSimAudience, logRegAudience],
         omitGdprConsent: true,
       });
 
@@ -356,11 +275,11 @@ describe('edkt run method', () => {
       expect(edktPageViews).toEqual([
         {
           ts: edktPageViews[0].ts,
-          features: mixedPageFeatures,
+          features: pageFeatures,
         },
         {
           ts: edktPageViews[1].ts,
-          features: mixedPageFeatures,
+          features: pageFeatures,
         },
       ]);
       expect(getMatchedAudiences()).toEqual([]);

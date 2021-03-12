@@ -1,22 +1,7 @@
 import { evaluateCondition } from './evaluate';
 import { timeStampInSecs } from '../utils';
 import { translate } from './translate';
-import {
-  PageView,
-  EngineCondition,
-  AudienceDefinition,
-  AudienceDefinitionFilter,
-  MatchedAudience,
-} from '../../types';
-
-const check = (
-  conditions: EngineCondition<AudienceDefinitionFilter>[],
-  pageViews: PageView[],
-  any = false
-): boolean =>
-  conditions[any ? 'some' : 'every']((condition) =>
-    evaluateCondition(condition, pageViews)
-  );
+import { PageView, AudienceDefinition, MatchedAudience } from '../../types';
 
 const getMatchingAudiences = (
   audienceDefinitions: AudienceDefinition[],
@@ -25,12 +10,12 @@ const getMatchingAudiences = (
   const currentTS = timeStampInSecs();
 
   return audienceDefinitions.reduce((acc, audience) => {
-    const conditions = translate(audience);
+    const condition = translate(audience);
     const pageViewsWithinLookBack = pageViews.filter(
       (pageView) =>
         audience.lookBack === 0 || pageView.ts > currentTS - audience.lookBack
     );
-    return check(conditions, pageViewsWithinLookBack)
+    return evaluateCondition(condition, pageViewsWithinLookBack)
       ? [
           ...acc,
           {
@@ -45,4 +30,4 @@ const getMatchingAudiences = (
   }, [] as MatchedAudience[]);
 };
 
-export { translate, check, getMatchingAudiences };
+export { translate, evaluateCondition, getMatchingAudiences };

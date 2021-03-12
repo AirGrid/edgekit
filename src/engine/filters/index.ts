@@ -5,8 +5,6 @@ import {
 } from '../../../types';
 import {
   versionMatches,
-  arrayIntersectsCondition,
-  vectorDistanceCondition,
   cosineSimilarityCondition,
   logisticRegressionCondition,
 } from './conditions';
@@ -21,8 +19,6 @@ export const queryMatches = (
 
   // matches if any of the conditions are satisfied
   return [
-    arrayIntersectsCondition,
-    vectorDistanceCondition,
     cosineSimilarityCondition,
     logisticRegressionCondition,
   ].some((match) => match(query, pageFeatures));

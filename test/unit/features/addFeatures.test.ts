@@ -6,20 +6,16 @@ describe('edkt viewStore add behaviour', () => {
   const omitGdprConsent = true;
 
   const features = {
-    keywords: {
+    docVector: {
       version: 1,
-      value: ['sport', 'soccer', 'football'],
-    },
-    someVector: {
-      version: 2,
-      value: [0.4, 0.2, 0.1, 0.8],
+      value: [1, 1, 1],
     },
   };
 
   const moreFeatures = {
     metaKeywords: {
       version: 1,
-      value: ['foo', 'bar', 'baz'],
+      value: [0, 0, 0],
     },
   };
 
