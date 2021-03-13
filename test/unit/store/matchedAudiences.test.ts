@@ -1,6 +1,7 @@
 import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
+import { storage } from '../../../src/utils';
 import { clearStore } from '../../helpers/localStorage';
-import { MatchedAudience } from '../../../types';
+import { MatchedAudience, StorageKeys } from '../../../types';
 
 const createMatchedAudience = (): MatchedAudience => {
   return {
@@ -30,6 +31,12 @@ describe('matchedAudienceStore', () => {
     expect(matchedAudiences).toHaveLength(1);
   });
 
+  it('there should be 1 matched audience ID in localstorage', () => {
+    const matchedAudienceIds = storage.get(StorageKeys.MATCHED_AUDIENCE_IDS);
+
+    expect(matchedAudienceIds).toHaveLength(1);
+  });
+
   it('hasAudienceBeenMatched should return true, for a previously matched audience', () => {
     const wasMatched = matchedAudienceStore.isMatched(
       matchedAudience.id,
@@ -40,10 +47,7 @@ describe('matchedAudienceStore', () => {
   });
 
   it('hasAudienceBeenMatched should return false, for a new version', () => {
-    const wasMatched = matchedAudienceStore.isMatched(
-      matchedAudience.id,
-      999
-    );
+    const wasMatched = matchedAudienceStore.isMatched(matchedAudience.id, 999);
 
     expect(wasMatched).toBe(false);
   });
