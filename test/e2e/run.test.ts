@@ -12,7 +12,7 @@ const getMatchedAudiencesFromStore = (store: Store) => {
   // https://github.com/AirGrid/edgekit/issues/152
   const matchedAudiences = JSON.parse(store['edkt_matched_audiences']);
   return Object.entries(matchedAudiences).map(([_, audience]) => audience);
-}
+};
 
 const getLocalStorageFromPage = (): Promise<Store> =>
   page.evaluate('localStorage');

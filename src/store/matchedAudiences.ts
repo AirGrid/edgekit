@@ -91,6 +91,7 @@ class MatchedAudienceStore {
         this._updatePageViewFlag(audience.id, false);
       }
     });
+    this.matchedAudienceIds = Object.keys(this.matchedAudiences);
     this._save();
   }
 

@@ -1,8 +1,4 @@
-import {
-  PageView,
-  MatchedAudience,
-  MatchedAudiences,
-} from '../../types';
+import { PageView, MatchedAudience, MatchedAudiences } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
 
 export const clearStore = (): void => {
@@ -30,4 +26,8 @@ export const getMatchedAudiences = (): MatchedAudience[] => {
   // TODO: this code has been added for backward compat
   // https://github.com/AirGrid/edgekit/issues/152
   return Object.entries(matchedAudiences).map(([_, audience]) => audience);
+};
+
+export const getMatchedAudienceIds = (): MatchedAudience[] => {
+  return JSON.parse(localStorage.getItem('edkt_matched_audience_ids') || '[]');
 };
