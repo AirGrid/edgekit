@@ -5,11 +5,41 @@ import {
   getPageViews,
 } from '../../helpers/localStorage';
 import {
-  cosineSimAudience,
-  multiCosineSimAudience,
+  makeAudienceDefinition,
+  makeCosineSimilarityQuery,
 } from '../../helpers/audienceDefinitions';
 
 describe('cosine similarity audiences matching behaviour', () => {
+  const cosineSimAudience = makeAudienceDefinition({
+    occurrences: 1,
+    definition: [
+      makeCosineSimilarityQuery({
+        queryValue: {
+          threshold: 0.99,
+          vector: [1, 1, 1],
+        },
+      }),
+    ],
+  });
+
+  const multiCosineSimAudience = makeAudienceDefinition({
+    occurrences: 1,
+    definition: [
+      makeCosineSimilarityQuery({
+        queryValue: {
+          threshold: 0.99,
+          vector: [1, 1, 1],
+        },
+      }),
+      makeCosineSimilarityQuery({
+        queryValue: {
+          threshold: 0.99,
+          vector: [1, 0, 1],
+        },
+      }),
+    ],
+  });
+
   describe('cosine similarity with single query audiences', () => {
     const pageFeatures = {
       docVector: {

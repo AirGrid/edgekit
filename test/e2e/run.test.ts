@@ -7,6 +7,7 @@ type Store = { edkt_matched_audiences: string; edkt_page_views: string };
 
 const getPageViewsFromStore = (store: Store) =>
   JSON.parse(store['edkt_page_views']);
+
 const getMatchedAudiencesFromStore = (store: Store) => {
   // TODO: this is added for backward compat.
   // https://github.com/AirGrid/edgekit/issues/152

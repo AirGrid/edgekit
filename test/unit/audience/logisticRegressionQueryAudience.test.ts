@@ -5,11 +5,44 @@ import {
   getPageViews,
 } from '../../helpers/localStorage';
 import {
-  logRegAudience,
-  multiLogRegAudience,
+  makeAudienceDefinition,
+  makeLogisticRegressionQuery,
 } from '../../helpers/audienceDefinitions';
 
 describe('logistic regression audiences matching behaviour', () => {
+  const logRegAudience = makeAudienceDefinition({
+    occurrences: 1,
+    definition: [
+      makeLogisticRegressionQuery({
+        queryValue: {
+          threshold: 0.9,
+          vector: [1, 1, 1],
+          bias: 0,
+        },
+      }),
+    ],
+  });
+
+  const multiLogRegAudience = makeAudienceDefinition({
+    occurrences: 1,
+    definition: [
+      makeLogisticRegressionQuery({
+        queryValue: {
+          threshold: 0.9,
+          vector: [1, 1, 1],
+          bias: 0,
+        },
+      }),
+      makeLogisticRegressionQuery({
+        queryValue: {
+          threshold: 0.9,
+          vector: [1, 0, 1],
+          bias: 1,
+        },
+      }),
+    ],
+  });
+
   describe('logistic regression with single query audiences', () => {
     const pageFeatures = {
       docVector: {
