@@ -8,7 +8,6 @@ import {
   makeAudienceDefinition,
   makeLogisticRegressionQuery,
 } from '../../helpers/audienceDefinitions';
-// import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
 
 describe('edkt behaviour on audience version bump', () => {
   const matchingVector = [1, 1, 1];
@@ -20,43 +19,30 @@ describe('edkt behaviour on audience version bump', () => {
     },
   };
 
-  const runEdktWithData = ({
-    vector,
-    version,
-  }: {
-    vector: number[];
-    version: number;
-  }) => {
-    const audienceDefinitions = [
-      makeAudienceDefinition({
-        version,
-        occurrences: 0,
-        definition: [
-          makeLogisticRegressionQuery({
-            queryValue: {
-              threshold: 0.9,
-              vector,
-              bias: 0,
-            },
-          }),
-        ],
-      }),
-    ];
-
-    return edkt.run({
-      pageFeatures,
-      audienceDefinitions,
-      omitGdprConsent: true,
-    });
-  };
-
   describe('edkt unmatching behaviour on audience version bump', () => {
     beforeAll(clearStore);
 
     it('should match pageView against audienceDefinition', async () => {
-      await runEdktWithData({
-        vector: matchingVector,
-        version: 1,
+      const audienceDefinitions = [
+        makeAudienceDefinition({
+          version: 1,
+          occurrences: 0,
+          definition: [
+            makeLogisticRegressionQuery({
+              queryValue: {
+                threshold: 0.9,
+                vector: matchingVector,
+                bias: 0,
+              },
+            }),
+          ],
+        }),
+      ];
+
+      await edkt.run({
+        pageFeatures,
+        audienceDefinitions,
+        omitGdprConsent: true,
       });
 
       const matchedAudiences = getMatchedAudiences();
@@ -70,9 +56,27 @@ describe('edkt behaviour on audience version bump', () => {
     });
 
     it('should unmatch matchedAudience on audienceDefinition version bump', async () => {
-      await runEdktWithData({
-        version: 2,
-        vector: [0, 0, 0], // this does not match
+      const notMatchingVector = [0, 0, 0];
+      const audienceDefinitions = [
+        makeAudienceDefinition({
+          version: 2,
+          occurrences: 0,
+          definition: [
+            makeLogisticRegressionQuery({
+              queryValue: {
+                threshold: 0.9,
+                vector: notMatchingVector,
+                bias: 0,
+              },
+            }),
+          ],
+        }),
+      ];
+
+      await edkt.run({
+        pageFeatures,
+        audienceDefinitions,
+        omitGdprConsent: true,
       });
 
       expect(getPageViews()).toHaveLength(2);
@@ -84,14 +88,48 @@ describe('edkt behaviour on audience version bump', () => {
     beforeAll(clearStore);
 
     it('should update matchedAudience version on matching audienceDefinition with version bump', async () => {
-      await runEdktWithData({
-        version: 1,
-        vector: matchingVector,
+      const audienceDefinitionVersionOne = [
+        makeAudienceDefinition({
+          version: 1,
+          occurrences: 0,
+          definition: [
+            makeLogisticRegressionQuery({
+              queryValue: {
+                threshold: 0.9,
+                vector: matchingVector,
+                bias: 0,
+              },
+            }),
+          ],
+        }),
+      ];
+
+      const audienceDefinitionVersionTwo = [
+        makeAudienceDefinition({
+          version: 2,
+          occurrences: 0,
+          definition: [
+            makeLogisticRegressionQuery({
+              queryValue: {
+                threshold: 0.9,
+                vector: matchingVector,
+                bias: 0,
+              },
+            }),
+          ],
+        }),
+      ];
+
+      await edkt.run({
+        pageFeatures,
+        audienceDefinitions: audienceDefinitionVersionOne,
+        omitGdprConsent: true,
       });
 
-      await runEdktWithData({
-        version: 2,
-        vector: matchingVector,
+      await edkt.run({
+        pageFeatures,
+        audienceDefinitions: audienceDefinitionVersionTwo,
+        omitGdprConsent: true,
       });
 
       const matchedAudiences = getMatchedAudiences();
