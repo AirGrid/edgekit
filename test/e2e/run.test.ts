@@ -24,6 +24,8 @@ describe('edgekit basic run behaviour', () => {
   // look at jest-playwright.config.js
   const testUrl = 'http://localhost:9000';
 
+  const matchingVector = [1, 1, 1];
+
   const topicModelAudience = makeAudienceDefinition({
     id: 'topic_dist_model_id',
     occurrences: 1,
@@ -31,7 +33,7 @@ describe('edgekit basic run behaviour', () => {
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: [0.2, 0.5, 0.1],
+          vector: matchingVector,
         },
       }),
     ],
@@ -40,7 +42,7 @@ describe('edgekit basic run behaviour', () => {
   const pageFeatures = {
     docVector: {
       version: 1,
-      value: [0.2, 0.5, 0.1],
+      value: matchingVector,
     },
   };
 
