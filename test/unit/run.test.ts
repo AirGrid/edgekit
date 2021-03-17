@@ -1,11 +1,6 @@
 import { edkt } from '../../src';
 import { timeStampInSecs } from '../../src/utils';
-import {
-  clearStore,
-  getPageViews,
-  getMatchedAudiences,
-  setUpLocalStorage,
-} from '../helpers/localStorage';
+import { clearStore, setUpLocalStorage } from '../helpers/localStorage';
 import {
   makeAudienceDefinition,
   makeCosineSimilarityQuery,
@@ -71,7 +66,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktPageViews = getPageViews();
+      const edktPageViews = edkt.getCopyOfPageViews();
       const latestQueryFeature =
         edktPageViews[edktPageViews.length - 1].features;
 
@@ -91,7 +86,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      expect(getMatchedAudiences()).toHaveLength(0);
+      expect(edkt.getMatchedAudiences()).toHaveLength(0);
     });
 
     it('does match with two page view', async () => {
@@ -103,7 +98,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      expect(getMatchedAudiences()).toHaveLength(1);
+      expect(edkt.getMatchedAudiences()).toHaveLength(1);
     });
 
     it('does not match with misconfigured audience filter / page feature', async () => {
@@ -128,7 +123,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      expect(getMatchedAudiences()).toHaveLength(0);
+      expect(edkt.getMatchedAudiences()).toHaveLength(0);
     });
   });
 
@@ -191,7 +186,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktMatchedAudiences = getMatchedAudiences();
+      const edktMatchedAudiences = edkt.getMatchedAudiences();
 
       expect(edktMatchedAudiences).toHaveLength(1);
       expect(edktMatchedAudiences[0].id).toEqual('look_back_infinity_id');
@@ -206,7 +201,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      const edktMatchedAudiences = getMatchedAudiences();
+      const edktMatchedAudiences = edkt.getMatchedAudiences();
 
       expect(edktMatchedAudiences).toHaveLength(1);
       expect(edktMatchedAudiences[0].id).toEqual('look_back_id');
@@ -221,7 +216,7 @@ describe('edkt run method', () => {
         omitGdprConsent: true,
       });
 
-      expect(getMatchedAudiences()).toHaveLength(0);
+      expect(edkt.getMatchedAudiences()).toHaveLength(0);
     });
   });
 
@@ -270,7 +265,7 @@ describe('edkt run method', () => {
       await run();
       await run();
 
-      const edktPageViews = getPageViews();
+      const edktPageViews = edkt.getCopyOfPageViews();
 
       expect(edktPageViews).toEqual([
         {
@@ -282,7 +277,7 @@ describe('edkt run method', () => {
           features: pageFeatures,
         },
       ]);
-      expect(getMatchedAudiences()).toEqual([]);
+      expect(edkt.getMatchedAudiences()).toEqual([]);
     });
   });
 });
