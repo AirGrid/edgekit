@@ -6,11 +6,17 @@ import {
   EngineConditionRule,
 } from '../../types';
 
-export const makeEngineCondition = <T extends AudienceQueryDefinition>(
-  queries: EngineConditionQuery<T>[],
-  occurences: EngineConditionRule['matcher']['args'] = 1,
-  condition: EngineConditionRule['matcher']['name'] = 'ge'
-): EngineCondition<T> => ({
+type MakeEngineConditionInput<T extends AudienceQueryDefinition> = {
+  queries: EngineConditionQuery<T>[];
+  occurences?: EngineConditionRule['matcher']['args'];
+  condition?: EngineConditionRule['matcher']['name'];
+};
+
+export const makeEngineCondition = <T extends AudienceQueryDefinition>({
+  queries,
+  occurences,
+  condition,
+}: MakeEngineConditionInput<T>): EngineCondition<T> => ({
   filter: {
     any: false,
     queries,
@@ -21,22 +27,29 @@ export const makeEngineCondition = <T extends AudienceQueryDefinition>(
         name: 'count',
       },
       matcher: {
-        name: condition,
-        args: occurences,
+        name: condition || 'ge',
+        args: occurences || 1,
       },
     },
   ],
 });
 
-export const makePageView = (
-  value: number[],
-  version: number,
-  ts = 100,
-  queryProperty = 'docVector'
-): PageView => ({
+type MakePageViewInput = {
+  value: number[];
+  version: number;
+  ts?: number;
+  queryProperty?: string;
+};
+
+export const makePageView = ({
+  value,
+  version,
   ts,
+  queryProperty,
+}: MakePageViewInput): PageView => ({
+  ts: ts || 100,
   features: {
-    [queryProperty]: {
+    [queryProperty || 'docVector']: {
       version,
       value,
     },

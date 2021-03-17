@@ -10,13 +10,17 @@ import {
 } from '../../helpers/audienceDefinitions';
 
 describe('cosine similarity audiences matching behaviour', () => {
+  const vectorOne = [1, 1, 1];
+  const vectorTwo = [1, 0, 1];
+  const notMatchingVector = [0, 1, 0];
+
   const cosineSimAudience = makeAudienceDefinition({
     occurrences: 1,
     definition: [
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: [1, 1, 1],
+          vector: vectorOne,
         },
       }),
     ],
@@ -28,13 +32,13 @@ describe('cosine similarity audiences matching behaviour', () => {
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: [1, 1, 1],
+          vector: vectorOne,
         },
       }),
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: [1, 0, 1],
+          vector: vectorTwo,
         },
       }),
     ],
@@ -43,7 +47,7 @@ describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity with single query audiences', () => {
     const pageFeatures = {
       docVector: {
-        value: [1, 1, 1],
+        value: vectorOne,
         version: 1,
       },
     };
@@ -83,16 +87,16 @@ describe('cosine similarity audiences matching behaviour', () => {
   });
 
   describe('cosine similarity multi query audiences matching above threshold', () => {
-    const pageFeaturesMatch0 = {
+    const pageFeaturesMatchOne = {
       docVector: {
-        value: [1, 1, 1],
+        value: vectorOne,
         version: 1,
       },
     };
 
-    const pageFeaturesMatch1 = {
+    const pageFeaturesMatchTwo = {
       docVector: {
-        value: [1, 0, 1],
+        value: vectorTwo,
         version: 1,
       },
     };
@@ -101,7 +105,7 @@ describe('cosine similarity audiences matching behaviour', () => {
 
     it('adds 1st page view and does not match on first run', async () => {
       await edkt.run({
-        pageFeatures: pageFeaturesMatch0,
+        pageFeatures: pageFeaturesMatchOne,
         audienceDefinitions: [multiCosineSimAudience],
         omitGdprConsent: true,
       });
@@ -112,7 +116,7 @@ describe('cosine similarity audiences matching behaviour', () => {
 
     it('adds 2nd page view and match second run', async () => {
       await edkt.run({
-        pageFeatures: pageFeaturesMatch1,
+        pageFeatures: pageFeaturesMatchTwo,
         audienceDefinitions: [multiCosineSimAudience],
         omitGdprConsent: true,
       });
@@ -123,7 +127,7 @@ describe('cosine similarity audiences matching behaviour', () => {
 
     it('adds 3rd page view third run', async () => {
       await edkt.run({
-        pageFeatures: pageFeaturesMatch0,
+        pageFeatures: pageFeaturesMatchOne,
         audienceDefinitions: [cosineSimAudience],
         omitGdprConsent: true,
       });
@@ -136,7 +140,7 @@ describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity multi query audiences not matching below threshold', () => {
     const pageFeaturesNotMatch = {
       docVector: {
-        value: [0, 1, 0],
+        value: notMatchingVector,
         version: 1,
       },
     };

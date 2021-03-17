@@ -11,6 +11,7 @@ import {
 
 describe('edkt behaviour on audience version bump', () => {
   const matchingVector = [1, 1, 1];
+  const notMatchingVector = [0, 0, 0];
 
   const pageFeatures = {
     docVector: {
@@ -56,7 +57,6 @@ describe('edkt behaviour on audience version bump', () => {
     });
 
     it('should unmatch matchedAudience on audienceDefinition version bump', async () => {
-      const notMatchingVector = [0, 0, 0];
       const audienceDefinitions = [
         makeAudienceDefinition({
           version: 2,
