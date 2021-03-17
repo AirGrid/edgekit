@@ -57,36 +57,3 @@ export const makeLogisticRegressionQuery = ({
   ...partialAudienceQueryDefinition,
   queryValue,
 });
-
-export const logRegAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 1, 1],
-        bias: 0,
-      },
-    }),
-  ],
-});
-
-export const multiLogRegAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 1, 1],
-        bias: 0,
-      },
-    }),
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 0, 1],
-        bias: 1,
-      },
-    }),
-  ],
-});
