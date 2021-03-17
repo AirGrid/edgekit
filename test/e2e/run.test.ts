@@ -2,16 +2,17 @@ import {
   makeAudienceDefinition,
   makeCosineSimilarityQuery,
 } from '../helpers/audienceDefinitions';
+import { StorageKeys } from '../../types';
 
 type Store = { edkt_matched_audiences: string; edkt_page_views: string };
 
 const getPageViewsFromStore = (store: Store) =>
-  JSON.parse(store['edkt_page_views']);
+  JSON.parse(store[StorageKeys.PAGE_VIEWS]);
 
 const getMatchedAudiencesFromStore = (store: Store) => {
   // TODO: this is added for backward compat.
   // https://github.com/AirGrid/edgekit/issues/152
-  const matchedAudiences = JSON.parse(store['edkt_matched_audiences']);
+  const matchedAudiences = JSON.parse(store[StorageKeys.MATCHED_AUDIENCES]);
   return Object.entries(matchedAudiences).map(([_, audience]) => audience);
 };
 

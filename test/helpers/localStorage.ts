@@ -1,5 +1,7 @@
-import { PageView, MatchedAudience, MatchedAudiences } from '../../types';
+import { PageView, MatchedAudience } from '../../types';
 import { viewStore, matchedAudienceStore } from '../../src/store';
+import { StorageKeys } from '../../types';
+import { storage } from '../../src/utils';
 
 export const clearStore = (): void => {
   localStorage.clear();
@@ -10,24 +12,23 @@ export const clearStore = (): void => {
 
 export const setUpLocalStorage = (pageViews: PageView[]): void => {
   localStorage.clear();
-  localStorage.setItem('edkt_page_views', JSON.stringify(pageViews));
+  storage.set(StorageKeys.PAGE_VIEWS, pageViews);
   // We need to reload from local storage because its only done on construction
   viewStore._load();
   matchedAudienceStore._load();
 };
 
 export const getPageViews = (): PageView[] =>
-  JSON.parse(localStorage.getItem('edkt_page_views') || '[]');
+  storage.get(StorageKeys.PAGE_VIEWS);
 
 export const getMatchedAudiences = (): MatchedAudience[] => {
-  const matchedAudiences: MatchedAudiences = JSON.parse(
-    localStorage.getItem('edkt_matched_audiences') || '{}'
+  const matchedAudiences: MatchedAudience = storage.get(
+    StorageKeys.MATCHED_AUDIENCES
   );
   // TODO: this code has been added for backward compat
   // https://github.com/AirGrid/edgekit/issues/152
   return Object.entries(matchedAudiences).map(([_, audience]) => audience);
 };
 
-export const getMatchedAudienceIds = (): MatchedAudience[] => {
-  return JSON.parse(localStorage.getItem('edkt_matched_audience_ids') || '[]');
-};
+export const getMatchedAudienceIds = (): string[] =>
+  storage.get(StorageKeys.MATCHED_AUDIENCE_IDS);
