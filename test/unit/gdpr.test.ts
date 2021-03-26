@@ -93,6 +93,20 @@ describe('EdgeKit GDPR tests', () => {
     });
   };
 
+  const updateTCDataAfterDelayWithNoVendorId = (): Promise<
+    [number, number]
+  > => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        updateTCData({
+          eventStatus: 'useractioncomplete',
+          vendor: { consents: { 0: true } },
+        });
+        resolve(process.hrtime());
+      }, 200);
+    });
+  };
+
   const featureVector = [1, 1, 1];
 
   const audienceDefinition = makeAudienceDefinition({
@@ -229,6 +243,23 @@ describe('EdgeKit GDPR tests', () => {
       expect(success).toEqual(true);
     });
 
-    // TODO @naripok test no consent (run forever) case
+    it('should not run callback if there is no consent', async () => {
+      updateTCData({
+        eventStatus: 'cmpuishown',
+        vendor: { consents: {} },
+      });
+
+      let called = false;
+      const callback = () => {
+        called = true;
+        return new Promise((resolve) => resolve());
+      };
+
+      updateTCDataAfterDelayWithNoVendorId();
+      await expect(runOnConsent([airgridVendorId], callback)).rejects.toEqual(
+        'No Gdpr consent given'
+      );
+      expect(called).toEqual(false);
+    });
   });
 });

@@ -92,18 +92,17 @@ export const waitForConsent = async (
   });
 };
 
-export const runOnConsent = async <T>(
+export const runOnConsent = <T>(
   vendorIds: number[],
   callback: () => Promise<T>,
   omitGdprConsent = false
-): Promise<T> => {
-  if (!omitGdprConsent) {
-    let hasConsent = false;
-    while (!hasConsent) {
-      hasConsent = await waitForConsent(vendorIds);
-      await new Promise((resolve) => setTimeout(resolve, 200));
+): Promise<T> =>
+  new Promise(async (resolve, reject) => {
+    let hasConsent = true;
+    if (!omitGdprConsent) hasConsent = await waitForConsent(vendorIds);
+    if (hasConsent) {
+      const result = await callback();
+      resolve(result);
     }
-  }
-  const result = await callback();
-  return result;
-};
+    reject('No Gdpr consent given');
+  });
