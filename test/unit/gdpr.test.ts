@@ -1,5 +1,9 @@
 import { edkt } from '../../src';
-import { checkConsentStatus, waitForTcfApiTimeout } from '../../src/gdpr';
+import {
+  checkConsentStatus,
+  waitForTcfApiTimeout,
+  runOnConsent,
+} from '../../src/gdpr';
 import { TCData } from '../../types';
 import {
   makeAudienceDefinition,
@@ -85,7 +89,21 @@ describe('EdgeKit GDPR tests', () => {
           vendor: { consents: { [airgridVendorId]: true } },
         });
         resolve(process.hrtime());
-      }, 500);
+      }, 200);
+    });
+  };
+
+  const updateTCDataAfterDelayWithNoVendorId = (): Promise<
+    [number, number]
+  > => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        updateTCData({
+          eventStatus: 'useractioncomplete',
+          vendor: { consents: { 0: true } },
+        });
+        resolve(process.hrtime());
+      }, 200);
     });
   };
 
@@ -192,6 +210,56 @@ describe('EdgeKit GDPR tests', () => {
           matchedOnCurrentPageView: true,
         },
       ]);
+    });
+  });
+
+  describe('runOnConsent behaviour', () => {
+    it('should not run callback until there is GDPR consent', async () => {
+      updateTCData({
+        eventStatus: 'cmpuishown',
+        vendor: { consents: { [airgridVendorId]: false } },
+      });
+
+      let success = false;
+      const callback = () => {
+        success = true;
+        return new Promise((resolve) => resolve());
+      };
+
+      const [
+        [runMsecs, runNsecs],
+        [updateMsecs, updateNsecs],
+      ] = await Promise.all([
+        (async () => {
+          await runOnConsent([airgridVendorId], callback);
+          return process.hrtime();
+        })(),
+        updateTCDataAfterDelay(),
+      ]);
+
+      expect(runMsecs).toBeGreaterThanOrEqual(updateMsecs);
+      expect(runNsecs).toBeGreaterThanOrEqual(updateNsecs);
+
+      expect(success).toEqual(true);
+    });
+
+    it('should not run callback if there is no consent', async () => {
+      updateTCData({
+        eventStatus: 'cmpuishown',
+        vendor: { consents: {} },
+      });
+
+      let success = false;
+      const callback = () => {
+        success = true;
+        return new Promise((resolve) => resolve());
+      };
+
+      updateTCDataAfterDelayWithNoVendorId();
+      await expect(runOnConsent([airgridVendorId], callback)).rejects.toEqual(
+        Error('No Gdpr consent given')
+      );
+      expect(success).toEqual(false);
     });
   });
 });

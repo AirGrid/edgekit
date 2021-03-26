@@ -57,10 +57,11 @@ export const checkConsentStatus = async (
       }
     };
 
-    if (window.__tcfapi) {
+    if (!window.__tcfapi) reject(new Error('TCF API is missing'));
+    try {
       window.__tcfapi('addEventListener', 2, callback);
-    } else {
-      reject(new Error('TCF API is missing'));
+    } catch (err) {
+      reject(err);
     }
   });
 };
@@ -96,9 +97,11 @@ export const runOnConsent = async <T>(
   callback: () => Promise<T>,
   omitGdprConsent = false
 ): Promise<T> => {
+  let hasConsent = true;
   if (!omitGdprConsent) {
-    await waitForConsent(vendorIds);
+    hasConsent = await waitForConsent(vendorIds);
   }
+  if (!hasConsent) throw new Error('No Gdpr consent given');
   const result = await callback();
   return result;
 };
