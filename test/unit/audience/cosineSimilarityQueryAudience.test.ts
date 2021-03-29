@@ -10,9 +10,9 @@ import {
 } from '../../helpers/audienceDefinitions';
 
 describe('cosine similarity audiences matching behaviour', () => {
-  const vectorOne = [1, 1, 1];
-  const vectorTwo = [1, 0, 1];
-  const notMatchingVector = [0, 1, 0];
+  const VECTOR_ONE = [1, 1, 1];
+  const VECTOR_TWO = [1, 0, 1];
+  const NOT_MATCHING_VECTOR = [0, 1, 0];
 
   const cosineSimAudience = makeAudienceDefinition({
     occurrences: 1,
@@ -20,7 +20,7 @@ describe('cosine similarity audiences matching behaviour', () => {
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: vectorOne,
+          vector: VECTOR_ONE,
         },
       }),
     ],
@@ -32,13 +32,13 @@ describe('cosine similarity audiences matching behaviour', () => {
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: vectorOne,
+          vector: VECTOR_ONE,
         },
       }),
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: vectorTwo,
+          vector: VECTOR_TWO,
         },
       }),
     ],
@@ -47,7 +47,7 @@ describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity with single query audiences', () => {
     const pageFeatures = {
       docVector: {
-        value: vectorOne,
+        value: VECTOR_ONE,
         version: 1,
       },
     };
@@ -89,14 +89,14 @@ describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity multi query audiences matching above threshold', () => {
     const pageFeaturesMatchOne = {
       docVector: {
-        value: vectorOne,
+        value: VECTOR_ONE,
         version: 1,
       },
     };
 
     const pageFeaturesMatchTwo = {
       docVector: {
-        value: vectorTwo,
+        value: VECTOR_TWO,
         version: 1,
       },
     };
@@ -140,7 +140,7 @@ describe('cosine similarity audiences matching behaviour', () => {
   describe('cosine similarity multi query audiences not matching below threshold', () => {
     const pageFeaturesNotMatch = {
       docVector: {
-        value: notMatchingVector,
+        value: NOT_MATCHING_VECTOR,
         version: 1,
       },
     };

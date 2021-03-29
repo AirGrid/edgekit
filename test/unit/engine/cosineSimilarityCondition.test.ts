@@ -6,15 +6,15 @@ import {
 import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 
 describe('engine matching behaviour for cosine similarity condition', () => {
-  const matchingVector = [1, 1, 1];
-  const notMatchingVector = [0, 0, 0];
+  const MATCHING_VECTOR = [1, 1, 1];
+  const NOT_MATCHING_VECTOR = [0, 0, 0];
 
   describe('cosine similarity condition with same condition/pageView version', () => {
     const cosineSimilarityCondition = makeEngineCondition({
       queries: [
         makeCosineSimilarityQuery({
           queryValue: {
-            vector: matchingVector,
+            vector: MATCHING_VECTOR,
             threshold: 0.99,
           },
           featureVersion: 1,
@@ -23,7 +23,13 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     });
 
     it('does match the page view if vector similarity is above threshold', () => {
-      const pageViews = [makePageView({ value: matchingVector, version: 1 })];
+      const pageViews = [
+        makePageView({
+          value: MATCHING_VECTOR,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
+      ];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
 
@@ -33,11 +39,17 @@ describe('engine matching behaviour for cosine similarity condition', () => {
     it('does not match the page view if similarity is not above threshold', () => {
       const pageViews = [
         makePageView({
-          value: notMatchingVector,
+          value: NOT_MATCHING_VECTOR,
           version: 1,
           ts: 100,
+          queryProperty: 'docVector',
         }),
-        makePageView({ value: notMatchingVector, version: 1, ts: 101 }),
+        makePageView({
+          value: NOT_MATCHING_VECTOR,
+          version: 1,
+          ts: 101,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
@@ -52,7 +64,7 @@ describe('engine matching behaviour for cosine similarity condition', () => {
       queries: [
         makeCosineSimilarityQuery({
           queryValue: {
-            vector: matchingVector,
+            vector: MATCHING_VECTOR,
             threshold: 0.99,
           },
           featureVersion: 2,
@@ -62,7 +74,12 @@ describe('engine matching behaviour for cosine similarity condition', () => {
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
       const pageViews = [
-        makePageView({ value: matchingVector, version: 2, ts: 100 }),
+        makePageView({
+          value: MATCHING_VECTOR,
+          version: 2,
+          ts: 100,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);
@@ -72,7 +89,12 @@ describe('engine matching behaviour for cosine similarity condition', () => {
 
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
       const pageViews = [
-        makePageView({ value: matchingVector, version: 1, ts: 100 }),
+        makePageView({
+          value: MATCHING_VECTOR,
+          version: 1,
+          ts: 100,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(cosineSimilarityCondition, pageViews);

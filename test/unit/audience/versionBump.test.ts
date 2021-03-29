@@ -10,13 +10,13 @@ import {
 } from '../../helpers/audienceDefinitions';
 
 describe('edkt behaviour on audience version bump', () => {
-  const matchingVector = [1, 1, 1];
-  const notMatchingVector = [0, 0, 0];
+  const MATCHING_VECTOR = [1, 1, 1];
+  const NOT_MATCHING_VECTOR = [0, 0, 0];
 
   const pageFeatures = {
     docVector: {
       version: 1,
-      value: matchingVector,
+      value: MATCHING_VECTOR,
     },
   };
 
@@ -32,7 +32,7 @@ describe('edkt behaviour on audience version bump', () => {
             makeLogisticRegressionQuery({
               queryValue: {
                 threshold: 0.9,
-                vector: matchingVector,
+                vector: MATCHING_VECTOR,
                 bias: 0,
               },
             }),
@@ -65,7 +65,7 @@ describe('edkt behaviour on audience version bump', () => {
             makeLogisticRegressionQuery({
               queryValue: {
                 threshold: 0.9,
-                vector: notMatchingVector,
+                vector: NOT_MATCHING_VECTOR,
                 bias: 0,
               },
             }),
@@ -96,7 +96,7 @@ describe('edkt behaviour on audience version bump', () => {
             makeLogisticRegressionQuery({
               queryValue: {
                 threshold: 0.9,
-                vector: matchingVector,
+                vector: MATCHING_VECTOR,
                 bias: 0,
               },
             }),
@@ -112,7 +112,7 @@ describe('edkt behaviour on audience version bump', () => {
             makeLogisticRegressionQuery({
               queryValue: {
                 threshold: 0.9,
-                vector: matchingVector,
+                vector: MATCHING_VECTOR,
                 bias: 0,
               },
             }),

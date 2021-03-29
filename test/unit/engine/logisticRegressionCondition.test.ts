@@ -24,7 +24,13 @@ describe('engine matching behaviour for logistic regression condition', () => {
     });
 
     it('does match the page view if vector similarity is above threshold', () => {
-      const pageViews = [makePageView({ value: matchingVector, version: 1 })];
+      const pageViews = [
+        makePageView({
+          value: matchingVector,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
+      ];
 
       const result = evaluateCondition(versionOneCondition, pageViews);
 
@@ -33,8 +39,18 @@ describe('engine matching behaviour for logistic regression condition', () => {
 
     it('does not match the page view if similarity is not above threshold', () => {
       const pageViews = [
-        makePageView({ value: notMatchingVector, version: 1, ts: 100 }),
-        makePageView({ value: notMatchingVector, version: 1, ts: 101 }),
+        makePageView({
+          value: notMatchingVector,
+          version: 1,
+          ts: 100,
+          queryProperty: 'docVector',
+        }),
+        makePageView({
+          value: notMatchingVector,
+          version: 1,
+          ts: 101,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(versionOneCondition, pageViews);
@@ -60,7 +76,12 @@ describe('engine matching behaviour for logistic regression condition', () => {
 
     it('does match the page view if similarity is above threshold and has the same featureVersion', () => {
       const pageViews = [
-        makePageView({ value: matchingVector, version: 2, ts: 100 }),
+        makePageView({
+          value: matchingVector,
+          version: 2,
+          ts: 100,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(versionTwoCondition, pageViews);
@@ -70,7 +91,12 @@ describe('engine matching behaviour for logistic regression condition', () => {
 
     it('does not match the page view if similarity is above threshold but does not have the same featureVersion', () => {
       const pageViews = [
-        makePageView({ value: matchingVector, version: 1, ts: 100 }),
+        makePageView({
+          value: matchingVector,
+          version: 1,
+          ts: 100,
+          queryProperty: 'docVector',
+        }),
       ];
 
       const result = evaluateCondition(versionTwoCondition, pageViews);

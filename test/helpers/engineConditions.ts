@@ -27,8 +27,8 @@ export const makeEngineCondition = <T extends AudienceQueryDefinition>({
         name: 'count',
       },
       matcher: {
-        name: condition || 'ge',
-        args: occurences || 1,
+        name: condition !== undefined ? condition : 'gt',
+        args: occurences !== undefined ? occurences : 0,
       },
     },
   ],
@@ -38,7 +38,7 @@ type MakePageViewInput = {
   value: number[];
   version: number;
   ts?: number;
-  queryProperty?: string;
+  queryProperty: string;
 };
 
 export const makePageView = ({
@@ -49,7 +49,7 @@ export const makePageView = ({
 }: MakePageViewInput): PageView => ({
   ts: ts || 100,
   features: {
-    [queryProperty || 'docVector']: {
+    [queryProperty]: {
       version,
       value,
     },

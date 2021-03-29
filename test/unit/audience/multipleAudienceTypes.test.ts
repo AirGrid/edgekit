@@ -11,11 +11,11 @@ import {
 } from '../../helpers/audienceDefinitions';
 
 describe('multiple audiences types matching behaviour', () => {
-  const cosSimId = 'cosSimAudience';
-  const logRegId = 'logRegAudience';
+  const COS_SIM_ID = 'cosSimAudience';
+  const LOG_REG_ID = 'logRegAudience';
 
-  const matchingVector = [1, 1, 1];
-  const notMatchingVector = [0, 0, 0];
+  const MATCHING_VECTOR = [1, 1, 1];
+  const NOT_MATCHING_VECTOR = [0, 0, 0];
 
   type AudienceFactoryInput = {
     vector: number[];
@@ -27,7 +27,7 @@ describe('multiple audiences types matching behaviour', () => {
     queryProperty,
   }: AudienceFactoryInput) =>
     makeAudienceDefinition({
-      id: logRegId,
+      id: LOG_REG_ID,
       occurrences: 0,
       definition: [
         makeLogisticRegressionQuery({
@@ -46,7 +46,7 @@ describe('multiple audiences types matching behaviour', () => {
     queryProperty,
   }: AudienceFactoryInput) =>
     makeAudienceDefinition({
-      id: cosSimId,
+      id: COS_SIM_ID,
       occurrences: 0,
       definition: [
         makeCosineSimilarityQuery({
@@ -63,11 +63,11 @@ describe('multiple audiences types matching behaviour', () => {
 
   describe('multiple audiences with different features', () => {
     const logRegAudience = makeLogRegAudience({
-      vector: matchingVector,
+      vector: MATCHING_VECTOR,
       queryProperty: 'logRegVector',
     });
     const cosSimAudience = makeCosSimAudience({
-      vector: matchingVector,
+      vector: MATCHING_VECTOR,
       queryProperty: 'cosSimVector',
     });
 
@@ -76,11 +76,11 @@ describe('multiple audiences types matching behaviour', () => {
     describe('logistic regression plus cosine similarity audiences, query matching both', () => {
       const pageFeatures = {
         cosSimVector: {
-          value: matchingVector,
+          value: MATCHING_VECTOR,
           version: 1,
         },
         logRegVector: {
-          value: matchingVector,
+          value: MATCHING_VECTOR,
           version: 1,
         },
       };
@@ -98,12 +98,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(2);
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });
@@ -112,11 +112,11 @@ describe('multiple audiences types matching behaviour', () => {
     describe('logistic regression plus cosine similarity audiences, query matching cosSim only', () => {
       const pageFeatures = {
         cosSimVector: {
-          value: matchingVector,
+          value: MATCHING_VECTOR,
           version: 1,
         },
         logRegVector: {
-          value: notMatchingVector,
+          value: NOT_MATCHING_VECTOR,
           version: 1,
         },
       };
@@ -134,12 +134,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(1);
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).not.toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });
@@ -148,11 +148,11 @@ describe('multiple audiences types matching behaviour', () => {
     describe('logistic regression plus cosine similarity audiences, query matching logReg only', () => {
       const pageFeatures = {
         cosSimVector: {
-          value: notMatchingVector,
+          value: NOT_MATCHING_VECTOR,
           version: 1,
         },
         logRegVector: {
-          value: matchingVector,
+          value: MATCHING_VECTOR,
           version: 1,
         },
       };
@@ -170,12 +170,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(1);
         expect(matchedAudiences).not.toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });
@@ -185,18 +185,18 @@ describe('multiple audiences types matching behaviour', () => {
   describe('multiple audiences with same features', () => {
     const pageFeatures = {
       logRegVector: {
-        value: matchingVector,
+        value: MATCHING_VECTOR,
         version: 1,
       },
     };
 
     describe('logistic regression plus cosine similarity audiences, query matching both', () => {
       const cosSimAudience = makeCosSimAudience({
-        vector: matchingVector,
+        vector: MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       });
       const logRegAudience = makeLogRegAudience({
-        vector: matchingVector,
+        vector: MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       });
       const audienceDefinitions = [cosSimAudience, logRegAudience];
@@ -214,12 +214,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(2);
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });
@@ -227,11 +227,11 @@ describe('multiple audiences types matching behaviour', () => {
 
     describe('logistic regression plus cosine similarity audiences, query matching cosSim only', () => {
       const cosSimAudience = makeCosSimAudience({
-        vector: matchingVector,
+        vector: MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       });
       const logRegAudience = makeLogRegAudience({
-        vector: notMatchingVector,
+        vector: NOT_MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       });
       const audienceDefinitions = [cosSimAudience, logRegAudience];
@@ -249,12 +249,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(1);
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).not.toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });
@@ -262,11 +262,11 @@ describe('multiple audiences types matching behaviour', () => {
 
     describe('logistic regression plus cosine similarity audiences, query matching logReg only', () => {
       const cosSimAudience = makeCosSimAudience({
-        vector: notMatchingVector,
+        vector: NOT_MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       }); // doesn't match
       const logRegAudience = makeLogRegAudience({
-        vector: matchingVector,
+        vector: MATCHING_VECTOR,
         queryProperty: 'logRegVector',
       });
       const audienceDefinitions = [cosSimAudience, logRegAudience];
@@ -284,12 +284,12 @@ describe('multiple audiences types matching behaviour', () => {
         expect(matchedAudiences).toHaveLength(1);
         expect(matchedAudiences).not.toContainEqual(
           expect.objectContaining({
-            id: cosSimId,
+            id: COS_SIM_ID,
           })
         );
         expect(matchedAudiences).toContainEqual(
           expect.objectContaining({
-            id: logRegId,
+            id: LOG_REG_ID,
           })
         );
       });

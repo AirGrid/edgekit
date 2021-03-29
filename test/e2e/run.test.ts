@@ -22,9 +22,9 @@ const getLocalStorageFromPage = (): Promise<Store> =>
 describe('edgekit basic run behaviour', () => {
   // We are serving a mock page with the edgekit transpiled code.
   // look at jest-playwright.config.js
-  const testUrl = 'http://localhost:9000';
+  const TEST_URL = 'http://localhost:9000';
 
-  const matchingVector = [1, 1, 1];
+  const MATCHING_VECTOR = [1, 1, 1];
 
   const topicModelAudience = makeAudienceDefinition({
     id: 'topic_dist_model_id',
@@ -33,7 +33,7 @@ describe('edgekit basic run behaviour', () => {
       makeCosineSimilarityQuery({
         queryValue: {
           threshold: 0.99,
-          vector: matchingVector,
+          vector: MATCHING_VECTOR,
         },
       }),
     ],
@@ -42,7 +42,7 @@ describe('edgekit basic run behaviour', () => {
   const pageFeatures = {
     docVector: {
       version: 1,
-      value: matchingVector,
+      value: MATCHING_VECTOR,
     },
   };
 
@@ -58,7 +58,7 @@ describe('edgekit basic run behaviour', () => {
     });
 
   beforeAll(async () => {
-    await page.goto(`${testUrl}?edktDebug=true`, { waitUntil: 'networkidle' });
+    await page.goto(`${TEST_URL}?edktDebug=true`, { waitUntil: 'networkidle' });
   });
 
   it('runs and adds pageView to store', async () => {
