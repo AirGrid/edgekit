@@ -1,22 +1,18 @@
 import { matchedAudienceStore } from '../../../src/store/matchedAudiences';
 import { storage } from '../../../src/utils';
 import { clearStore } from '../../helpers/localStorage';
-import { MatchedAudience, StorageKeys } from '../../../types';
+import { StorageKeys } from '../../../types';
 
-const createMatchedAudience = (): MatchedAudience => {
-  return {
+describe('matchedAudienceStore', () => {
+  const matchedAudience = {
     id: 'id',
     version: 1,
     matchedAt: 1,
     expiresAt: 2,
     matchedOnCurrentPageView: true,
   };
-};
 
-describe('matchedAudienceStore', () => {
   beforeAll(clearStore);
-
-  const matchedAudience = createMatchedAudience();
 
   it('should load an empty store', () => {
     const matchedAudiences = matchedAudienceStore.getMatchedAudiences();

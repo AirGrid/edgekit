@@ -43,36 +43,6 @@ export const makeCosineSimilarityQuery = ({
   queryValue,
 });
 
-export const cosineSimAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeCosineSimilarityQuery({
-      queryValue: {
-        threshold: 0.99,
-        vector: [1, 1, 1],
-      },
-    }),
-  ],
-});
-
-export const multiCosineSimAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeCosineSimilarityQuery({
-      queryValue: {
-        threshold: 0.99,
-        vector: [1, 1, 1],
-      },
-    }),
-    makeCosineSimilarityQuery({
-      queryValue: {
-        threshold: 0.99,
-        vector: [1, 0, 1],
-      },
-    }),
-  ],
-});
-
 // logistic regression audiences
 
 export const makeLogisticRegressionQuery = ({
@@ -86,37 +56,4 @@ export const makeLogisticRegressionQuery = ({
   queryProperty: 'docVector',
   ...partialAudienceQueryDefinition,
   queryValue,
-});
-
-export const logRegAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 1, 1],
-        bias: 0,
-      },
-    }),
-  ],
-});
-
-export const multiLogRegAudience = makeAudienceDefinition({
-  occurrences: 1,
-  definition: [
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 1, 1],
-        bias: 0,
-      },
-    }),
-    makeLogisticRegressionQuery({
-      queryValue: {
-        threshold: 0.9,
-        vector: [1, 0, 1],
-        bias: 1,
-      },
-    }),
-  ],
 });
