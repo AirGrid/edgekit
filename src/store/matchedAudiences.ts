@@ -55,6 +55,7 @@ class MatchedAudienceStore {
     Object.entries(loadedAudiences).forEach(([id, audience]) => {
       if (this._hasAudienceExpired(audience.expiresAt)) {
         this._unsetAudience(id);
+        return;
       }
       this._updatePageViewFlag(id, false);
     });
