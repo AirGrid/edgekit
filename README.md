@@ -5,7 +5,7 @@
 
 # EdgeKit | `edkt();`
 
-An open source, privacy focused client side library for the creation and monetisation of online audiences.
+An open source, privacy focused client-side library for the creation and monetisation of online audiences.
 
 ![EdgeKit Prebid Flow](./docs/images/edgekit-prebid-flow.svg?raw=true)
 
