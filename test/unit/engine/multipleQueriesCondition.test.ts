@@ -6,28 +6,37 @@ import {
 import { makeCosineSimilarityQuery } from '../../helpers/audienceDefinitions';
 
 describe('engine matching behaviour for multiple engine condition values', () => {
-  const multipleNonOverlapingQueriesCondition = makeEngineCondition(
-    [
+  const VECTOR_ONE = [0, 1, 0];
+  const VECTOR_TWO = [1, 0, 0];
+  const NOT_MATCHING_VECTOR = [0, 0, 1];
+
+  const multipleNonOverlapingQueriesCondition = makeEngineCondition({
+    queries: [
       makeCosineSimilarityQuery({
         queryValue: {
-          vector: [0, 1, 0],
+          vector: VECTOR_ONE,
           threshold: 0.99,
         },
         featureVersion: 1,
       }),
       makeCosineSimilarityQuery({
         queryValue: {
-          vector: [1, 0, 0],
+          vector: VECTOR_TWO,
           threshold: 0.99,
         },
         featureVersion: 1,
       }),
     ],
-    1
-  );
+  });
 
   it('does match for condition above threshold on fisrt query object', () => {
-    const pageViews = [makePageView([1, 0, 0], 1)];
+    const pageViews = [
+      makePageView({
+        value: VECTOR_ONE,
+        version: 1,
+        queryProperty: 'docVector',
+      }),
+    ];
 
     const result = evaluateCondition(
       multipleNonOverlapingQueriesCondition,
@@ -38,7 +47,13 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   });
 
   it('does match for condition above threshold on second query object', () => {
-    const pageViews = [makePageView([0, 1, 0], 1)];
+    const pageViews = [
+      makePageView({
+        value: VECTOR_TWO,
+        version: 1,
+        queryProperty: 'docVector',
+      }),
+    ];
 
     const result = evaluateCondition(
       multipleNonOverlapingQueriesCondition,
@@ -49,7 +64,13 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   });
 
   it('does not match for condition below threshold on every query object', () => {
-    const pageViews = [makePageView([0, 0, 1], 1)];
+    const pageViews = [
+      makePageView({
+        value: NOT_MATCHING_VECTOR,
+        version: 1,
+        queryProperty: 'docVector',
+      }),
+    ];
 
     const result = evaluateCondition(
       multipleNonOverlapingQueriesCondition,
@@ -62,24 +83,51 @@ describe('engine matching behaviour for multiple engine condition values', () =>
   it('does match for condition above threshold on at least one (pageView, condition) pair', () => {
     expect(
       evaluateCondition(multipleNonOverlapingQueriesCondition, [
-        makePageView([1, 0, 0], 1),
-        makePageView([0, 0, 1], 1),
+        makePageView({
+          value: VECTOR_ONE,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
+        makePageView({
+          value: NOT_MATCHING_VECTOR,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
       ])
     ).toEqual(true);
     expect(
       evaluateCondition(multipleNonOverlapingQueriesCondition, [
-        makePageView([0, 1, 0], 1),
-        makePageView([0, 0, 1], 1),
+        makePageView({
+          value: VECTOR_TWO,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
+        makePageView({
+          value: NOT_MATCHING_VECTOR,
+          version: 1,
+          queryProperty: 'docVector',
+        }),
       ])
     ).toEqual(true);
   });
 
   it('does not match for different (condition, pageView) versions attributes', () => {
     const pageViews = [
-      makePageView([1, 0, 0], 2),
-      makePageView([0, 1, 0], 2),
-      makePageView([0, 0, 1], 2),
-      makePageView([1, 1, 1], 2),
+      makePageView({
+        value: VECTOR_ONE,
+        version: 2,
+        queryProperty: 'docVector',
+      }),
+      makePageView({
+        value: VECTOR_TWO,
+        version: 2,
+        queryProperty: 'docVector',
+      }),
+      makePageView({
+        value: NOT_MATCHING_VECTOR,
+        version: 2,
+        queryProperty: 'docVector',
+      }),
     ];
 
     const result = evaluateCondition(
@@ -90,12 +138,23 @@ describe('engine matching behaviour for multiple engine condition values', () =>
     expect(result).toEqual(false);
   });
 
-  it('does match for mixed versions/conditions with enough evidence', () => {
+  it('does match for mixed versions/conditions with enough above threshold pairs', () => {
     const pageViews = [
-      makePageView([1, 0, 0], 1),
-      makePageView([0, 1, 0], 2),
-      makePageView([0, 0, 1], 2),
-      makePageView([1, 1, 1], 2),
+      makePageView({
+        value: VECTOR_ONE,
+        version: 1,
+        queryProperty: 'docVector',
+      }),
+      makePageView({
+        value: VECTOR_TWO,
+        version: 2,
+        queryProperty: 'docVector',
+      }),
+      makePageView({
+        value: NOT_MATCHING_VECTOR,
+        version: 2,
+        queryProperty: 'docVector',
+      }),
     ];
 
     const result = evaluateCondition(

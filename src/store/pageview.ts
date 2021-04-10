@@ -41,7 +41,7 @@ class ViewStore {
   ): void {
     if (!features || Object.keys(features).length < 1) return;
     const ts = timeStampInSecs();
-    const pageView = {
+    const pageView: PageView = {
       ts,
       features,
       ...metadata,

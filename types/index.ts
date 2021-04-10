@@ -5,10 +5,11 @@ export type PageFeatureResult = {
   value: number[];
 };
 
-export interface PageView {
+export type PageView = {
   ts: number;
   features: Record<string, PageFeatureResult>;
-}
+  [key: string]: any;
+};
 
 // Audience definition interfaces
 

@@ -3,19 +3,21 @@ import { edkt } from '../../../src';
 import { getPageViews } from '../../helpers/localStorage';
 
 describe('edkt viewStore cleaning behaviour', () => {
-  const omitGdprConsent = true;
+  const OMIT_GDPR_CONSENT = true;
+  const VECTOR_ONE = [1, 1, 1];
+  const VECTOR_TWO = [0, 0, 0];
 
   const oldFeatures = {
     docVector: {
       version: 1,
-      value: [1, 1, 1],
+      value: VECTOR_ONE,
     },
   };
 
   const newFeatures = {
     docVector: {
       version: 1,
-      value: [0, 0, 0],
+      value: VECTOR_TWO,
     },
   };
 
@@ -32,7 +34,7 @@ describe('edkt viewStore cleaning behaviour', () => {
       await edkt.run({
         pageFeatures: oldFeatures,
         audienceDefinitions: [],
-        omitGdprConsent,
+        omitGdprConsent: OMIT_GDPR_CONSENT,
       });
     }
 
@@ -44,7 +46,7 @@ describe('edkt viewStore cleaning behaviour', () => {
     await edkt.run({
       pageFeatures: newFeatures,
       audienceDefinitions: [],
-      omitGdprConsent,
+      omitGdprConsent: OMIT_GDPR_CONSENT,
     });
 
     expect(getPageViews()).toHaveLength(9);
@@ -53,7 +55,7 @@ describe('edkt viewStore cleaning behaviour', () => {
     await edkt.run({
       pageFeatures: newFeatures,
       audienceDefinitions: [],
-      omitGdprConsent,
+      omitGdprConsent: OMIT_GDPR_CONSENT,
       featureStorageSize: 3,
     });
 
@@ -81,7 +83,7 @@ describe('edkt viewStore cleaning behaviour', () => {
       await edkt.run({
         pageFeatures: oldFeatures,
         audienceDefinitions: [],
-        omitGdprConsent,
+        omitGdprConsent: OMIT_GDPR_CONSENT,
         featureStorageSize: 5,
       });
     }
@@ -91,7 +93,7 @@ describe('edkt viewStore cleaning behaviour', () => {
     await edkt.run({
       pageFeatures: newFeatures,
       audienceDefinitions: [],
-      omitGdprConsent,
+      omitGdprConsent: OMIT_GDPR_CONSENT,
       featureStorageSize: 6,
     });
 

@@ -2,8 +2,8 @@ import { edkt } from '../../../src';
 import { getPageViews } from '../../helpers/localStorage';
 
 describe('edkt viewStore add behaviour', () => {
-  const vendorIds = [873];
-  const omitGdprConsent = true;
+  const VENDOR_IDS = [873];
+  const OMIT_GDPR_CONSENT = true;
 
   const features = {
     docVector: {
@@ -23,8 +23,8 @@ describe('edkt viewStore add behaviour', () => {
     await edkt.run({
       pageFeatures: { ...features, ...moreFeatures },
       audienceDefinitions: [],
-      omitGdprConsent,
-      vendorIds,
+      omitGdprConsent: OMIT_GDPR_CONSENT,
+      vendorIds: VENDOR_IDS,
     });
 
     const edktPageViews = getPageViews();
