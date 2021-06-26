@@ -1,5 +1,5 @@
 import { edkt } from '../../src';
-import { checkConsentStatus, waitForTcfApiTimeout } from '../../src/gdpr';
+import { checkConsentStatus, WAIT_FOR_TCF_API } from '../../src/gdpr';
 import { TCData } from '../../types';
 import {
   makeAudienceDefinition,
@@ -115,7 +115,7 @@ describe('EdgeKit GDPR tests', () => {
 
   describe('checkForConsent', () => {
     it('should fail to consent if the Transparency and Consent Framework API is missing', async () => {
-      jest.setTimeout(waitForTcfApiTimeout + 500);
+      jest.setTimeout(WAIT_FOR_TCF_API + 500);
       expect(window.__tcfapi).toBeUndefined();
       await expect(checkConsentStatus([airgridVendorId])).rejects.toThrow(
         'TCF API is missing'

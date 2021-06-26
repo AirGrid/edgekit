@@ -1,7 +1,7 @@
 import { TCData, ConsentStatus } from '../../types';
 import { timeout } from '../utils';
 
-export const waitForTcfApiTimeout = 10 * 1000;
+export const WAIT_FOR_TCF_API = 10 * 1000;
 
 const hasGdprConsent = (vendorIds: number[], tcData: TCData): boolean => {
   const { vendor } = tcData;
@@ -34,11 +34,11 @@ const waitForTcfApi = () => {
           if (!!intervalId) {
             window.clearInterval(intervalId);
           }
-          resolve();
+          resolve(true);
         }
       }, 100);
     }),
-    timeout(waitForTcfApiTimeout, 'TCF API is missing'),
+    timeout(WAIT_FOR_TCF_API, 'TCF API is missing'),
   ]);
 };
 
