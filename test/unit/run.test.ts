@@ -117,6 +117,31 @@ describe('edkt run method', () => {
 
       expect(edkt.getMatchedAudiences()).toHaveLength(0);
     });
+
+    it('does not break execution if there is a malformed audience definition', async () => {
+      setUpLocalStorage(TWO_PAGE_VIEW);
+
+      const malformedAudience = {
+        id: 'test_id',
+        version: 7,
+        ttl: 1209600,
+        lookBack: 0,
+        occurrences: 0,
+      };
+
+      await edkt.run({
+        pageFeatures,
+        audienceDefinitions: [
+          audienceDefinition,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          malformedAudience,
+        ],
+        omitGdprConsent: true,
+      });
+
+      expect(edkt.getMatchedAudiences()).toHaveLength(1);
+    });
   });
 
   describe('look back edkt run behaviour', () => {
