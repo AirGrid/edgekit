@@ -1,7 +1,14 @@
+> [!WARNING]  
+> **This repository and project have been archived.**
+> Whilst we still believe in the idea of an open-source and open-definition base IAB audiences, our small team has never been able to complete this project,
+> and after two year of zero love it is time to admit defeat.
+> We thank all those whom have gotten in touch with interest and words of support and please continue to do so [hello@airgrid.io](mailto:hello@airgrid.io).
+
+
+---
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![npm (scoped)](https://img.shields.io/npm/v/@airgrid/edgekit?style=flat-square)
-![Build, Test and Publish](https://github.com/AirGrid/edgekit/workflows/Build,%20Test%20and%20maybe%20Publish/badge.svg?style=flat-square)
 
 # EdgeKit | `edkt();`
 
